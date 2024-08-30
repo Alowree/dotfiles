@@ -1,7 +1,10 @@
 #Aliases
 Set-Alias tt tree
 
-# Set-Alias -Name git-bare -Value "git --git-dir=$HOME/dotfiles --work-tree=$HOME"
+function gitbare {
+  git --git-dir=$HOME/dotfiles --work-tree=$HOME $args
+}
+
 # Aliases for lazyvim
 Set-Alias nvim-kickstart "cmd /c set NVIM_APPNAME=nvim-kickstart && nvim"
 
