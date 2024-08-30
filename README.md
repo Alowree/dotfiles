@@ -33,3 +33,8 @@ To be tested...
 - https://www.daytona.io/dotfiles/ultimate-guide-to-dotfiles
 - https://www.youtube.com/watch?v=iYElODEf6awo
 - https://github.com/pawelbialaszczyk/dotfiles
+
+## Other thoughts
+
+- git submodule
+- How do I convert a git repository folder into a regular folder?
