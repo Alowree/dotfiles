@@ -1,18 +1,33 @@
-- 目标：通过 Git 管理和备份电脑上的各种配置文件
-- 系统：Windows 10, PowerShell 7.5.3 Preview
-- 方法：a bare git repository
+- Goal: Manage and backup various configuration files on your computer through Git.
+- System: Windows 10, PowerShell 7.5.3 Preview
+- Method: Through a bare Git repository
 
-## 实现步骤
+## Backup
 
-1. 创建一个新文件夹 `$HOME/dotfiles`，运行命令 `git init --bare` 将其初始化成一个（不包含工作目录的）光杆仓库，用于追踪需要管理的各个配置文件
-2. 把基本的 git 命令改造为 gitbare，即当运行 gitbare 时，Git 会自动把 `$HOME/dotfiles` 当作仓库，而把整个 `$HOME` 目录作为工作区。 在 PowerShell 运行 `code $PROFILE`，使用 VS Code 打开配置文件，添加如下函数：
+1. Create a new folder `$HOME/dotfiles` and run `git init --bare` to initialize it as a bare repository (without a working directory) to track the configuration files you need to manage
+2. Transform the basic git command into the gitbare command, i.e. when running gitbare in PowerShell instead of basic git, Git automatically treats `$HOME/dotfiles` as the repository and the entire `$HOME` directory as the workspace. To accomplish this substitution, simply run `code $PROFILE` in PowerShell, open the configuration file using VS Code, and add the following function:
+
    ```ps1
    function gitbare {
-     git --git-dir=$HOME/dotfiles --work-tree=$HOME $args
+   git --git-dir=$HOME/dotfiles --work-tree=$HOME $args
    }
+
    ```
 
-## 参考资料
+3. After step 2, when we need to work on our dotfiles repository, we can use the retrofit `gitbare add`, `gitbare commit`, and `gitbare remote` instead of the original `git add`, `git commit`, and `git remote`
+4. Create a new repository on Github, https://github.com/user-name/dotfiles
+   ```ps
+   gitbare remote add origin https://github.com/user-name/dotfiles.git
+   gitbare branch -M main
+   gitbare push -u origin main
+   ```
+5. Now you can selectively add, commit, and push configuration files from your `$HOME` directory to your remote Github repository for backup
+
+## Pull
+
+To be tested...
+
+## Reference
 
 https://www.ackama.com/what-we-think/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained/
 https://www.daytona.io/dotfiles/ultimate-guide-to-dotfiles
