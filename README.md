@@ -29,7 +29,7 @@ To be tested...
 
 ## Reference
 
-https://www.ackama.com/what-we-think/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained/
-https://www.daytona.io/dotfiles/ultimate-guide-to-dotfiles
-https://www.youtube.com/watch?v=iYElODEf6awo
-https://github.com/pawelbialaszczyk/dotfiles
+- https://www.ackama.com/what-we-think/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained/
+- https://www.daytona.io/dotfiles/ultimate-guide-to-dotfiles
+- https://www.youtube.com/watch?v=iYElODEf6awo
+- https://github.com/pawelbialaszczyk/dotfiles
