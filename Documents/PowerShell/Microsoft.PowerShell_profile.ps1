@@ -1,17 +1,18 @@
-#Aliases
-Set-Alias tt tree
-
+# Transform basic git into gitbare with two positional parameters
 function gitbare {
   git --git-dir=$HOME/dotfiles --work-tree=$HOME $args
 }
 
-# Aliases for lazyvim
-Set-Alias nvim-kickstart "cmd /c set NVIM_APPNAME=nvim-kickstart && nvim"
-
-# Aliases for lazyvim
-Set-Alias nvim-lazyvim "cmd /c set NVIM_APPNAME=nvim-lazyvim && nvim"
-
-# Function to select Neovim configuration interactively
+# Functions to launch different Neovim configurations in PowerShell
+function kv {
+  $env:NVIM_APPNAME = "nvim-kickstart"
+  nvim
+} 
+function lv {
+  $env:NVIM_APPNAME = "nvim-lazyvim"
+  nvim
+} 
+# Function to select different Neovim configurations interactively
 function nvims {
     $items = @("default", "nvim-lazyvim", "nvim-kickstart")
     $config = $items | fzf --prompt=" Neovim Config  " --height=50% --layout=reverse --border
