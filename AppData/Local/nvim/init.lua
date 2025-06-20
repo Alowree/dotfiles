@@ -1,2 +1,2 @@
-require("alowree.lazy")
 require("alowree.core")
+require("alowree.lazy")

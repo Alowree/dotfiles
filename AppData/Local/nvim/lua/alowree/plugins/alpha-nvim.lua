@@ -29,18 +29,18 @@ return {
 
 		-- Randomly selects one quote each time Neovim starts
 		local function footer()
+			math.randomseed(os.time()) -- Seed the random number generator
 			local quotes = {
-				"The only way to do great work is to love what you do. – Steve Jobs",
-				"Success is not final, failure is not fatal: it is the courage to continue that counts. – Winston Churchill",
-				"It always seems impossible until it's done. – Nelson Mandela",
-				"Do what you can, with what you have, where you are. – Theodore Roosevelt",
-				"Believe you can and you're halfway there. – Theodore Roosevelt",
-				"Happiness depends upon ourselves. – Aristotle",
-				"Don't cry because it's over, smile because it happened. – Dr. Seuss",
-				"You must be the change you wish to see in the world. – Mahatma Gandhi",
-				"Opportunities don't happen. You create them. – Chris Grosser",
-				"Do what you love and success will follow. – Richard Branson",
-				"Don't Stop Until You are Proud...",
+                "学而时习之，不亦说乎？——《论语》",
+                "天行健，君子以自强不息。——《周易》",
+                "海内存知己，天涯若比邻。——王勃",
+                "路漫漫其修远兮，吾将上下而求索。——屈原",
+                "千里之行，始于足下。——《老子》",
+                "敏而好学，不耻下问。——《论语》",
+                "业精于勤荒于嬉，行成于思毁于随。——韩愈",
+                "会当凌绝顶，一览众山小。——杜甫",
+                "知之者不如好之者，好之者不如乐之者。——《论语》",
+                "不积跬步，无以至千里；不积小流，无以成江海。——荀子",
 			}
 			return quotes[math.random(#quotes)]
 		end

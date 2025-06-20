@@ -1,5 +1,5 @@
--- vim.g.mapleader = " "
--- vim.g.maplocalleader = "\\"
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
@@ -88,18 +88,6 @@ keymap.set("ia", "fedex", "FedEx")
 
 -- Insert date and time under Windows OS
 keymap.set("ia", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>")
-
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
-vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		-- vim.highlight.on_yank()
-		vim.hl.on_yank()
-	end,
-})
 
 -- FileType autocmd for Markdown files
 -- https://github.com/Piotr1215/dotfiles/blob/master/.config/nvim/ftplugin/markdown.lua
