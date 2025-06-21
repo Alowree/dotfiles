@@ -5,6 +5,7 @@ return {
         require("kanagawa").setup({
             compile = true,
             transparent = true,
+            -- Feature provided by nvim-treesitter
             overrides = function(colors)
                 return {
                     ["@markup.link.url.markdown_inline"] = { link = "Special" }, -- (url)

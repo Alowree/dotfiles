@@ -7,7 +7,7 @@ local keymap = vim.keymap
 
 keymap.set("n", "-", "<cmd>Oil --float<CR>", { desc = "Open Parent Directory in Oil" })
 keymap.set("n", "gl", function()
-    vim.diagnostic.open_float()
+  vim.diagnostic.open_float()
 end, { desc = "Open Diagnostics in Float" })
 -- better up/down
 -- keymap.set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -67,7 +67,7 @@ keymap.set("n", "<C-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase Wi
 keymap.set("n", "<leader>wk", "<cmd>e ~/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
 keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 keymap.set("n", "<leader>ww", function()
-    vim.cmd("write")
+  vim.cmd("write")
 end, { desc = "Write current file" })
 
 -- Visual mode
@@ -102,12 +102,12 @@ keymap.set("ia", "dt()", "<C-R>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>")
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight when yanking (copying) text",
-    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-    callback = function()
-        -- vim.highlight.on_yank()
-        vim.hl.on_yank()
-    end,
+  desc = "Highlight when yanking (copying) text",
+  group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+  callback = function()
+    -- vim.highlight.on_yank()
+    vim.hl.on_yank()
+  end,
 })
 
 -- FileType autocmd for Markdown files

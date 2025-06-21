@@ -93,3 +93,11 @@ opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,te
 -- Gave up on global setting and changed to Markdown specific
 -- opt.spell = true
 -- opt.spelllang = "en_us,cjk"
+
+-- Avoid garbled characters in Chinese language Windows OS
+vim.cmd("let $LANG='en'")
+opt.langmenu = "en" -- Set the language menu to English
+--
+-- Source the default Vim runtime menu files
+vim.cmd("source " .. vim.env.VIMRUNTIME .. "/delmenu.vim")
+vim.cmd("source " .. vim.env.VIMRUNTIME .. "/menu.vim")
