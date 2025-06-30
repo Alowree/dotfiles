@@ -6,7 +6,7 @@ return {
 	opts = {
 		library = {
 			-- Add Neovim's runtime Lua files (macOS default location)
-			-- vim.fn.stdpath("config") .. "/lua",
+			vim.fn.stdpath("config") .. "/lua",
 			-- vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy", -- For lazy.nvim
 		},
 		enabled = true,
