@@ -6,7 +6,7 @@
 " Start date:
 "   Fri 2025-04-04 21:09:42 +0800
 " Last updated:
-"   Fri 2025-04-04 21:11:10 +0800
+"   Fri 2025-07-04 11:21:02 +0800
 " Sections:
 "    -> Plugins
 "    -> General
@@ -28,26 +28,16 @@
 " => Plugins ---------------------------------------------- {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin('~/.vim/plugged')
-" Plug 'preservim/nerdtree'
 Plug 'bullets-vim/bullets.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-prettier'
-" Plug 'vim-scripts/fountain.vim'
 Plug 'tpope/vim-markdown' | Plug 'ap/vim-css-color'
-" Plug 'morhetz/gruvbox'
-" Plug 'ashfinal/vim-colors-paper'
-" Plug 'dunstontc/vim-vscode-theme'
-" Plug 'tomasr/molokai'
-" Plug 'jacoborus/tender.vim'
+Plug 'morhetz/gruvbox'
 call plug#end()
 " }}}
 
 let mapleader = " "
-
-" NERDTree Config
-" nnoremap <leader>ee :NERDTreeToggle<CR>
-" nnoremap <leader>ef :NERDTreeFind<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -78,10 +68,11 @@ filetype plugin on
 filetype indent on
 
 " Set to auto read when a file is changed from the outside
-" Autoload files that have changed outside of vim
+" Autoload files that have changed outside of Vim
 set autoread
 
-au FocusGained,BufEnter * silent! checktime
+autocmd FocusGained,BufEnter * silent! checktime
+autocmd BufWritePost * checktime
 
 " Use system clipboard
 set clipboard+=unnamed
@@ -200,6 +191,7 @@ endif
 try
     colorscheme gruvbox
 catch
+
 endtry
 
 set background=dark
@@ -238,7 +230,7 @@ set noswapfile
 " Convert tabs to spaces
 set expandtab
 
-" Be smart when using tabs ;)
+" Be smart when using tabs
 set smarttab
 
 " 1 tab == 4 spaces
@@ -248,6 +240,10 @@ set shiftwidth=4
 " Set tab size in spaces (this is for manual indenting)
 set tabstop=4
 
+" To visualize tabs and trailing spaces
+set list
+set listchars=tab:»\ ,trail:·,nbsp:␣
+
 " Linebreak on 500 characters
 set lbr
 set tw=500
@@ -256,6 +252,10 @@ set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
+
+" To persist undo history between sessions
+set undofile
+set undodir=~/.vim/undodir
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -289,8 +289,8 @@ nmap <leader>v :edit $MYVIMRC<cr>
 nmap <leader>so :source ~/.vimrc<CR>
 nmap <leader>wk :e ~/Documents/Weekly.md<cr>
 
-" Disable highlight when <leader><cr> is pressed
-map <silent> <leader><cr> :noh<cr>
+" Disable highlight when <Esc> is pressed
+map <silent> <Esc> :noh<cr>
 
 " Smart way to move between windows
 " <C-w>w toggles through the active windows
@@ -309,11 +309,11 @@ map <leader>l :bnext<cr>
 map <leader>h :bprevious<cr>
 
 " Useful mappings for managing tabs
-map <leader>tn :tabnew<cr>
+map <leader>te :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
-map <leader>t<leader> :tabnext<cr>
+map <leader>tn :tabnext<cr>
 
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
@@ -339,18 +339,26 @@ endtry
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 " Insert Date and Time
-" inline style 2025-03-29 18:41:29; Sat 2025-03-29 18:42:36 +0800
-iabbrev <expr> dt() strftime("%a %Y-%m-%d %H:%M:%S %z")
+abbrev <expr> dt() strftime("%a %Y-%m-%d %H:%M:%S %z")
+nnoremap <F5> a<C-R>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR><Esc>
+inoremap <F5> <C-R>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>
 
+" Useful tricks for keying in the arrow
+" The iabbrev command in Vim requires a non-keyword character
+" (like a space or enter) to be typed after the abbreviation
+" to trigger the expansion.
 iabbrev >> →
 iabbrev << ←
 iabbrev ^^ ↑
 iabbrev VV ↓
-iabbrev 【【 「
-iabbrev 】】 」
-iabbrev 《《 『
-iabbrev	》》 』
 
+" Useful tricks for keying in the Chinese quotation marks
+inoremap 【【 「
+inoremap 】】 」
+inoremap 《《 『
+inoremap 》》 』
+
+" Abbreviations
 iabbrev btw By the way,
 iabbrev fyi For your information ——
 iabbrev asap as soon as possible.
@@ -359,21 +367,6 @@ iabbrev dhl DHL
 iabbrev ndl Nolan Digital Limited
 iabbrev tcl Twine Company Limited
 
-" Insert before the current character
-" Sat Mar 29 18:35:28 2025
-nnoremap <F5> "=strftime('%c')<CR>P
-
-" inoremap <F5> <C-R>=strftime('%c')<CR>
-
-" Sat 2025-03-29 18:40:41 +0800
-inoremap <F5> <C-R>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>
-
-" new line style
-" Mon, Mar 24, 2025 10:25:34 AM
-nnoremap <leader>dt :r !date<CR>
-
-" Why this is not working?
-" nnoremap <leader>dt "=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>
 
 """"""""""""""""""""""""""""""
 " STATUS LINE ------------------------------------------------------------ {{{
@@ -386,93 +379,11 @@ set noshowmode
 " Always show the status line
 set laststatus=2
 
-" Customize the status line
-" https://jdhao.github.io/2019/11/03/vim_custom_statusline/
-" function! Buf_total_num()
-"     return len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
-" endfunction
-"
-" function! File_size(f)
-"     let l:size = getfsize(expand(a:f))
-"     if l:size == 0 || l:size == -1 || l:size == -2
-"         return ''
-"     endif
-"     if l:size < 1024
-"         return l:size.' bytes'
-"     elseif l:size < 1024*1024
-"         return printf('%.1f', l:size/1024.0).'k'
-"     elseif l:size < 1024*1024*1024
-"         return printf('%.1f', l:size/1024.0/1024.0/1024.0) . 'g'
-"     endif
-" endfunction
-"
-" " Define highlight groups for each mode
-" hi ModeNormal cterm=bold ctermfg=232 ctermbg=30
-" hi ModeInsert cterm=bold ctermfg=232 ctermbg=13
-" hi ModeVisual cterm=bold ctermfg=232 ctermbg=11
-"
-" let g:currentmode={
-"        \ 'n'  : 'NORMAL ',
-"        \ 'v'  : 'VISUAL ',
-"        \ 'V'  : 'V-Line ',
-"        \ "\<C-V>" : 'V-Block ',
-"        \ 'i'  : 'INSERT ',
-"        \ 'R'  : 'R ',
-"        \ 'Rv' : 'V-Replace ',
-"        \ 'c'  : 'Command ',
-"        \ }
-"
-" set statusline=
-" " Show current mode
-" " set statusline+=%5*\ %-10{toupper(g:currentmode[mode()])}
-" set statusline+=%#ModeNormal#\ %-8{toupper(g:currentmode[mode()])}
-" " Show current buffer number
-" set statusline+=%<%1*[B-%n]%*
-" set statusline+=%2*[TOTAL:%{Buf_total_num()}]%*
-" " Show full file path, test change
-" set statusline+=%3*\ %F\ %*
-" set statusline+=%4*\ %{File_size(@%)}\ %*
-" set statusline+=%5*\ [%{wordcount().words}]
-" set statusline+=%6*\ %m%r%y\ %*
-" set statusline+=%=%7*\ %{&ff}\ \|\ %{\"\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"\ \|\"}\ %-14.(%l:%c%V%)%*
-" set statusline+=%8*\ %P\ %*
-" " default bg for statusline is 236 in space-vim-dark
-" hi User1 cterm=bold ctermfg=232 ctermbg=179
-" hi User2 cterm=None ctermfg=214 ctermbg=242
-" hi User3 cterm=bold ctermfg=169 ctermbg=239
-" hi User4 cterm=None ctermfg=251 ctermbg=240
-" hi User5 cterm=bold ctermfg=208 ctermbg=238
-" hi User6 cterm=None ctermfg=246 ctermbg=237
-" hi User7 cterm=None ctermfg=250 ctermbg=238
-" hi User8 cterm=None ctermfg=249 ctermbg=240
-
-
-
 " }}}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" inoremap jk <Esc>
-
-" Alt+j sends ^[j
-" So need some tweaks for mapping Alt
-" for i in range(97,122)
-"   let c = nr2char(i)
-"   exec "map \e".c." <M-".c.">"
-"   exec "map! \e".c." <M-".c.">"
-" endfor
-"
-"
-" " Move a line down/up using Alt+[jk]
-" nnoremap <A-j> :m .+1<CR>==
-" nnoremap <A-k> :m .-2<CR>==
-" inoremap <A-j> <Esc>:m .+1<CR>==gi
-" inoremap <A-k> <Esc>:m .-2<CR>==gi
-" vnoremap <A-j> :m '>+1<CR>gv=gv
-" vnoremap <A-k> :m '<-2<CR>gv=gv
-
-
 
 
 
@@ -489,7 +400,7 @@ map <leader>ss :setlocal spell!<cr>
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " Quickly open a markdown buffer for scribble
 map <leader>x :e ~/buffer.md<cr>
@@ -600,4 +511,7 @@ function AddFileInformation_md()
       silent  put! =infor
 endfunction
 autocmd BufNewFile *.md call AddFileInformation_md()
+
+" Format certain files on save
+autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx,*.json,*.css,*.scss,*.html,*.vue,*.md call CocAction('format')
 " }}}
