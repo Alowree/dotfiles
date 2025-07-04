@@ -32,7 +32,8 @@ Plug 'bullets-vim/bullets.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-prettier'
-Plug 'tpope/vim-markdown' | Plug 'ap/vim-css-color'
+Plug 'tpope/vim-markdown'
+Plug 'ap/vim-css-color'
 Plug 'morhetz/gruvbox'
 call plug#end()
 " }}}
@@ -75,7 +76,11 @@ autocmd FocusGained,BufEnter * silent! checktime
 autocmd BufWritePost * checktime
 
 " Use system clipboard
-set clipboard+=unnamed
+"" unnamed register "* (Linux)
+"" unnamedplus register "+ (Linux and macOS)
+" This allows you to copy and paste between Vim and other applications
+" Use the system clipboard for all yank, delete, change and put operations
+set clipboard=unnamedplus
 
 " Don't show intro
 set shortmess+=I
@@ -159,10 +164,6 @@ set novisualbell
 set t_vb=
 set tm=500
 
-" Properly disable sound on errors on MacVim
-if has("gui_macvim")
-    autocmd GUIEnter * set vb t_vb=
-endif
 
 " Add a bit extra margin to the left
 set foldcolumn=1
@@ -171,7 +172,7 @@ set foldcolumn=1
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
-syntax enable
+syntax on
 
 " Set regular expression engine automatically
 set regexpengine=0
@@ -254,8 +255,8 @@ set wrap "Wrap lines
 
 
 " To persist undo history between sessions
+set undodir=~/.vim/tmp/undodir
 set undofile
-set undodir=~/.vim/undodir
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
