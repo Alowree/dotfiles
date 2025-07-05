@@ -1,117 +1,118 @@
----
-title: Backup dotfiles on GitHub
-date: 2024-09-03 11:14:30
-permalink: /pages/b6e997/
-categories:
-  - editor
-tags:
-  - editor
-  - Neovim
----
+# Dotfiles Management with Bare Git Repo and Symlinks
 
-There might be many tools installed on your computer; each has a config file, stored at different locations. What if you just purchased a new computer, or simply re-installed OS on your existing computer? Do you want to set up your config files from scratch all over again?
+This guide explains how to manage and share your configuration files (dotfiles) across Windows and macOS using a bare Git repository and symbolic links (symlinks).
 
-## Goal
+<!-- more -->
 
-- Manage and backup various configuration files on your computer through Git
-- Share the same set of dotfiles between two different machines
-- System:
-  - Windows 10, Windows Terminal, Zsh, Neovim
-  - MacOS, iTerm2, Zsh, Neovim
-- Method:
-  - A bare Git repository `dotfiles` in the home directory on my primary machine
+## 1. Choose a Canonical Config Folder
 
-## Tracked files
+Use `~/.config/nvim` as the canonical Neovim config folder (tracked in your dotfiles repo).
 
-- `.zshrc`
-- `.vimrc`
-- `README.md`
-- `AppData/Local/nvim`
+## 2. Initial Setup on macOS
 
-## Backup
+1. **Move your Neovim config to the canonical location:**
 
-1. Create a new folder `$HOME/dotfiles` and run `git init --bare` to initialize it as a bare repository (without a working directory) to track the configuration files you need to manage
-2. Transform the basic git command into the gitbare command, i.e. when running gitbare in Windows Terminal instead of basic git, Git automatically treats `$HOME/dotfiles` as the repository and the entire `$HOME` directory as the working directory. To accomplish this substitution, simply run `code $PROFILE` in Windows Terminal, open the configuration file using VS Code, and add the following function:
-
-   ```ps1
-   function gitbare {
-   git --git-dir=$HOME/dotfiles --work-tree=$HOME $args
-   }
+   ```sh
+   mkdir -p ~/.config
+   mv ~/AppData/Local/nvim ~/.config/nvim  # Only if you have config in the Windows path on macOS
    ```
 
-3. After step 2, when we need to work on our dotfiles repository, we can use the retrofit `gitbare add`, `gitbare commit`, and `gitbare remote` instead of the original `git add`, `git commit`, and `git remote`
-4. Create a new repository on GitHub, https://github.com/user-name/dotfiles
-   ```pwsh
-   gitbare remote add origin https://github.com/user-name/dotfiles.git
+2. **Initialize the bare repo (if not already done):**
+
+   ```sh
+   git init --bare $HOME/dotfiles
+   ```
+
+3. **Add the alias to your shell config:**
+
+   ```sh
+   echo "alias gitbare='git --git-dir=\$HOME/dotfiles --work-tree=\$HOME'" >> ~/.zshrc
+   source ~/.zshrc
+   ```
+
+4. **Ignore the bare repo folder:**
+
+   ```sh
+   echo "dotfiles" >> ~/.gitignore
+   gitbare config --local core.excludesfile ~/.gitignore
+   ```
+
+5. **Add and commit your config:**
+   ```sh
+   gitbare add .config/nvim
+   gitbare commit -m "Add Neovim config"
+   gitbare remote add origin https://github.com/yourusername/dotfiles.git
    gitbare branch -M main
    gitbare push -u origin main
    ```
-5. Now you can selectively add, commit, and push your configuration files from your `$HOME` directory to your remote GitHub repository for backup
 
-## 本地仓库从零重建
+## 3. Setup on Windows
 
-远程仓库已经存在，也包含之前推送过的仓库文件夹和文件。现在本地仓库删除，完全从零开始重建。当尝试运行 `gitbare push` 触发以下报错：
+1. **Clone the bare repo:**
 
-```
-fatal: The current branch main has no upstream branch.
-To push the current branch and set the remote as upstream, use
+   ```powershell
+   git clone --bare https://github.com/yourusername/dotfiles.git $HOME\dotfiles
+   ```
 
-    git push --set-upstream origin main
+2. **Add the function to your PowerShell profile:**
 
-To have this happen automatically for branches without a tracking
-upstream, see 'push.autoSetupRemote' in 'git help config'.
-```
+   ```powershell
+   code $PROFILE
+   # Add:
+   function gitbare {
+     git --git-dir=$HOME/dotfiles --work-tree=$HOME $args
+   }
+   ```
 
-根据提示，运行 `gitbare push --set-upstream origin main` 之后，旋即触发以下报错：
+3. **Ignore the bare repo folder:**
 
-```
-error: src refspec main does not match any
-error: failed to push some refs to 'https://github.com/alowree/dotfiles.git'
-```
+   ```powershell
+   echo "dotfiles" >> $HOME\.gitignore
+   gitbare config --local core.excludesfile $HOME\.gitignore
+   ```
 
-没有更好的办法，只好手动删除运程仓库，再重新推送。
+4. **Pull your dotfiles:**
 
-## git clone
+   ```powershell
+   gitbare checkout
+   ```
 
-Now I'm on my macOS home folder.
+5. **Remove the old Neovim config folder if it exists:**
 
-```
-git clone https://github.com/Alowree/dotfiles.git
-```
+   ```powershell
+   Remove-Item "$HOME\AppData\Local\nvim" -Recurse -Force
+   ```
 
-If the internet connection is good (and you are not blocked by the GFW), the above command would clone the `dotfiles` folder from your remote repository to your home directory.
+6. **Create a symlink from the Windows path to the canonical folder:**
 
-## git push
+   ```powershell
+   New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Local\nvim" -Target "$HOME\.config\nvim"
+   ```
 
-I've done some editing in the README.md file on the macOS.
+## 4. Daily Usage
 
-```
-git add .
-git commit -m "Updated the README.md from macOS"
-git push origin main
-```
+- Edit your Neovim config in `~/.config/nvim` (macOS) or via the symlinked path on Windows.
+- Use `gitbare add`, `gitbare commit`, `gitbare push` and `gitbare pull` to sync changes.
 
-Push success!
+## 5. Notes
 
-## Pull
+- Only `~/.config/nvim` is tracked in your dotfiles repo.
+- On Windows, `~/AppData/Local/nvim` is just a symlink (pointer) to `~/.config/nvim`.
+- On macOS, Neovim reads from `~/.config/nvim` directly.
 
-How can I pull the update from remote repository onto my Windows machine?
+## 6. Comparison Table: Common Config Paths in $HOME
 
-Will all updates be made automatically to each file and each folder, as originally organized on the home directory, using the same file structure?
+| Software     | macOS Path                                | Windows Path                         |
+| ------------ | ----------------------------------------- | ------------------------------------ |
+| Vim          | `~/.vimrc`                                | `~/.vimrc`                           |
+| Zsh          | `~/.zshrc`                                | `~/.zshrc`                           |
+| Git Config   | `~/.gitconfig`                            | `~/.gitconfig`                       |
+| Neovim       | `~/.config/nvim`                          | `~/AppData/Local/nvim`               |
+| Neovim       | `~/.config/nvim-from-scratch/`            | `~/AppData/Local/nvim-from-scratch/` |
+| Yazi         | `~/.config/yazi/`                         | `~/AppData/Roaming/yazi/`            |
+| Bash         | `~/.bashrc`                               | `~/.bashrc` or `~/.bash_profile`     |
+| VS Code User | `~/Library/Application Support/Code/User` | `~/AppData/Roaming/Code/User`        |
+| PowerShell   | N/A                                       | `~/Documents/PowerShell`             |
+| SSH Config   | `~/.ssh/config`                           | `~/.ssh/config`                      |
 
-Switch to the Windows machine and enter the home directory.
-
-```
-gitbare pull
-```
-
-We can see both changes made to the `README.md` and to the `AppData/Local/nvim/` are successfully updated to the local Windows machine. Note the Git user from two machines are of the same user. What about two different users?
-
-Affirmative. `git pull` works just fine on the Windows machine.
-
-## Reference
-
-- https://www.ackama.com/what-we-think/the-best-way-to-store-your-dotfiles-a-bare-git-repository-explained/
-- https://www.daytona.io/dotfiles/ultimate-guide-to-dotfiles
-- https://www.youtube.com/watch?v=iYElODEf6awo
-- https://github.com/pawelbialaszczyk/dotfiles
+**Tip:** For true cross-platform sharing, use symlinks to point platform-specific config paths to a single canonical folder tracked in your dotfiles repo.
