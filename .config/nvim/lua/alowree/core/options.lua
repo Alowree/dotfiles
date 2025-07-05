@@ -1,4 +1,4 @@
--- C:\Users\Alowr\AppData\Local\nvim\lua\alowree\core\options.lua
+-- C:\Users\Lenovo\AppData\Local\nvim\lua\alowree\core\options.lua
 -- See `:help options`
 
 vim.cmd("let g:netrw_liststyle = 3")
