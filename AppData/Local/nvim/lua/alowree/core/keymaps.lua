@@ -72,22 +72,25 @@ keymap.set("v", ">", ">gv")
 -- Abbreviations
 -- See `:h vim.keymap.set`
 -- See `:h nvim_set_keymap`
-keymap.set("ia", "<<", "←")
-keymap.set("ia", ">>", "→")
-keymap.set("ia", "^^", "↑")
-keymap.set("ia", "VV", "↓")
-keymap.set("ia", "【【", "「")
-keymap.set("ia", "】】", "」")
-keymap.set("ia", "《《", "『")
-keymap.set("ia", "》》", "』")
+keymap.set("i", "<<", "←")
+keymap.set("i", ">>", "→")
+keymap.set("i", "^^", "↑")
+keymap.set("i", "VV", "↓")
 
-keymap.set("ia", "btw", "By the way, ")
-keymap.set("ia", "fyi", "For your information ——")
-keymap.set("ia", "dhl", "DHL")
-keymap.set("ia", "ndl", "Nolan Digital Limited")
-keymap.set("ia", "tcl", "Twine Company Limited")
-keymap.set("ia", "asap", "as soon as possible.")
-keymap.set("ia", "fedex", "FedEx")
+-- Useful tricks for keying in the Chinese quotation marks
+keymap.set("i", "【【", "「")
+keymap.set("i", "】】", "」")
+keymap.set("i", "《《", "『")
+keymap.set("i", "》》", "』")
+
+-- Abbreviations
+keymap.set("i", "btw", "By the way, ")
+keymap.set("i", "fyi", "For your information ——")
+keymap.set("i", "dhl", "DHL")
+keymap.set("i", "ndl", "Nolan Digital Limited")
+keymap.set("i", "tcl", "Twine Company Limited")
+keymap.set("i", "asap", "as soon as possible.")
+keymap.set("i", "fedex", "FedEx")
 
 -- Insert date and time under Windows OS
 keymap.set("ia", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>")

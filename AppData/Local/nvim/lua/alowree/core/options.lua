@@ -86,10 +86,19 @@ opt.sidescrolloff = 5
 opt.fileformat = "unix"
 opt.fileformats = "unix,dos"
 
+-- Enable autoread (auto-reload files changed outside of Neovim)
 opt.autoread = true
-opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
--- Enable spell checking for English and Chinese
--- Gave up on global setting and changed to Markdown specific
--- opt.spell = true
--- opt.spelllang = "en_us,cjk"
+-- Check for file changes when focus is gained or buffer is entered
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+	pattern = "*",
+	command = "silent! checktime",
+})
+
+-- Check for file changes after writing any buffer
+vim.api.nvim_create_autocmd("BufWritePost", {
+	pattern = "*",
+	command = "checktime",
+})
+
+opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
