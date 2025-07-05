@@ -1,0 +1,35 @@
+[flavor]
+dark = "catppuccin-macchiato"
+light = "catppuccin-macchiato"
+
+
+[general]
+# 设置主界面配色方案
+background_color = "#1e1e2e"  # 背景颜色
+foreground_color = "#cdd6f4"  # 文本颜色
+cursor_color = "#89dceb"      # 光标颜色
+selection_color = "#585b70"   # 选中项背景颜色
+highlight_color = "#fab387"   # 高亮颜色
+
+[file_browser]
+# 文件浏览器颜色配置
+directory_color = "#89b4fa"   # 目录名称颜色
+file_color = "#cdd6f4"        # 普通文件颜色
+symlink_color = "#f5c2e7"     # 符号链接颜色
+hidden_file_color = "#6c7086" # 隐藏文件颜色
+
+[status_bar]
+# 状态栏颜色
+background_color = "#313244"  # 状态栏背景
+foreground_color = "#a6adc8"  # 状态栏文字
+error_color = "#f38ba8"       # 状态栏错误信息
+
+[search]
+# 搜索结果配色
+match_color = "#a6e3a1"       # 搜索结果的匹配高亮
+current_match_color = "#fab387"  # 当前匹配项的高亮
+
+[progress_bar]
+# 进度条的配色
+filled_color = "#89dceb"      # 已填充部分
+empty_color = "#313244"       # 未填充部分
