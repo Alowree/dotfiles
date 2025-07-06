@@ -3,8 +3,10 @@ Set-Alias vi nvim
 Set-Alias tr tree
 
 # Enviromental Variables
+# Gemini uses this environmental variable
 $env:GEMINI_API_KEY="AIzaSyA-7XagPZBx6QKfmMDyR9E69mFrbQLlVng"
-
+# Yazi config uses this environmental variable
+$env:EDITOR="nvim"
 
 # Functions
 function whereis ($command) {
