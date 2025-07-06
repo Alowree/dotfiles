@@ -89,7 +89,7 @@ Use `~/.config/nvim` as the canonical Neovim config folder (tracked in your dotf
    New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Local\nvim" -Target "$HOME\.config\nvim"
    ```
 
-   ::: details
+   ::: details The system cannot find the path specified
 
    ```sh
    New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Roaming\yazi\config" -Target "$HOME\.config\yazi"
@@ -120,17 +120,18 @@ Use `~/.config/nvim` as the canonical Neovim config folder (tracked in your dotf
 
 ## 6. Comparison Table: Common Config Paths in $HOME
 
-| Software     | macOS Path                                | Windows Path                         |
-| ------------ | ----------------------------------------- | ------------------------------------ |
-| Vim          | `~/.vimrc`                                | `~/.vimrc`                           |
-| Zsh          | `~/.zshrc`                                | `~/.zshrc`                           |
-| Git Config   | `~/.gitconfig`                            | `~/.gitconfig`                       |
-| Neovim       | `~/.config/nvim`                          | `~/AppData/Local/nvim`               |
-| Neovim       | `~/.config/nvim-from-scratch/`            | `~/AppData/Local/nvim-from-scratch/` |
-| Yazi         | `~/.config/yazi/`                         | `~/AppData/Roaming/yazi/config`      |
-| Bash         | `~/.bashrc`                               | `~/.bashrc` or `~/.bash_profile`     |
-| VS Code User | `~/Library/Application Support/Code/User` | `~/AppData/Roaming/Code/User`        |
-| PowerShell   | N/A                                       | `~/Documents/PowerShell`             |
-| SSH Config   | `~/.ssh/config`                           | `~/.ssh/config`                      |
+| Software      | Canonical Folder               | macOS Path                                                | Windows Path                         |
+| ------------- | ------------------------------ | --------------------------------------------------------- | ------------------------------------ |
+| Vim           | `~/.vimrc`                     | `~/.vimrc`                                                | `~/.vimrc`                           |
+| Zsh           | `~/.zshrc`                     | `~/.zshrc`                                                | `~/.zshrc`                           |
+| Git Config    | `~/.gitconfig`                 | `~/.gitconfig`                                            | `~/.gitconfig`                       |
+| Neovim        | `~/.config/nvim`               | `~/.config/nvim`                                          | `~/AppData/Local/nvim`               |
+| Neovim (alt)  | `~/.config/nvim-from-scratch/` | `~/.config/nvim-from-scratch/`                            | `~/AppData/Local/nvim-from-scratch/` |
+| Yazi          | `~/.config/yazi/`              | `~/.config/yazi/`                                         | `~/AppData/Roaming/yazi/config`      |
+| Typora Themes | `~/.config/typora-themes/`     | `~/Library/Application Support/abnerworks.Typora/themes/` | `~/AppData/Roaming/Typora/themes/`   |
+| Bash          | `~/.bashrc`                    | `~/.bashrc`                                               | `~/.bashrc` or `~/.bash_profile`     |
+| VS Code User  | `~/.config/vscode-user/`       | `~/Library/Application Support/Code/User`                 | `~/AppData/Roaming/Code/User`        |
+| PowerShell    | `~/Documents/PowerShell`       | N/A                                                       | `~/Documents/PowerShell`             |
+| SSH Config    | `~/.ssh/config`                | `~/.ssh/config`                                           | `~/.ssh/config`                      |
 
 **Tip:** For true cross-platform sharing, use symlinks to point platform-specific config paths to a single canonical folder tracked in your dotfiles repo.
