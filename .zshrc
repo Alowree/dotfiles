@@ -45,6 +45,8 @@ zinit cdreplay -q
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Environmental Variables
+export GEMINI_API_KEY="AIzaSyA-7XagPZBx6QKfmMDyR9E69mFrbQLlVng"
 # Yazi configuration uses this variable
 export EDITOR="nvim"
 
