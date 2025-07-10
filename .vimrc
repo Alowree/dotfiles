@@ -31,10 +31,9 @@ call plug#begin('~/.vim/plugged')
 Plug 'bullets-vim/bullets.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-prettier'
 Plug 'tpope/vim-markdown'
 Plug 'ap/vim-css-color'
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
 call plug#end()
 " }}}
 
@@ -80,7 +79,7 @@ autocmd BufWritePost * checktime
 "" unnamedplus register "+ (Linux and macOS)
 " This allows you to copy and paste between Vim and other applications
 " Use the system clipboard for all yank, delete, change and put operations
-set clipboard=unnamedplus
+set clipboard=unnamed
 
 " Don't show intro
 set shortmess+=I
@@ -89,7 +88,7 @@ set shortmess+=I
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set 8 lines to the cursor - when moving vertically using j/k
-set scrolloff=8
+set scrolloff=5
 
 " Avoid garbled characters in Chinese language windows OS
 let $LANG='en'
@@ -98,7 +97,14 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
 " Turn on the Wild menu
+"
+" This enables the viusal menu
+" It draws the list of matches for you to see
 set wildmenu
+
+" This defines the behavior of the Tab key
+" when that menu is active
+set wildmode=longest:full,full
 
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
@@ -115,9 +121,9 @@ set ruler
 set cmdheight=1
 
 " A buffer becomes hidden
-" A buffer is marked as ‘hidden’ if it has unsaved changes, and it is not currently loaded in a window
+" A buffer is marked as ¿hidden¿ if it has unsaved changes, and it is not currently loaded in a window
 " if you try and quit Vim while there are hidden buffers, you will raise an error:
-" E162: No write since last change for buffer “a.txt”
+" E162: No write since last change for buffer ¿a.txt¿
 set hidden
 
 set wrap
@@ -149,14 +155,15 @@ set magic
 " Show matching brackets when text indicator is over them
 set showmatch
 
+" How long Vim highlights a matching bracket, in tenths of a second
+set matchtime=2
+
 " Show incomplete commands
 set showcmd
 
 " Set built-in file system explorer to use layout similar to the NERDTree plugin
 let g:netrw_liststyle=3
 
-" How many tenths of a second to blink when matching brackets
-set mat=2
 
 " No annoying sound on errors
 set noerrorbells
@@ -208,6 +215,8 @@ endif
 
 " Set utf-8 as standard encoding and en_US as the standard language
 set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8,ucs-bom,default,latin1
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
@@ -243,7 +252,7 @@ set tabstop=4
 
 " To visualize tabs and trailing spaces
 set list
-set listchars=tab:»\ ,trail:·,nbsp:␣
+set listchars=tab:»\ ,trail:·,nbsp:¿
 
 " Linebreak on 500 characters
 set lbr
@@ -283,12 +292,14 @@ augroup END
 " => Moving around, tabs, windows and buffers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Fast saving
 nmap <leader>ww :w<cr>
 nmap <leader>qq :wq<cr>
+
 nmap <leader>v :edit $MYVIMRC<cr>
 nmap <leader>so :source ~/.vimrc<CR>
+
 nmap <leader>wk :e ~/Documents/Weekly.md<cr>
+nmap <leader>x :e ~/Documents/buffer.md<cr>
 
 " Disable highlight when <Esc> is pressed
 map <silent> <Esc> :noh<cr>
@@ -353,6 +364,7 @@ iabbrev << ←
 iabbrev ^^ ↑
 iabbrev VV ↓
 
+
 " Useful tricks for keying in the Chinese quotation marks
 inoremap 【【 「
 inoremap 】】 」
@@ -361,7 +373,7 @@ inoremap 》》 』
 
 " Abbreviations
 iabbrev btw By the way,
-iabbrev fyi For your information ——
+iabbrev fyi For your information —
 iabbrev asap as soon as possible.
 iabbrev fedex FedEx
 iabbrev dhl DHL
@@ -374,13 +386,40 @@ iabbrev tcl Twine Company Limited
 " Purely manual, withouth plugins such as vim-airline
 " Will be overwritten after you install vim-airline
 """"""""""""""""""""""""""""""
+
+" https://github.com/vim-airline/vim-airline/blob/ebb89a0846ff8b8bc64579155d661b825f97d3f2/doc/airline.txt
+"vim-airline/vim-airline
+let g:airline#extensions#tabline#enabled = 1               "显示窗口的 tab 和 buffer
+" let g:airline_powerline_fonts = 1                          "开启支持 powerline 字体
+" let g:airline#extensions#tabline#formatter = 'unique_tail' "顶部缓存只显示文件名
+
+" airline-customziation
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+let g:airline_left_sep = ''
+" let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+" let g:airline_right_alt_sep = ''
+
+" let g:airline_symbols.branch = ''
+
+" let g:airline_symbols.linenr = ' ㏑ '
+let g:airline_symbols.colnr = ' ℅ :'                         "列标志，默认标志乱码
+
+" let g:airline_symbols.readonly = ''
+let g:airline_symbols.maxlinenr = ' ☰'
+let g:airline_symbols.maxlinenr = ' '
+" let g:airline_symbols.dirty = '⚡'
+
+" }}}
+
 " Don't show the mode, since it's already in the status line
 set noshowmode
 
 " Always show the status line
 set laststatus=2
-
-" }}}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
@@ -403,11 +442,6 @@ map <leader>ss :setlocal spell!<cr>
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
-" Quickly open a markdown buffer for scribble
-map <leader>x :e ~/buffer.md<cr>
-
-" Toggle paste mode on and off
-map <leader>pp :setlocal paste!<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Helper functions                                       {{{
