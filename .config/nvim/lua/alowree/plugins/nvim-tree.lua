@@ -1,4 +1,5 @@
--- C:\Users\Alowr\AppData\Local\nvim\lua\alowree\plugins\nvim-tree.lua
+-- C:\Users\Lenovo\AppData\Local\nvim\lua\alowree\plugins\nvim-tree.lua
+-- C:/Users/Lenovo/AppData/Local/nvim/lua/alowree/plugins/nvim-tree.lua
 return {
 	"nvim-tree/nvim-tree.lua",
 	dependencies = {
@@ -8,6 +9,12 @@ return {
 			"nvim-lua/plenary.nvim",
 			"3rd/image.nvim", -- Optional, for previewing images
 		},
+	},
+	cmd = {
+		"NvimTreeToggle",
+		"NvimTreeFindFile",
+		"NvimTreeCollapse",
+		"NvimTreeRefresh",
 	},
 	config = function()
 		local nvimtree = require("nvim-tree")

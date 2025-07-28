@@ -36,7 +36,6 @@ opt.smartcase = true -- if you include mixed case in your search, assumes you wa
 
 -- Show line under cursor
 opt.cursorline = true
--- opt.colorcolumn = "80"
 
 -- Store undos between sessions
 opt.undofile = true
@@ -48,7 +47,6 @@ opt.mouse = "a"
 -- (have to use iterm2 or any other true color terminal)
 opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
--- opt.background = "light" -- colorschemes that can be light or dark will be made light
 
 -- Show sign column so that text doesn't shift
 opt.signcolumn = "yes"
@@ -84,7 +82,7 @@ opt.sidescrolloff = 5
 
 -- opt.fileformat = "dos"
 opt.fileformat = "unix"
-opt.fileformats = "unix,dos"
+opt.fileformats = "unix,dos,mac"
 
 -- Enable autoread (auto-reload files changed outside of Neovim)
 opt.autoread = true
@@ -93,12 +91,6 @@ opt.autoread = true
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
 	pattern = "*",
 	command = "silent! checktime",
-})
-
--- Check for file changes after writing any buffer
-vim.api.nvim_create_autocmd("BufWritePost", {
-	pattern = "*",
-	command = "checktime",
 })
 
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"

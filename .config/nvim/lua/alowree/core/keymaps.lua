@@ -15,8 +15,8 @@ keymap.set("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move Down" })
 keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 
 -- Navigate buffers
--- keymap.set("n", "<leader>h", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
--- keymap.set("n", "<leader>l", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+keymap.set("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+keymap.set("n", "<leader>bn", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
@@ -84,16 +84,16 @@ keymap.set("i", "《《", "『")
 keymap.set("i", "》》", "』")
 
 -- Abbreviations
-keymap.set("i", "btw", "By the way, ")
-keymap.set("i", "fyi", "For your information ——")
-keymap.set("i", "dhl", "DHL")
-keymap.set("i", "ndl", "Nolan Digital Limited")
-keymap.set("i", "tcl", "Twine Company Limited")
-keymap.set("i", "asap", "as soon as possible.")
-keymap.set("i", "fedex", "FedEx")
+-- keymap.set("i", "btw", "By the way, ")
+-- keymap.set("i", "fyi", "For your information —")
+-- keymap.set("i", "dhl", "DHL")
+-- keymap.set("i", "ndl", "Nolan Digital Limited")
+-- keymap.set("i", "tcl", "Twine Company Limited")
+-- keymap.set("i", "asap", "as soon as possible.")
+-- keymap.set("i", "fedex", "FedEx")
 
 -- Insert date and time under Windows OS
-keymap.set("ia", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>")
+keymap.set("i", "<leader>dt", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>", { desc = "Insert date and time" })
 
 -- FileType autocmd for Markdown files
 -- https://github.com/Piotr1215/dotfiles/blob/master/.config/nvim/ftplugin/markdown.lua
