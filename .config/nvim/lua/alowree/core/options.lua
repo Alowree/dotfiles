@@ -5,28 +5,16 @@ vim.cmd("let g:netrw_liststyle = 3")
 
 local opt = vim.opt
 
-opt.conceallevel = 0 -- so that `` is visible in Markdown files
-opt.fileencoding = "utf-8"
+-- opt.fileencoding = "utf-8" -- Default setting
 
--- Always show relative line numbers
 opt.number = true
 opt.relativenumber = true
 
--- opt.title = true
-
 -- tabs & indentation
-opt.expandtab = true -- Convert tabs to spaces
-opt.shiftwidth = 2 -- Amount to indent with << and >>
-
 opt.tabstop = 2 -- How many spaces are shown per Tab
-opt.softtabstop = 2 -- How many spaces are applied when pressing Tab
-
-opt.smarttab = true
-opt.smartindent = true
-opt.autoindent = true -- Keep indentation from previous line
-
--- Enable break indent
-opt.breakindent = true
+opt.shiftwidth = 2 -- Amount to indent with << and >>
+opt.expandtab = true -- Convert tabs to spaces
+opt.autoindent = true -- Keep indentation from previous line; Default setting
 
 opt.wrap = true -- whether to auto wrap long lines into display lines
 
@@ -34,21 +22,16 @@ opt.wrap = true -- whether to auto wrap long lines into display lines
 opt.ignorecase = true -- ignore upper/lower case when searching
 opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
 
--- Show line under cursor
 opt.cursorline = true
 
--- Store undos between sessions
 opt.undofile = true
 
--- Enable mouse mode, can be useful for resizing splits for example.
 opt.mouse = "a"
 
 -- turn on termguicolors for tokyonight colorscheme to work
 -- (have to use iterm2 or any other true color terminal)
 opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-
--- Show sign column so that text doesn't shift
 opt.signcolumn = "yes"
 
 -- Don't show the mode, since it's already in the status line
@@ -77,20 +60,17 @@ opt.swapfile = false
 opt.scrolloff = 5
 opt.sidescrolloff = 5
 
--- Enable a blinking cursor
--- opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor"
-
 -- opt.fileformat = "dos"
 opt.fileformat = "unix"
 opt.fileformats = "unix,dos,mac"
 
 -- Enable autoread (auto-reload files changed outside of Neovim)
-opt.autoread = true
+-- opt.autoread = true
 
 -- Check for file changes when focus is gained or buffer is entered
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
-	pattern = "*",
-	command = "silent! checktime",
-})
+-- vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+-- 	pattern = "*",
+-- 	command = "silent! checktime",
+-- })
 
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
