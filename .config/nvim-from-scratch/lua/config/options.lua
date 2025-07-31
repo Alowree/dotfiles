@@ -89,11 +89,6 @@ opt.fileformats = "unix,dos"
 opt.autoread = true
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
--- Enable spell checking for English and Chinese
--- Gave up on global setting and changed to Markdown specific
--- opt.spell = true
--- opt.spelllang = "en_us,cjk"
-
 -- Avoid garbled characters in Chinese language Windows OS
 vim.cmd("let $LANG='en'")
 opt.langmenu = "en" -- Set the language menu to English

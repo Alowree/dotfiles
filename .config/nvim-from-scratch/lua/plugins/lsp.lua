@@ -60,6 +60,9 @@ return {
         --  To jump back, press <C-t>.
         map("gd", require("fzf-lua").lsp_definitions, "[G]oto [D]efinition")
 
+        -- Hover documentation
+        map('K', vim.lsp.buf.hover, 'Hover Documentation')
+
         -- Find references for the word under your cursor.
         map("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
 
