@@ -5,7 +5,7 @@
 
 local keymap = vim.keymap
 
-keymap.set("n", "-", "<cmd>Oil --float<CR>", { desc = "Open Parent Directory in Oil" })
+keymap.set("n", "<leader>ee", "<cmd>Oil --float<CR>", { desc = "Open Parent Directory in Oil" })
 keymap.set("n", "gl", function()
   vim.diagnostic.open_float()
 end, { desc = "Open Diagnostics in Float" })
@@ -64,6 +64,7 @@ keymap.set("n", "<C-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrease W
 keymap.set("n", "<C-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 -- Open / Save file
+keymap.set("n", "<leader>o", ":update<CR> :source<CR>")
 keymap.set("n", "<leader>wk", "<cmd>e ~/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
 keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 keymap.set("n", "<leader>ww", function()
@@ -111,4 +112,5 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Quit
-keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+keymap.set("n", "<leader>qq", "<cmd>q<cr>", { desc = "Quit" })
+keymap.set("n", "<leader>qa", "<cmd>qa<cr>", { desc = "Quit All" })

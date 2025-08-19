@@ -63,9 +63,7 @@ keymap.set("n", "<leader>fO", "zR", { desc = "Fold: Open All" })
 
 -- Open / Save file
 keymap.set("n", "<leader>wk", "<cmd>e ~/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
-keymap.set("n", "<leader>ww", function()
-	vim.cmd("write")
-end, { desc = "Write current file" })
+keymap.set("n", "<leader>ww", ":write<CR>")
 
 -- Save file from any mode
 keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
@@ -99,9 +97,10 @@ keymap.set("i", "》》", "』")
 -- keymap.set("i", "fedex", "FedEx")
 
 -- Insert date and time under Windows OS
-keymap.set("i", "<leader>dt", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>", { desc = "Insert date and time" })
+keymap.set("i", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>", { desc = "Insert date and time" })
 
 -- FileType autocmd for Markdown files
 -- https://github.com/Piotr1215/dotfiles/blob/master/.config/nvim/ftplugin/markdown.lua
 -- Quit
-keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+keymap.set("n", "<leader>qq", "<cmd>quit<cr>", { desc = "Quit" })
+keymap.set("n", "<leader>qa", "<cmd>quitall<cr>", { desc = "Quit" })

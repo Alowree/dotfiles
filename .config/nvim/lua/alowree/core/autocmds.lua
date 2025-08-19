@@ -10,23 +10,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
--- Auto switch en/cn input method
--- local ime_autogroup = vim.api.nvim_create_augroup("ImeAutoGroup", { clear = true })
---
--- vim.api.nvim_create_autocmd("InsertLeave", {
--- 	group = ime_autogroup,
--- 	callback = function()
--- 		vim.cmd(":silent :!" .. vim.fn.stdpath("config") .. "/bin/im-select.exe 1033")
--- 	end,
--- })
---
--- vim.api.nvim_create_autocmd("InsertEnter", {
--- 	group = ime_autogroup,
--- 	callback = function()
--- 		vim.cmd(":silent :!" .. vim.fn.stdpath("config") .. "/bin/im-select.exe 2052")
--- 	end,
--- })
-
 -- ============================================================================
 --  Optimized Auto-Switch for Windows Input Method
 -- ============================================================================
@@ -43,7 +26,7 @@ local ime = {
 	-- NOTE: We don't need to hardcode the Chinese ID anymore!
 
 	-- Path to the executable, as seen in the original Option 2
-	select_path = vim.fn.stdpath("config") .. "/bin/im-select.exe",
+	select_path = vim.fn.stdpath("config") .. "/z-bin/im-select.exe",
 
 	-- Variable to store the last used IME ID
 	last_id = nil,
