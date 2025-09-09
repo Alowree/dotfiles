@@ -4,8 +4,6 @@ vim.g.mapleader = " "
 
 local keymap = vim.keymap -- for conciseness
 
--- keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
-
 -- Move current line up/down by Alt jk, like in VSCode
 --  :[range]move {address}
 keymap.set("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move Down" })
@@ -62,11 +60,8 @@ keymap.set("n", "<leader>fC", "zM", { desc = "Fold: Close All" })
 keymap.set("n", "<leader>fO", "zR", { desc = "Fold: Open All" })
 
 -- Open / Save file
-keymap.set("n", "<leader>wk", "<cmd>e ~/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
+keymap.set("n", "<leader>wk", "<cmd>e ~/OneDrive/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
 keymap.set("n", "<leader>ww", ":write<CR>")
-
--- Save file from any mode
--- keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
 -- Visual mode
 -- Stay in indent mode, better indenting
@@ -87,20 +82,9 @@ keymap.set("i", "】】", "」")
 keymap.set("i", "《《", "『")
 keymap.set("i", "》》", "』")
 
--- Abbreviations
--- keymap.set("i", "btw", "By the way, ")
--- keymap.set("i", "fyi", "For your information —")
--- keymap.set("i", "dhl", "DHL")
--- keymap.set("i", "ndl", "Nolan Digital Limited")
--- keymap.set("i", "tcl", "Twine Company Limited")
--- keymap.set("i", "asap", "as soon as possible.")
--- keymap.set("i", "fedex", "FedEx")
-
 -- Insert date and time under Windows OS
-keymap.set("i", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>", { desc = "Insert date and time" })
+-- keymap.set("i", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>", { desc = "Insert date and time" })
 
--- FileType autocmd for Markdown files
--- https://github.com/Piotr1215/dotfiles/blob/master/.config/nvim/ftplugin/markdown.lua
 -- Quit
 keymap.set("n", "<leader>qq", "<cmd>quit<cr>", { desc = "Quit" })
 keymap.set("n", "<leader>qa", "<cmd>quitall<cr>", { desc = "Quit" })
