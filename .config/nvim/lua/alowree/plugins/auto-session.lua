@@ -1,17 +1,17 @@
 return {
 	"rmagatti/auto-session",
-	config = function()
-		local auto_session = require("auto-session")
-
-		auto_session.setup({
-			auto_restore = false,
-			suppress_dirs = { "~/", "~/Dev/", "~/Downloads", "~/Documents", "~/Desktop/" },
-		})
-
-		local keymap = vim.keymap
-
-		keymap.set("n", "<leader>wr", "<cmd>SessionRestore<CR>", { desc = "Restore session for cwd" }) -- restore last workspace session for current directory
-		keymap.set("n", "<leader>ws", "<cmd>SessionSave<CR>", { desc = "Save session for auto session root dir" }) -- save workspace session for current working directory
-		keymap.set("n", "<leader>wa", "<cmd>SessionToggleAutoSave<CR>", { desc = "Toggle autosave" })
-	end,
+	lazy = false,
+	---enables autocomplete for opts
+	---@module "auto-session"
+	---@type AutoSession.Config
+	opts = {
+		suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+		-- log_level = 'debug',
+	},
+	keys = {
+		-- Will use Telescope if installed or a vim.ui.select picker otherwise
+		{ "<leader>wr", "<cmd>AutoSession search<CR>", desc = "Session search" },
+		{ "<leader>ws", "<cmd>AutoSession save<CR>", desc = "Save session" },
+		{ "<leader>wa", "<cmd>AutoSession toggle<CR>", desc = "Toggle autosave" },
+	},
 }

@@ -44,15 +44,19 @@ keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
 
--- Resize window using <ctrl> arrow keys
+-- Resize window using Ctrl + arrow keys
+-- Works on Windows only
+-- Does not work in macOS by default
+-- Ctrl + arrow key combinations conflict with macOS's default Mission Control shortcuts.
+-- Disable the conflicting macOS keyboard shortcuts first. Then they will work nicely.
 keymap.set("n", "<C-Down>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
 keymap.set("n", "<C-Up>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
 keymap.set("n", "<C-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 keymap.set("n", "<C-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 -- Code Folding
-keymap.set("n", "-", "<cmd>foldclose<CR>", { desc = " Close code fold" })
-keymap.set("n", "+", "<cmd>foldopen<CR>", { desc = " Open code fold" })
+keymap.set("n", "-", "<cmd>foldclose<CR>", { desc = "Close code fold" })
+keymap.set("n", "+", "<cmd>foldopen<CR>", { desc = "Open code fold" })
 
 -- Better code folding
 keymap.set("n", "za", "za", { desc = "Toggle fold" }) -- Toggle fold under cursor
@@ -86,5 +90,5 @@ keymap.set("i", "》》", "』")
 -- keymap.set("i", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>", { desc = "Insert date and time" })
 
 -- Quit
-keymap.set("n", "<leader>qq", "<cmd>quit<cr>", { desc = "Quit" })
-keymap.set("n", "<leader>qa", "<cmd>quitall<cr>", { desc = "Quit" })
+keymap.set("n", "<leader>qq", "<cmd>quit<cr>", { desc = "Quit Window" })
+keymap.set("n", "<leader>qa", "<cmd>quitall<cr>", { desc = "Quit All" })

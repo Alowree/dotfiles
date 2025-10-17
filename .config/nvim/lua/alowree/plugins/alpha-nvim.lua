@@ -21,9 +21,9 @@ return {
 		dashboard.section.buttons.val = {
 			dashboard.button("e", "  > New File", "<cmd>ene<CR>"),
 			dashboard.button("Space ee", "  > Toggle Sidebar", "<cmd>NvimTreeToggle<CR>"),
-			dashboard.button("Space ff", "󰱼  > Find File", "<cmd>FzfLua files<CR>"),
-			dashboard.button("Space fg", "  > Find Word", "<cmd>FzfLua live_grep<CR>"),
-			dashboard.button("Space wr", "󰁯  > Restore Session", "<cmd>SessionRestore<CR>"),
+			dashboard.button("Space ff", "󰱼  > Find File", "<cmd>lua require('fzf-lua').files()<CR>"),
+			dashboard.button("Space fg", "  > Find Word", "<cmd>lua require('fzf-lua').live_grep()<CR>"),
+			dashboard.button("Space wr", "󰁯  > Restore Session", "<cmd>AutoSession restore<CR>"),
 			dashboard.button("q", "  > Quit NeoVim", "<cmd>qa<CR>"),
 		}
 
