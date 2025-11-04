@@ -145,7 +145,27 @@ return {
 		local servers = {
 			bashls = {},
 			marksman = {},
-			lua_ls = {},
+			-- lua_ls = {},
+			-- The warning "Undefined global vim" on line 79 of lua/alowree/core/keymaps.lua
+			-- appears because the Lua language server, which analyzes your code for errors,
+			-- doesn't know that vim is a global variable provided by the Neovim environment.
+			-- While the code runs correctly inside Neovim, the language server flags it as
+			-- a potential error during static analysis.
+			--
+			-- To fix this, we can configure the Lua language server to recognize vim as a
+			-- known global variable. This is done in your LSP configuration file,
+			-- lua/alowree/plugins/lsp.lua. By adding this setting, you inform the language
+			-- server that vim is a valid global, which will remove the warning for all
+			-- your Lua files in this project.
+			lua_ls = {
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = { "vim" },
+						},
+					},
+				},
+			},
 		}
 
 		local ensure_installed = vim.tbl_keys(servers or {})

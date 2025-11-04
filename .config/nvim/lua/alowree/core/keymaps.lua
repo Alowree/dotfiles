@@ -4,6 +4,9 @@ vim.g.mapleader = " "
 
 local keymap = vim.keymap -- for conciseness
 
+-- Open Lazy.nvim plugin manager
+keymap.set("n", "<leader>L", "<cmd>Lazy<cr>")
+
 -- Move current line up/down by Alt jk, like in VSCode
 --  :[range]move {address}
 keymap.set("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move Down" })
@@ -16,8 +19,6 @@ keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 -- Navigate buffers
 keymap.set("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 keymap.set("n", "<leader>bn", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer and Window" })
 
@@ -29,13 +30,22 @@ keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" })
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" })
 
 -- Window management
-keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
-keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
-keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" })
-keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
+keymap.set("n", "<leader>sv", "<C-w>v", { desc = "[S]plit Window [V]ertically" })
+keymap.set("n", "<leader>sh", "<C-w>s", { desc = "[S]plit Window [H]orizontally" })
+keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make [S]plits [E]qual Size" })
+keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close Current Split" })
 
 -- Spell check
-keymap.set("n", "<leader>ss", "<cmd>set spell!<CR>", { desc = "Toggle spell On/Off" })
+keymap.set("n", "<leader>ss", "<cmd>set spell!<CR>", { desc = "Toggle Spell On/Off" })
+
+-- Search and replace
+-- Helps you change all occurences of the word the cursor is on
+keymap.set(
+	"n",
+	"<leader>sr",
+	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+	{ desc = "[S]earch and [R]eplace Current Word" }
+)
 
 -- Tabs
 keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
@@ -65,7 +75,11 @@ keymap.set("n", "<leader>fO", "zR", { desc = "Fold: Open All" })
 
 -- Open / Save file
 keymap.set("n", "<leader>wk", "<cmd>e ~/OneDrive/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
-keymap.set("n", "<leader>ww", ":write<CR>")
+keymap.set("n", "<leader>ww", function()
+	vim.cmd("w")
+	print("File Written")
+end, { desc = "Write file" })
+-- keymap.set("n", "<leader>ww", ":write<CR>")
 
 -- Visual mode
 -- Stay in indent mode, better indenting
