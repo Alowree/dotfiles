@@ -7,6 +7,12 @@ local keymap = vim.keymap -- for conciseness
 -- Open Lazy.nvim plugin manager
 keymap.set("n", "<leader>L", "<cmd>Lazy<cr>")
 
+-- Source file
+keymap.set("n", "<leader>S", function()
+	vim.cmd("source %")
+	print("file sourced")
+end, { desc = "Execute the current file" })
+
 -- Move current line up/down by Alt jk, like in VSCode
 --  :[range]move {address}
 keymap.set("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move Down" })
@@ -38,13 +44,22 @@ keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close Current Split" }
 -- Spell check
 keymap.set("n", "<leader>ss", "<cmd>set spell!<CR>", { desc = "Toggle Spell On/Off" })
 
--- Search and replace
--- Helps you change all occurences of the word the cursor is on
+-- Search and Replace all occurrences
+-- of the word the cursor is on
 keymap.set(
 	"n",
 	"<leader>sr",
 	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
 	{ desc = "[S]earch and [R]eplace Current Word" }
+)
+
+-- Search and Replace all occurrences
+-- of the current visual selection
+keymap.set(
+	"v",
+	"<leader>sr",
+	'"sy:%s#<C-r>s#<C-r>s#gI<Left><Left><Left>',
+	{ desc = "[S]earch and [R]eplace Current Selection" }
 )
 
 -- Tabs
@@ -64,6 +79,11 @@ keymap.set("n", "<C-Up>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height
 keymap.set("n", "<C-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 keymap.set("n", "<C-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
+-- Mute search highlighting
+-- To mute search highlighting in Neovim,
+-- the command :nohlsearch (or its abbreviation :noh) is used.
+keymap.set({ "n", "v" }, "<Esc><Esc>", "<cmd>noh<CR>", { desc = "Clear Search Highlighting" })
+
 -- Code Folding
 keymap.set("n", "-", "<cmd>foldclose<CR>", { desc = "Close code fold" })
 keymap.set("n", "+", "<cmd>foldopen<CR>", { desc = "Open code fold" })
@@ -75,11 +95,7 @@ keymap.set("n", "<leader>fO", "zR", { desc = "Fold: Open All" })
 
 -- Open / Save file
 keymap.set("n", "<leader>wk", "<cmd>e ~/OneDrive/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
-keymap.set("n", "<leader>ww", function()
-	vim.cmd("w")
-	print("File Written")
-end, { desc = "Write file" })
--- keymap.set("n", "<leader>ww", ":write<CR>")
+keymap.set("n", "<leader>ww", ":write<CR>", { desc = "Write File" })
 
 -- Visual mode
 -- Stay in indent mode, better indenting
@@ -89,16 +105,18 @@ keymap.set("v", ">", ">gv")
 -- Abbreviations
 -- See `:h vim.keymap.set`
 -- See `:h nvim_set_keymap`
-keymap.set("i", "<<", "←")
-keymap.set("i", ">>", "→")
-keymap.set("i", "^^", "↑")
-keymap.set("i", "VV", "↓")
+-- Refactored to ~/.config/nvim/ftplugin/markdown.lua
+-- keymap.set("i", "<<", "←")
+-- keymap.set("i", ">>", "→")
+-- keymap.set("i", "^^", "↑")
+-- keymap.set("i", "VV", "↓")
 
+-- Refactored to ~/.config/nvim/ftplugin/markdown.lua
 -- Useful tricks for keying in the Chinese quotation marks
-keymap.set("i", "【【", "「")
-keymap.set("i", "】】", "」")
-keymap.set("i", "《《", "『")
-keymap.set("i", "》》", "』")
+-- keymap.set("i", "【【", "「")
+-- keymap.set("i", "】】", "」")
+-- keymap.set("i", "《《", "『")
+-- keymap.set("i", "》》", "』")
 
 -- Insert date and time under Windows OS
 -- keymap.set("i", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>", { desc = "Insert date and time" })

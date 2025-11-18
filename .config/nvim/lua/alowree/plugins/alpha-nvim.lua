@@ -22,7 +22,8 @@ return {
 			dashboard.button("e", "  > New File", "<cmd>ene<CR>"),
 			dashboard.button("Space ee", "  > Toggle Sidebar", "<cmd>NvimTreeToggle<CR>"),
 			dashboard.button("Space ff", "󰱼  > Find File", "<cmd>lua require('fzf-lua').files()<CR>"),
-			dashboard.button("Space fg", "  > Find Word", "<cmd>lua require('fzf-lua').live_grep()<CR>"),
+			dashboard.button("Space fl", "  > Find with Live Grep", "<cmd>lua require('fzf-lua').live_grep()<CR>"),
+			dashboard.button("Space fo", "󰱼  > Find Old Files", "<cmd>lua require('fzf-lua').oldfiles()<CR>"),
 			dashboard.button("Space wr", "󰁯  > Restore Session", "<cmd>AutoSession restore<CR>"),
 			dashboard.button("q", "  > Quit NeoVim", "<cmd>qa<CR>"),
 		}
