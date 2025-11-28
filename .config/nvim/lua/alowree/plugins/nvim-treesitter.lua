@@ -11,20 +11,6 @@ return {
 
 		-- configure treesitter
 		treesitter.setup({ -- enable syntax highlighting
-			modules = {},
-			sync_install = false,
-			auto_install = true,
-			ignore_install = {},
-			highlight = {
-				enable = true,
-			},
-			folding = { enable = true },
-			-- enable indentation
-			indent = { enable = true },
-			-- enable autotagging (w/ nvim-ts-autotag plugin)
-			autotag = {
-				enable = true,
-			},
 			-- ensure these language parsers are installed
 			ensure_installed = {
 				"json",
@@ -32,22 +18,28 @@ return {
 				"typescript",
 				"tsx",
 				"yaml",
+				"toml",
 				"html",
 				"css",
-				"prisma",
 				"markdown",
 				"markdown_inline",
-				"svelte",
-				"graphql",
+				"muttrc",
 				"bash",
 				"lua",
 				"vim",
-				"dockerfile",
-				"gitignore",
-				"query",
 				"vimdoc",
-				"c",
+				"gitignore",
+				"editorconfig",
 			},
+			modules = {},
+			sync_install = false,
+			auto_install = true,
+			ignore_install = {},
+			-- Feature #1
+			highlight = {
+				enable = true,
+			},
+			-- Feature #2
 			incremental_selection = {
 				enable = true,
 				keymaps = {
@@ -56,6 +48,14 @@ return {
 					scope_incremental = false,
 					node_decremental = "<Backspace>",
 				},
+			},
+			-- enable indentation, Feature #3
+			indent = { enable = true },
+			-- Feature #4
+			folding = { enable = true },
+			-- enable autotagging (w/ nvim-ts-autotag plugin)
+			autotag = {
+				enable = true,
 			},
 		})
 	end,

@@ -4,9 +4,12 @@
 
 -- Use soft-wraps and set a reading-friendly textwidth
 -- Markdown is typically a prose format, so wrapping is often preferred.
+
+-- I don't use wrap because I write long sentences
 vim.opt_local.wrap = true
 vim.opt_local.linebreak = true -- Wrap at words, not arbitrary characters
-vim.opt_local.textwidth = 80 -- Limit the width for comfortable reading/writing
+-- vim.opt_local.textwidth = 80 -- Limit the width for comfortable reading/writing
+
 vim.opt_local.softtabstop = 2 -- Use 2 spaces for tab stop (common for lists)
 vim.opt_local.shiftwidth = 2
 vim.opt_local.tabstop = 2

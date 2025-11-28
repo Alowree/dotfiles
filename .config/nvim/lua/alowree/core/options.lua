@@ -30,7 +30,9 @@ opt.mouse = "a"
 
 -- turn on termguicolors for tokyonight colorscheme to work
 -- (have to use iterm2 or any other true color terminal)
+-- akinsho/bufferline.nvim also requires this optoin
 opt.termguicolors = true
+
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
 opt.signcolumn = "yes"
 
@@ -64,13 +66,22 @@ opt.sidescrolloff = 5
 opt.fileformat = "unix"
 opt.fileformats = "unix,dos,mac"
 
--- Enable autoread (auto-reload files changed outside of Neovim)
--- opt.autoread = true
-
--- Check for file changes when focus is gained or buffer is entered
--- vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
--- 	pattern = "*",
--- 	command = "silent! checktime",
--- })
-
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
+-- DO NOT rely on the default OS-specific paths
+-- (like ~/.local/share/nvim/) for portability.
+-- DO explicitly set the vim.opt.spellfile option
+-- to a location within your main configuration folder
+--
+-- Set a variable for the configuration directory (which is where init.lua lives)
+local config_dir = vim.fn.stdpath("config")
+--
+-- Set the global spellfile location explicitly
+-- This path will be used for all spell-checked buffers.
+vim.opt.spellfile = config_dir .. "/spell/en.utf-8.add"
+--
+-- Optional: Create the directory if it doesn't exist
+local spell_dir = config_dir .. "/spell"
+if vim.fn.isdirectory(spell_dir) == 0 then
+	vim.fn.mkdir(spell_dir, "p")
+end

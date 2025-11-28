@@ -1,3 +1,6 @@
+-- Filename: ~/.config/nvim/lua/alowree/core/keymaps.lua
+-- ~/.config/nvim/lua/alowree/core/keymaps.lua
+
 vim.g.mapleader = " "
 
 -- vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
@@ -42,7 +45,7 @@ keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make [S]plits [E]qual Size" })
 keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close Current Split" })
 
 -- Spell check
-keymap.set("n", "<leader>ss", "<cmd>set spell!<CR>", { desc = "Toggle Spell On/Off" })
+keymap.set("n", "<leader>us", "<cmd>set spell!<CR>", { desc = "Toggle Spell On/Off" })
 
 -- Search and Replace all occurrences
 -- of the word the cursor is on
@@ -79,11 +82,6 @@ keymap.set("n", "<C-Up>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height
 keymap.set("n", "<C-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 keymap.set("n", "<C-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
--- Mute search highlighting
--- To mute search highlighting in Neovim,
--- the command :nohlsearch (or its abbreviation :noh) is used.
-keymap.set({ "n", "v" }, "<Esc><Esc>", "<cmd>noh<CR>", { desc = "Clear Search Highlighting" })
-
 -- Code Folding
 keymap.set("n", "-", "<cmd>foldclose<CR>", { desc = "Close code fold" })
 keymap.set("n", "+", "<cmd>foldopen<CR>", { desc = "Open code fold" })
@@ -102,25 +100,33 @@ keymap.set("n", "<leader>ww", ":write<CR>", { desc = "Write File" })
 keymap.set("v", "<", "<gv")
 keymap.set("v", ">", ">gv")
 
--- Abbreviations
--- See `:h vim.keymap.set`
--- See `:h nvim_set_keymap`
--- Refactored to ~/.config/nvim/ftplugin/markdown.lua
--- keymap.set("i", "<<", "←")
--- keymap.set("i", ">>", "→")
--- keymap.set("i", "^^", "↑")
--- keymap.set("i", "VV", "↓")
-
--- Refactored to ~/.config/nvim/ftplugin/markdown.lua
--- Useful tricks for keying in the Chinese quotation marks
--- keymap.set("i", "【【", "「")
--- keymap.set("i", "】】", "」")
--- keymap.set("i", "《《", "『")
--- keymap.set("i", "》》", "』")
-
--- Insert date and time under Windows OS
--- keymap.set("i", "dt()", "<C-r>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>", { desc = "Insert date and time" })
+-- Auto insert stuff
+vim.keymap.set("i", "(", "()<Esc>i")
+vim.keymap.set("i", "[", "[]<Esc>i")
+vim.keymap.set("i", "{", "{}<Esc>i")
 
 -- Quit
 keymap.set("n", "<leader>qq", "<cmd>quit<cr>", { desc = "Quit Window" })
 keymap.set("n", "<leader>qa", "<cmd>quitall<cr>", { desc = "Quit All" })
+
+-- This will insert 3 lines:
+-- A commented line with Filename: <file_path>
+-- A commented line with just the <file_path>
+-- An empty line
+keymap.set("n", "<M-z>", function()
+	local file_path = vim.fn.expand("%:p:~")
+	local comment_format = vim.bo.commentstring
+	if not comment_format or comment_format == "" then
+		vim.notify("No commentstring defined for this filetype", vim.log.levels.WARN)
+		return
+	end
+	if not string.find(comment_format, "%%s") then
+		comment_format = comment_format .. " %s"
+	end
+	local first_line_text = "Filename: " .. file_path
+	local first_commented_line = string.format(comment_format, first_line_text)
+	local second_commented_line = string.format(comment_format, file_path)
+	local bufnr = vim.api.nvim_get_current_buf()
+	local lnum = vim.api.nvim_win_get_cursor(0)[1]
+	vim.api.nvim_buf_set_lines(bufnr, lnum - 1, lnum - 1, false, { first_commented_line, second_commented_line, "" })
+end, { desc = "Insert file path as comment" })
