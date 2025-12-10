@@ -1,6 +1,9 @@
--- C:\Users\Lenovo\AppData\Local\nvim\lua\alowree\core\options.lua
+-- Filename: ~/.config/nvim/lua/alowree/core/10_options.lua
+-- ~/.config/nvim/lua/alowree/core/10_options.lua
+
 -- See `:help options`
 
+-- What is this for? netrw is already disabled inside nvim-tree plugin
 vim.cmd("let g:netrw_liststyle = 3")
 
 local opt = vim.opt
@@ -16,7 +19,10 @@ opt.shiftwidth = 2 -- Amount to indent with << and >>
 opt.expandtab = true -- Convert tabs to spaces
 opt.autoindent = true -- Keep indentation from previous line; Default setting
 
-opt.wrap = true -- whether to auto wrap long lines into display lines
+-- This option changes how text is displayed.
+-- When on, lines longer than the width of th window will wrap and displaying continues on the next line.
+-- When off lines will not wrap and only part of long lines will be displayed.
+opt.wrap = true
 
 -- search settings
 opt.ignorecase = true -- ignore upper/lower case when searching
@@ -30,11 +36,11 @@ opt.mouse = "a"
 
 -- turn on termguicolors for tokyonight colorscheme to work
 -- (have to use iterm2 or any other true color terminal)
--- akinsho/bufferline.nvim also requires this optoin
+-- akinsho/bufferline.nvim also requires this option
 opt.termguicolors = true
 
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-opt.signcolumn = "yes"
+opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 
 -- Don't show the mode, since it's already in the status line
 opt.showmode = false

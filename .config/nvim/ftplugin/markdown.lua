@@ -1,11 +1,14 @@
+-- Filename: ~/.config/nvim/ftplugin/markdown.lua
+-- ~/.config/nvim/ftplugin/markdown.lua
+
 -- ===============================================
 -- 1. General Buffer Options
 -- ===============================================
+--
+-- To replicate the behavior of |:setlocal|, use `vim.opt_local`.
+-- To replicate the behavior of |:setglobal|, use `vim.opt_global`.
+-- What is the difference between vim.opt and vim.opt_global? Are they the same?
 
--- Use soft-wraps and set a reading-friendly textwidth
--- Markdown is typically a prose format, so wrapping is often preferred.
-
--- I don't use wrap because I write long sentences
 vim.opt_local.wrap = true
 vim.opt_local.linebreak = true -- Wrap at words, not arbitrary characters
 -- vim.opt_local.textwidth = 80 -- Limit the width for comfortable reading/writing
@@ -37,24 +40,38 @@ vim.opt_local.conceallevel = 0
 -- ===============================================
 -- 4. Useful Key Mappings (Local to Markdown)
 -- ===============================================
+
+-- **Insert Mode Mapping**
 --
--- Arrow abbreviations
-local arrows = {
+-- Triggers immediately as you type the characters
+-- No waiting for trigger characters
+-- Replaces the input sequence in real-time
+vim.cmd("inoremap <buffer> 【【 「")
+vim.cmd("inoremap <buffer> 】】 」")
+vim.cmd("inoremap <buffer> 《《 『")
+vim.cmd("inoremap <buffer> 》》 』")
+
+-- **Insert Mode Abbreviation**
+--
+-- Triggers only on specific "trigger characters" like Space, Tab, Enter, or certain punctuation
+-- Waits for you to type a trigger character before expanding
+-- Designed for typing shortcuts that shouldn't interfere with normal typing
+local abbreviation_special_marks = {
+	["--"] = "—", -- converts two hyphens into em dash
 	[">>"] = "→",
 	["<<"] = "←",
 	["^^"] = "↑",
 	["VV"] = "↓",
-	["【【"] = "「",
-	["】】"] = "」",
-	["《《"] = "『",
-	["》》"] = "』",
+	-- ["【【"] = "「",
+	-- ["】】"] = "」",
+	-- ["《《"] = "『",
+	-- ["》》"] = "』",
 }
-for key, val in pairs(arrows) do
+for key, val in pairs(abbreviation_special_marks) do
 	vim.cmd(string.format("iabbrev <buffer> %s %s", key, val))
 end
 
--- Abbreviations
-local abbreviations = {
+local abbreviation_phrases = {
 	["btw"] = "By the way,",
 	["fyi"] = "For your information ——",
 	["asap"] = "as soon as possible.",
@@ -63,7 +80,7 @@ local abbreviations = {
 	["ndl"] = "Nolan Digital Limited",
 	["tcl"] = "Twine Company Limited",
 }
-for key, val in pairs(abbreviations) do
+for key, val in pairs(abbreviation_phrases) do
 	vim.cmd(string.format("iabbrev <buffer> %s %s", key, val))
 end
 

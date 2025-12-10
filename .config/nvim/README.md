@@ -7,15 +7,15 @@ categories:
   - Neovim
 ---
 
-# Neovim Configuration
-
 This post provides a walkthrough of my personal Neovim setup tailored for an enhanced Markdown writing experience. We will explore various configurations, from formatting and spell checking to custom keymaps and abbreviations, which you can adapt for your own Neovim setup.
+
+<!-- more -->
 
 ## Directory Structure
 
 Below is an overview of the directory structure:
 
-```
+```bash
 .
 ├── ftplugin
 │   └── markdown.lua
@@ -114,38 +114,75 @@ vim.opt_local.spelllang = { "en_us", "cjk" }
 
 We use abbreviations to speed up typing of common symbols and phrases.
 
+#### 特殊符号
+
+时下的中文环境流行使用平引号，但是它们却很难输入。即使有支持的中文输入法，通常需要翻页才能找到。我们使用插入模式下的映射功能，可以使用两个中文方括号（两下击键），即可完成输入一个平引号，非常快捷。
+
 ```lua
+-- Filename: ~/.config/nvim/ftplugin/markdown.lua
 -- ~/.config/nvim/ftplugin/markdown.lua
 
--- Arrow abbreviations
-local arrows = {
-	[">>"] = "→",
-	["<<"] = "←",
-	["^^"] = "↑",
-	["VV"] = "↓",
-	["【【"] = "「",
-	["】】"] = "」",
-	["《《"] = "『",
-	["》》"] = "』",
-}
-for key, val in pairs(arrows) do
-	vim.cmd(string.format("iabbrev <buffer> %s %s", key, val))
-end
+-- ===============================================
+-- 4. Useful Key Mappings (Local to Markdown)
+-- ===============================================
 
--- Abbreviations
-local abbreviations = {
-	["btw"] = "By the way,",
-	["fyi"] = "For your information ——",
-	["asap"] = "as soon as possible.",
-	["fedex"] = "FedEx",
-	["dhl"] = "DHL",
-	["ndl"] = "Nolan Digital Limited",
-	["tcl"] = "Twine Company Limited",
+-- **Insert Mode Mapping**
+--
+-- Triggers immediately as you type the characters
+-- No waiting for trigger characters
+-- Replaces the input sequence in real-time
+vim.cmd("inoremap <buffer> 【【 「")
+vim.cmd("inoremap <buffer> 】】 」")
+vim.cmd("inoremap <buffer> 《《 『")
+vim.cmd("inoremap <buffer> 》》 』")
+```
+
+还有一些字符，例如箭头符号，前后各有一个空格看起来更为美观。故而使用插入模式下的缩写扩展功能来实现，因为这种扩展功能需要使用空格来进行触发。
+
+```lua
+-- Filename: ~/.config/nvim/ftplugin/markdown.lua
+-- ~/.config/nvim/ftplugin/markdown.lua
+
+-- **Insert Mode Abbreviation**
+
+-- Triggers only on specific "trigger characters" like Space, Tab, Enter, or certain punctuation
+-- Waits for you to type a trigger character before expanding
+-- Designed for typing shortcuts that shouldn't interfere with normal typing
+local abbreviation_special_marks = {
+["--"] = "—", -- converts two hyphens into em dash
+[">>"] = "→",
+["<<"] = "←",
+["^^"] = "↑",
+["VV"] = "↓",
+-- ["【"] = "「",
+-- ["】"] = "」",
+-- ["《"] = "『",
+-- ["》"] = "』",
 }
-for key, val in pairs(abbreviations) do
-	vim.cmd(string.format("iabbrev <buffer> %s %s", key, val))
+for key, val in pairs(abbreviation_special_marks) do
+vim.cmd(string.format("iabbrev <buffer> %s %s", key, val))
 end
 ```
+
+例如，经过以上设置，在 Markdown 文件内编辑，按下 `-- ` 可以得到 `— `，注意尾部的空格。
+
+但是这样会产生一个附作用：在英文输入状态下，使用 Markdown 常用的语法 `---`，以正常速度输入会被破坏。这里起作用的是一个 `timeoutlen` 参数，默认是 `1000`，单位是毫秒。
+
+For Your Chinese Brackets (`inoremap`):
+
+- Type `【【` quickly → immediate expansion to `「`
+- Type `【` → pause → `【` slowly → remains `【【`
+
+For Your Abbreviations (`iabbrev`):
+
+- Type `--` quickly + space → `—`
+- Type `-` → pause → `-` slowly + space → remains `--`
+
+::: info Em Dash
+
+如果需要输入 em dash，只需要切换到中文输入（我使用 86 五笔），按下 `Shift` + `-` 就可以得到一个中文破折号，也就是两个 em dash 符号。回退删除一个即可。
+
+:::
 
 #### Visual Polish with `conceallevel`
 

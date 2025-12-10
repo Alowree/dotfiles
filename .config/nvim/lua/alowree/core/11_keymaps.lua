@@ -1,7 +1,17 @@
--- Filename: ~/.config/nvim/lua/alowree/core/keymaps.lua
--- ~/.config/nvim/lua/alowree/core/keymaps.lua
+-- Filename: ~/.config/nvim/lua/alowree/core/11_keymaps.lua
+-- ~/.config/nvim/lua/alowree/core/11_keymaps.lua
 
-vim.g.mapleader = " "
+-- stylua: ignore start
+
+-- ---------------------------------------------------------------------------
+-- Global settings
+-- ---------------------------------------------------------------------------
+-- In a global plugin <Leader> should be used and in a filetype plugin <LocalLeader>.
+-- "mapleader" and "maplocalleader" can be equal.
+vim.g.mapleader        = " "
+vim.g.maplocalleader   = " "
+
+-- stylua: ignore end
 
 -- vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
