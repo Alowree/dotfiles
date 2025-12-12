@@ -39,7 +39,7 @@ keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move Up" })
 keymap.set("n", "<leader>bp", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 keymap.set("n", "<leader>bn", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
-keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer and Window" })
+-- keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer and Window" })
 
 -- Normal mode
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })

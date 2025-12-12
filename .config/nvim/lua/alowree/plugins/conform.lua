@@ -22,32 +22,5 @@ return {
 			timeout_ms = 500,
 			lsp_format = "fallback",
 		},
-		-- Option 2.
-		-- You can adjust conform.nvim to use either a local prettier
-		-- (if available i the project's `node_modules`)
-		-- or fallback to global prettier if the local version isn't found.
-		-- formatters = {
-		-- 	prettier = {
-		-- 		command = function()
-		-- 			local local_prettier = vim.fn.findfile("node_modules/.bin/prettier", vim.fn.getcwd() .. ";")
-		-- 			if local_prettier ~= "" then
-		-- 				return "./" .. local_prettier -- Use project-local Prettier
-		-- 			end
-		-- 			return "prettier" -- Use global Prettier if local doesn't exist
-		-- 		end,
-		-- 		args = function()
-		-- 			local local_config = vim.fn.findfile(".prettierrc", vim.fn.getcwd() .. ";")
-		-- 			if local_config ~= "" then
-		-- 				return { "--config", local_config, "--stdin-filepath", "$FILENAME" }
-		-- 			end
-		-- 			return {
-		-- 				"--config",
-		-- 				vim.fn.expand("~/.config/prettier/.prettierrc"),
-		-- 				"--stdin-filepath",
-		-- 				"$FILENAME",
-		-- 			}
-		-- 		end,
-		-- 	},
-		-- },
 	},
 }

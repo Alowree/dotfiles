@@ -73,7 +73,7 @@ end
 
 local abbreviation_phrases = {
 	["btw"] = "By the way,",
-	["fyi"] = "For your information ——",
+	["fyi"] = "For your information —",
 	["asap"] = "as soon as possible.",
 	["fedex"] = "FedEx",
 	["dhl"] = "DHL",
