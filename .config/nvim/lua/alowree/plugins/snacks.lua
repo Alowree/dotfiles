@@ -41,6 +41,18 @@ return {
 		-- your configuration comes here
 		-- or leave it empty to use the default settings
 		-- refer to the configuration section below
+		--
+		-- 1. Enable the image module
+		-- iTerm2 does not support the kitty graphic protocol
+		-- Therefore I installed WezTerm/Kitty instead
+		image = {
+			enabled = true,
+			-- 2. Configure document rendering (Markdown)
+			doc = {
+				inline = true, -- This NOW works in Kitty
+				render_math = true, -- Enable LaTeX math rendering!
+			},
+		},
 		bigfile = { enabled = true },
 		-- dashboard = { enabled = true },
 		dashboard = {
@@ -98,5 +110,15 @@ return {
 				{ section = "startup" },
 			},
 		},
+		explorer = { enabled = false },
+		indent = { enabled = true },
+		input = { enabled = false },
+		picker = { enabled = false },
+		notifier = { enabled = false },
+		quickfile = { enabled = true },
+		scope = { enabled = false },
+		statuscolumn = { enabled = false },
+		words = { enabled = false },
+		rename = { enabled = true },
 	},
 }

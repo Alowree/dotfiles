@@ -15,7 +15,10 @@ return {
 	},
 	{
 		-- add a space between English and Chinese characters
-		"hotoo/pangu.vim",
+		-- "hotoo/pangu.vim",
+		"alowree/pangu.nvim", -- remote repository
+		-- dir = "/Users/alowree/Desktop/pangu.nvim", -- local repository for developing and testing purpose
+		ft = { "markdown", "text" },
 	},
 	{
 		-- detect tabstop and shiftwidth automatically
@@ -27,11 +30,27 @@ return {
 		ft = { "css", "html", "javascript", "typescript" },
 		opts = {},
 	},
+	-- {
+	-- 	-- Hints keybinds
+	-- 	"folke/which-key.nvim",
+	-- 	opts = {
+	-- 		delay = 3000,
+	-- 	},
+	-- },
 	{
-		-- Hints keybinds
 		"folke/which-key.nvim",
+		event = "VeryLazy",
+		-- There is no sample code on the official repository
+		-- How do you know this snippet is actually working?
+		init = function()
+			vim.o.timeout = true
+			vim.o.timeoutlen = 500
+		end,
+		-- Taken from the reference code
 		opts = {
-			delay = 3000,
+			-- your configuration comes here
+			-- or leave it empty to use the default settings
+			-- refer to the configuration section below
 		},
 	},
 	{

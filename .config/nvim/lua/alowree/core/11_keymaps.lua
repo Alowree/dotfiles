@@ -111,9 +111,9 @@ keymap.set("v", "<", "<gv")
 keymap.set("v", ">", ">gv")
 
 -- Auto insert stuff
-vim.keymap.set("i", "(", "()<Esc>i")
-vim.keymap.set("i", "[", "[]<Esc>i")
-vim.keymap.set("i", "{", "{}<Esc>i")
+-- vim.keymap.set("i", "(", "()<Esc>i")
+-- vim.keymap.set("i", "[", "[]<Esc>i")
+-- vim.keymap.set("i", "{", "{}<Esc>i")
 
 -- Quit
 keymap.set("n", "<leader>qq", "<cmd>quit<cr>", { desc = "Quit Window" })
