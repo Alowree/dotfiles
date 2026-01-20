@@ -1,42 +1,23 @@
 return {
 	{
-		-- This plugin automatically adds bulletpoints on the next line respecting
-		-- indentation
-		-- In markdown or a text file start a bulleted list using - or *. Press return
-		-- to go to the next line, a new list item will be created.
-		--
-		-- When in insert mode, you can increase indentation with ctrl+t and decrease it
-		-- with ctrl+d
-		--
-		-- By default its enabled on filetypes 'markdown', 'text', 'gitcommit', 'scratch'
-		-- https://github.com/bullets-vim/bullets.vim
-		"bullets-vim/bullets.vim",
-		-- ft = { "markdown", "text", "gitcommit", "scratch" },
+		-- lua functions that many plugins use
+		"nvim-lua/plenary.nvim",
+		-- tmux & split window navigation
+		"christoomey/vim-tmux-navigator",
+		-- "tpope/vim-sleuth", -- detect tabstop and shiftwidth automatically
 	},
 	{
-		-- add a space between English and Chinese characters
-		-- "hotoo/pangu.vim",
+		"bullets-vim/bullets.vim",
 		"alowree/pangu.nvim", -- remote repository
 		-- dir = "/Users/alowree/Desktop/pangu.nvim", -- local repository for developing and testing purpose
 		ft = { "markdown", "text" },
 	},
 	{
-		-- detect tabstop and shiftwidth automatically
-		"tpope/vim-sleuth",
-	},
-	{
 		-- high-performance color highlighter
 		"catgoose/nvim-colorizer.lua",
-		ft = { "css", "html", "javascript", "typescript" },
+		ft = { "lua", "css", "html", "javascript", "typescript" },
 		opts = {},
 	},
-	-- {
-	-- 	-- Hints keybinds
-	-- 	"folke/which-key.nvim",
-	-- 	opts = {
-	-- 		delay = 3000,
-	-- 	},
-	-- },
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",

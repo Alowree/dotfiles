@@ -14,13 +14,20 @@ return {
 			vue = { "prettier" },
 			json = { "prettier" },
 			yaml = { "prettier" },
-			markdown = { "prettier" },
+			markdown = { "prettierd" },
 			lua = { "stylua" },
 			python = { "isort", "black" },
+			zsh = { "beautysh" },
 		},
 		format_on_save = {
 			timeout_ms = 500,
 			lsp_format = "fallback",
+		},
+		formatters = {
+			-- beautysh = {
+			-- 	-- This tells the actual formatter program to use 2 spaces
+			-- 	prepend_args = { "--indent-size", "2" },
+			-- },
 		},
 	},
 }

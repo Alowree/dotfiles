@@ -1,12 +1,29 @@
--- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
-vim.api.nvim_create_autocmd("TextYankPost", {
-	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
-	pattern = "*",
-	desc = "highlight when yanking text",
+local function augroup(name)
+	return vim.api.nvim_create_augroup("alowree_" .. name, { clear = true })
+end
+
+-- Create general groups
+local general_group = augroup("general")
+
+-- 1. Jump to last edit position
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = general_group, -- Use the pre-defined group
+	desc = "Jump to last edit position on opening a file",
 	callback = function()
-		vim.hl.on_yank({ timeout = 200, visual = true })
+		local mark = vim.api.nvim_buf_get_mark(0, '"')
+		local lcount = vim.api.nvim_buf_line_count(0)
+		if mark[1] > 0 and mark[1] <= lcount then
+			pcall(vim.api.nvim_win_set_cursor, 0, mark)
+		end
+	end,
+})
+
+-- 2. Highlight when yanking
+vim.api.nvim_create_autocmd("TextYankPost", {
+	group = general_group, -- Use the same group
+	desc = "Highlight when yanking (copying) text",
+	callback = function()
+		vim.hl.on_yank({ timeout = 200 })
 	end,
 })
 

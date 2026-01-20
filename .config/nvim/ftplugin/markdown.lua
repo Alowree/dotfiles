@@ -9,9 +9,9 @@
 -- To replicate the behavior of |:setglobal|, use `vim.opt_global`.
 -- What is the difference between vim.opt and vim.opt_global? Are they the same?
 
-vim.opt_local.wrap = true
+vim.opt_local.wrap = false
 vim.opt_local.linebreak = true -- Wrap at words, not arbitrary characters
--- vim.opt_local.textwidth = 80 -- Limit the width for comfortable reading/writing
+vim.opt_local.textwidth = 80 -- Limit the width for comfortable reading/writing
 
 vim.opt_local.softtabstop = 2 -- Use 2 spaces for tab stop (common for lists)
 vim.opt_local.shiftwidth = 2
@@ -46,10 +46,28 @@ vim.opt_local.conceallevel = 0
 -- Triggers immediately as you type the characters
 -- No waiting for trigger characters
 -- Replaces the input sequence in real-time
-vim.cmd("inoremap <buffer> 【【 「")
-vim.cmd("inoremap <buffer> 】】 」")
-vim.cmd("inoremap <buffer> 《《 『")
-vim.cmd("inoremap <buffer> 》》 』")
+--
+-- Implementation: I
+-- vim.cmd("inoremap <buffer> 【【 「")
+-- vim.cmd("inoremap <buffer> 】】 」")
+-- vim.cmd("inoremap <buffer> 《《 『")
+-- vim.cmd("inoremap <buffer> 》》 』")
+--
+-- Implementation: II
+local symbols = {
+	["【【"] = "「",
+	["】】"] = "」",
+	["《《"] = "『",
+	["》》"] = "』",
+	-- You could add the date here too if you want it localized to Markdown
+	-- ["adate"] = function()
+	-- 	return os.date("%Y-%m-%d")
+	-- end,
+}
+
+for lhs, rhs in pairs(symbols) do
+	vim.keymap.set("i", lhs, rhs, { buffer = true, expr = (type(rhs) == "function") })
+end
 
 -- **Insert Mode Abbreviation**
 --
