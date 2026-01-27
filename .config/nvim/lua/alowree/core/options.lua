@@ -11,7 +11,7 @@ local opt = vim.opt
 opt.number = true -- Line numbers
 opt.relativenumber = true -- Relative line numbers
 opt.cursorline = true -- Highlight current line
-opt.wrap = false -- Don't wrap lines
+opt.wrap = true -- Don't wrap lines
 opt.scrolloff = 10 -- Keep 10 lines above/below cursor
 opt.sidescrolloff = 8 -- Keep 8 columns left/right of cursor
 

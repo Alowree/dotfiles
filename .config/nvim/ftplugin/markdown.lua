@@ -9,9 +9,16 @@
 -- To replicate the behavior of |:setglobal|, use `vim.opt_global`.
 -- What is the difference between vim.opt and vim.opt_global? Are they the same?
 
-vim.opt_local.wrap = false
+-- I prefer for Neovim to auto wrap the lines,
+-- as accordig to the current window width.
+-- I prefer NOT to wrap lines, at a fixed textwidth,
+-- at least NOT in Markdown files.
+-- Because, I sometimes use Typora for preview/report purposes,
+-- and wrapped lines viewed inside Typora do not look good.
+
+vim.opt_local.wrap = true
 vim.opt_local.linebreak = true -- Wrap at words, not arbitrary characters
-vim.opt_local.textwidth = 80 -- Limit the width for comfortable reading/writing
+-- vim.opt_local.textwidth = 80 -- Limit the width for comfortable reading/writing
 
 vim.opt_local.softtabstop = 2 -- Use 2 spaces for tab stop (common for lists)
 vim.opt_local.shiftwidth = 2

@@ -18,9 +18,12 @@ return {
 			lua = { "stylua" },
 			python = { "isort", "black" },
 			zsh = { "beautysh" },
+			-- toml = { "taplo" },
 		},
 		format_on_save = {
 			timeout_ms = 500,
+			-- why someone use
+			-- lsp_fallback = true,
 			lsp_format = "fallback",
 		},
 		formatters = {
