@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/Users/alowree/.config/vim/autoload'
+let g:netrw_dirhist_3='/Users/alowree/.config/vim'
+let g:netrw_dirhist_2='/Users/alowree'
+let g:netrw_dirhist_1='/Users/alowree/.config/nvim/lua'

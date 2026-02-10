@@ -1,0 +1,448 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Maintainer:
+" Alowree XU
+" alowree@hotmail.com
+" Start date:
+" Fri 2025-04-04 21:09:42 +0800
+" Last updated:
+" Thu 2026-02-10 19:21:35 +0800
+" Sections:
+" -> Plugins
+" -> General
+" -> VIM user interface
+" -> Colors and Fonts
+" -> Files and backups
+" -> Text, tab and indent related
+" -> Visual mode related
+" -> Moving around, tabs and buffers
+" -> Status line
+" -> Editing mappings
+" -> vimgrep searching and cope displaying
+" -> Spell checking
+" -> Misc
+" -> Helper functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugins ---------------------------------------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" vim-plug bootstrap
+if empty(glob('~/.config/vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.config/vim/plugged')
+
+" Plugins
+Plug 'bullets-vim/bullets.vim'
+" Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'preservim/nerdtree'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-markdown'
+Plug 'ap/vim-css-color'
+" Plug 'morhetz/gruvbox'
+
+call plug#end()
+" }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General ---------------------------------------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let mapleader = "\<Space>"
+
+set history=500
+set number
+set relativenumber
+set ruler
+set cursorline
+set mouse=a
+set nocompatible
+set autoread
+
+" On a standard Vim installation on macOS,
+" both the * register and the + register are mapped to
+" the same system pasteboard.
+"
+" On a Vim distributed with Git for Windows,
+" using the + register will NOT work,
+" due to Broken Clipboard Integration
+"
+" set clipboard=unnamedplus " uses + register
+set clipboard=unnamed       " uses * register
+
+" }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => User Interface --------------------------------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set scrolloff=5
+
+" Avoid garbled characters in Chinese language windows OS
+" let $LANG='en'
+" set langmenu=en
+" source $VIMRUNTIME/delmenu.vim
+" source $VIMRUNTIME/menu.vim
+
+set wildmenu
+set wildmode=longest:full,full
+
+set cmdheight=1
+set hidden
+set wrap
+
+" Allow backspace to delete end of line, indent and start of line characters
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+set ignorecase
+set smartcase
+
+set hlsearch
+set incsearch
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" For regular expressions turn magic on
+" Ask Gemini what this is about
+set magic
+set title
+
+set showmatch
+set matchtime=2
+
+" Show incomplete commands
+set showcmd
+
+" Set built-in file system explorer to use layout similar to the NERDTree plugin
+let g:netrw_liststyle=3
+
+" No annoying beep sound on errors
+set noerrorbells
+" Turn off error beep/flash
+set visualbell
+set t_vb=
+
+" Time out on key mapping after 0.5 seconds
+" Time out on key codes after a tenth of a second
+set timeout timeoutlen=500 ttimeoutlen=100
+
+" Add a bit extra margin to the left
+set foldcolumn=1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Status Line ----------------------------------------- {{{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Always show the status line
+set laststatus=2
+
+" Don't show the mode, since it's already in the status line
+set noshowmode
+
+let g:lightline = {
+  \ 'colorscheme': 'wombat',
+  \ 'separator': { 'left': '', 'right': '' },
+  \ 'subseparator': { 'left': '', 'right': '' },
+  \ 'active': {
+  \     'left': [ [ 'mode', 'paste' ],
+  \               [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+  \ },
+  \ 'component_function': {
+  \   'gitbranch': 'FugitiveHead'
+  \ }
+  \ }
+
+" Gitgutter options
+let g:gitgutter_enabled = 1
+
+" }}}}
+" }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts ------------------------------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Enable syntax highlighting
+syntax on
+
+" Set regular expression engine automatically
+set regexpengine=0
+
+" Without this setting, the color of GUI Vim will act strange
+set t_Co=256
+
+" gruvbox colorscheme is not installed by plugin manager
+" but downloaded and stored inside the ~/.vim/colors directory
+" colorscheme gruvbox
+colorscheme morning
+
+set background=dark
+
+" Set utf-8 as standard encoding and en_US as the standard language
+set encoding=utf-8
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+
+" Use Unix as the standard file type
+set fileformats=unix,dos,mac
+
+" Set global text formatting options. These act as sane defaults for all
+" file types and can be overridden by filetype-specific plugins.
+"
+"   m: Allow breaking of lines in the middle of a multi-byte character
+"      (e.g., Chinese characters). Essential for CJK text wrapping.
+"   r: Automatically insert the current comment leader after hitting
+"      <Enter> in Insert mode.
+"   j: When joining lines, automatically remove the comment leader (e.g., '#')
+"      from the second line, creating a single, clean comment line.
+set formatoptions+=m
+set formatoptions+=rj
+" }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Files, backups and undo ------------------------------ {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Turn backup off, since most stuff is in SVN, git etc. anyway...
+set nobackup
+set nowritebackup
+set noswapfile
+
+set viminfofile=~/.cache/vim/viminfo
+
+filetype plugin on
+
+" Reload file when changed externally
+autocmd FocusGained,BufEnter * silent! checktime
+
+" Strip trailing white spaces on save
+fun! StripTrailingWhitespace()
+  " don't strip on these filetypes
+  if &ft =~ 'markdown'
+    return
+  endif
+  %s/\s\+$//e
+endfun
+autocmd BufWritePre * call StripTrailingWhitespace()
+" }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related ------------------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use spaces instead of tabs
+set expandtab
+set smarttab
+
+" 1 tab == 2 spaces
+set shiftwidth=2
+set tabstop=2
+
+" To visualize tabs and trailing spaces
+set list
+set listchars=tab:»\ ,trail:·,nbsp:␣
+
+" Linebreak on 500 characters
+set lbr
+set tw=500
+
+filetype indent on
+set autoindent         "Auto indent
+
+" To persist undo history between sessions
+set undodir=~/.config/vim/tmp/undodir
+set undofile
+" }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Visual mode related ---------------------------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Search for the current visual selection (by Gemini suggestion)
+vnoremap <silent> * y/\V<C-R>"<CR>
+vnoremap <silent> # y?\V<C-R>"<CR>
+
+" Set cursor styles in Normal, Insert, and Command modes
+augroup cursor_behaviour
+autocmd!
+" reset cursor on start:
+autocmd VimEnter * silent !echo -ne "\e[2 q"
+" cursor blinking bar on insert mode
+let &t_SI = "\e[5 q"
+" cursor steady block on command mode
+let &t_EI = "\e[2 q"
+augroup END
+" }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Moving around, tabs, windows and buffers ------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree toggle and focus navigation
+nnoremap <silent> <leader>ee :NERDTreeToggle<CR>
+nnoremap <leader>ww :write<cr>
+
+nnoremap <leader>v :edit $MYVIMRC<cr>
+nnoremap <leader>o :source $MYVIMRC<CR>
+
+nnoremap <leader>wk :e ~/OneDrive/Documents/Weekly.md<cr>
+
+nnoremap <leader>qq :wq<cr>
+nnoremap <leader>qa :wqa<cr>
+
+" Disable highlight when <Esc> is pressed
+nnoremap <silent> <Esc> :noh<cr>
+
+" Smart way to move between windows
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+
+" Move Lines
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+" Make Y behave like C and D
+nnoremap Y y$
+
+" Close the current buffer without closing its window
+" using the custom :Bclose command defined in the Helper section
+nnoremap <leader>bb :e #<cr>
+" nnoremap <leader>bd :Bclose<cr>
+" I don't see the difference between Bclose and bdelete?
+nnoremap <leader>bd :bdelete<cr>
+
+nnoremap <leader>bn :bnext<cr>
+nnoremap <leader>bp :bprevious<cr>
+
+" Useful mappings for managing tabs
+nnoremap <leader>tN :tabnew<cr>
+nnoremap <leader>to :tabonly<cr>
+nnoremap <leader>tc :tabclose<cr>
+nnoremap <leader>tm :tabmove
+nnoremap <leader>tn :tabnext<cr>
+
+" Let 'tl' toggle between this and the last accessed tab
+let g:lasttab = 1
+nnoremap <leader>tl :exe "tabn ".g:lasttab<CR>
+au TabLeave \* let g:lasttab = tabpagenr()
+
+" Opens a new tab with the current buffer's path (Gemini's suggestion)
+nnoremap <leader>te :tabedit %:p:h<cr>
+
+" Switch CWD to the directory of the open buffer
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" Specify the behavior when switching between buffers
+try
+  set switchbuf=useopen,usetab,newtab
+  set stal=2
+catch
+
+endtry
+
+" Return to last edit position when opening files (You want this!)
+au BufReadPost \* if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" Insert Date and Time
+" abbrev <expr> dt() strftime("%a %Y-%m-%d %H:%M:%S %z")
+" nnoremap <F5> a<C-R>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR><Esc>
+" inoremap <F5> <C-R>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>
+" inoremap <leader>dt <C-R>=strftime('%a %Y-%m-%d %H:%M:%S %z')<CR>
+
+" Useful tricks for keying in the arrow
+iabbrev >> →
+iabbrev << ←
+iabbrev ^^ ↑
+iabbrev VV ↓
+
+" Useful tricks for keying in the Chinese quotation marks
+inoremap 【【 「
+inoremap 】】 」
+inoremap 《《 『
+inoremap 》》 』
+
+" Abbreviations
+iabbrev btw By the way,
+iabbrev fyi For your information —
+iabbrev asap as soon as possible.
+iabbrev fedex FedEx
+iabbrev dhl DHL
+iabbrev ndl Nolan Digital Limited
+iabbrev tcl Twine Company Limited
+" }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking --------------------------------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set nospell spelllang=en_us
+nnoremap <leader>ss :setlocal spell!<cr>
+" }}}
+
+" ---------------
+" coc.nvim setup
+" https://www.youtube.com/watch?v=kdlwb55Go9E
+" ---------------
+" Trigger completion
+inoremap <silent><expr> <C-Space> coc#refresh()
+
+" Use `[g` and `]g` to navigate disgnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Auto install language servers (Rust, JS, HTML)
+let g:coc_global_extensions = [
+  \ 'coc-html',
+  \ 'coc-tsserver',
+  \ 'coc-rust-analyzer'
+  \ ]
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Helper functions ------------------------------------- {{{
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+
+function! <SID>BufcloseCloseIt()
+  let l:currentBufNum = bufnr("%")
+  let l:alternateBufNum = bufnr("#")
+
+  if buflisted(l:alternateBufNum)
+      buffer #
+  else
+      bnext
+  endif
+
+  if bufnr("%") == l:currentBufNum
+      new
+  endif
+
+  if buflisted(l:currentBufNum)
+      execute("bdelete! ".l:currentBufNum)
+  endif
+
+endfunction
+
+" Close all folds when opening a new buffer
+autocmd BufRead * setlocal foldmethod=marker | normal zM
+" }}}

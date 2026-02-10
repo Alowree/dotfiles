@@ -6,8 +6,9 @@
 -- ---------------------------------------------------------------------------
 -- Global settings
 -- ---------------------------------------------------------------------------
--- In a global plugin <Leader> should be used and in a filetype plugin <LocalLeader>.
--- "mapleader" and "maplocalleader" can be equal.
+-- In a global plugin <Leader> should be used
+-- in a filetype plugin <LocalLeader>
+-- "mapleader" and "maplocalleader" can be equal
 vim.g.mapleader        = " "
 vim.g.maplocalleader   = " "
 
@@ -56,7 +57,7 @@ map("n", "<A-l>", "$", {
 })
 
 -- Essential Window/Buffer Management
-map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Last Buffer" })
+map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Alternate Buffer" })
 map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Buffer Delete" })
 map("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next Buffer" })
 map("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Previous Buffer" })

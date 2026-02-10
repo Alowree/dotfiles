@@ -75,7 +75,7 @@ return {
 					hl.Folded = { bg = "#1a1b26", fg = "#7aa2f7" }
 				end,
 			})
-			vim.cmd("colorscheme tokyonight")
+			-- vim.cmd("colorscheme tokyonight")
 		end,
 	},
 	-- }}}
@@ -111,7 +111,7 @@ return {
 					end,
 				},
 			})
-			-- vim.cmd("colorscheme catppuccin")
+			vim.cmd("colorscheme catppuccin")
 		end,
 	},
 	-- }}}
