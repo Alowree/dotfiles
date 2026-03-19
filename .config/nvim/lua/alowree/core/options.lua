@@ -1,164 +1,162 @@
--- Filename: ~/.config/nvim/lua/alowree/core/10_options.lua
--- ~/.config/nvim/lua/alowree/core/10_options.lua
+-- Filename: ~/.config/nvim/lua/alowree/core/options.lua
+-- ~/.config/nvim/lua/alowree/core/options.lua
 
 -- See `:help options`
 
--- What is this for? netrw is already disabled inside nvim-tree plugin
-vim.cmd("let g:netrw_liststyle = 3")
-
 local opt = vim.opt
 
-opt.number = true -- Line numbers
-opt.relativenumber = true -- Relative line numbers
-opt.cursorline = true -- Highlight current line
-opt.wrap = true -- Don't wrap lines
-opt.scrolloff = 10 -- Keep 10 lines above/below cursor
-opt.sidescrolloff = 8 -- Keep 8 columns left/right of cursor
+-- General UI
+opt.number = true         -- Show absolute line number
+opt.relativenumber = true -- Show relative line numbers for easier jumping
+opt.cursorline = true     -- Highlight the text line of the cursor
+opt.wrap = true           -- Enable line wrapping (break long lines)
+opt.scrolloff = 10        -- Vertical scroll offset (keep 10 lines visible)
+opt.sidescrolloff = 8     -- Horizontal scroll offset (keep 8 columns visible)
 
 -- Indentation
-opt.tabstop = 2 -- Tab width
-opt.shiftwidth = 2 -- Indent width
-opt.softtabstop = 2 -- Soft tab stop
-opt.expandtab = true -- Use spaces instead of tabs
-opt.smartindent = true -- Smart auto-indenting
-opt.autoindent = true -- Copy indent from current line
-opt.shiftround = true -- Round indent
+opt.tabstop = 2        -- Number of spaces a <Tab> counts for
+opt.shiftwidth = 2     -- Number of spaces used for each step of (auto)indent
+opt.softtabstop = 2    -- Number of spaces a <Tab> counts for while editing
+opt.expandtab = true   -- Convert all tabs to spaces
+opt.smartindent = true -- Insert indents automatically in C-like languages
+opt.autoindent = true  -- Copy indent from current line when starting a new one
+opt.shiftround = true  -- Round indent to multiple of 'shiftwidth'
 
--- Search settings
-opt.ignorecase = true -- Case insensitive search
-opt.smartcase = true -- Case sensitive if uppercase in search
-opt.hlsearch = true -- Do highlight search results
-opt.incsearch = true -- Show matches as you type
+-- Search Settings
+opt.ignorecase = true -- Case-insensitive searching...
+opt.smartcase = true  -- ...unless the query contains capital letters
+opt.hlsearch = true   -- Highlight all matches on previous search pattern
+opt.incsearch = true  -- Show search matches as you type
 
--- Visual settings
-opt.termguicolors = true -- Enable 24-bit colors
-opt.signcolumn = "auto" -- Always show sign column
-opt.showmatch = true -- Highlight matching brackets
-opt.matchtime = 2 -- How long to show matching bracke
-opt.cmdheight = 1 -- Command line height
-opt.showmode = false -- Don't show mode in command line
-opt.pumheight = 10 -- Popup menu height
-opt.pumblend = 10 -- Popup menu transparency
-opt.winblend = 0 -- Floating window transparency
-opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
-opt.confirm = true -- Confirm to save changes before exiting modified buffer
-opt.concealcursor = "" -- Don't hide cursor line markup
-opt.synmaxcol = 300 -- Syntax highlighting limit
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-opt.winminwidth = 5 -- Minimum window width
+-- Visual & Rendering
+opt.termguicolors = true  -- Enable 24-bit RGB colors
+opt.signcolumn = "auto"   -- Show signcolumn only if needed (for git/diagnostics)
+opt.showmatch = true      -- Briefly jump to matching bracket when inserted
+opt.matchtime = 2         -- Tenths of a second to show the matching paren
+opt.cmdheight = 1         -- Number of screen lines for the command-line
+opt.showmode = false      -- Mode is shown by Lualine, so hide it in cmdline
+opt.pumheight = 10        -- Maximum number of items to show in popup menu
+opt.pumblend = 10         -- Pseudo-transparency for the popup menu
+opt.winblend = 0          -- Pseudo-transparency for floating windows
+opt.conceallevel = 2      -- Hide * markup for bold/italic (good for Markdown)
+opt.confirm = true        -- Confirm to save changes before exiting modified buffer
+opt.concealcursor = ""    -- Do not hide markup on the current cursor line
+opt.synmaxcol = 300       -- Don't syntax highlight long lines (performance)
+opt.virtualedit = "block" -- Allow cursor to move past end of line in Visual Block
+opt.winminwidth = 5       -- Minimum window width
 
--- File handling
-opt.backup = false -- Don't create backup files
-opt.writebackup = false -- Don't create backup before writing
-opt.swapfile = false -- Don't create swap files
-opt.undofile = true -- Persistent undo
-opt.undolevels = 10000
-opt.undodir = vim.fn.expand("~/.vim/undodir") -- Undo directory
-opt.updatetime = 300 -- Faster completion
-opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
-opt.ttimeoutlen = 0 -- Key code timeout
-opt.autoread = true -- Auto reload files changed outside vim
-opt.autowrite = true -- Auto sav
+-- File Handling & Persistence
+opt.backup = false      -- Don't keep a backup file after overwriting
+opt.writebackup = false -- Don't write a backup before overwriting
+opt.swapfile = false    -- Don't use swapfiles
 
--- Behavior settings
-opt.hidden = true -- Allow hidden buffers
-opt.errorbells = false -- No error bells
-opt.backspace = "indent,eol,start" -- Better backspace behavior
-opt.autochdir = false -- Don't auto change directory
-opt.iskeyword:append("-") -- Treat dash as part of word
-opt.path:append("**") -- include subdirectories in search
-opt.selection = "exclusive" -- Selection behavior
-opt.mouse = "a" -- Enable mouse support
-opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
-opt.modifiable = true -- Allow buffer modifications
-opt.encoding = "UTF-8" -- Set encoding
+opt.undofile = true     -- Save undo history to an undofile
+opt.undolevels = 10000  -- Maximum number of changes that can be undone
 
--- Folding settings {{{
-opt.smoothscroll = true
-
-opt.foldmethod = "manual" -- Use an expression to determine folds
--- opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- The expression comes from Treesitter
-opt.foldlevel = 99 -- Open all folds by default when entering a file
--- opt.foldlevelstart = 99 -- Ensure folds are open on startup
-opt.foldcolumn = "1" -- Show a small sidebar indicating where folds are
-opt.foldtext = "" -- Keep clean 0.10+ styling
-
--- opt.fillchars = {
--- 	foldopen = "",
--- 	foldclose = "",
--- 	foldsep = " ", -- Keep separator empty for a clean "IDE-like" look
--- }
--- }}}
-
-opt.formatoptions = "jcroqlnt" -- tcqj
-opt.grepformat = "%f:%l:%c:%m"
-opt.grepprg = "rg --vimgrep"
-
--- Split behavior
-opt.splitbelow = true -- Horizontal splits go below
-opt.splitright = true -- Vertical splits go right
-opt.splitkeep = "screen"
-
--- Command-line completion
-opt.wildmenu = true
--- opt.completeopt = "menu,menuone,noselect"
-opt.completeopt = "menuone,popup,fuzzy,noselect"
--- opt.wildmode = "longest:full,full"
-opt.wildmode = "longest:full,longest,lastused"
-opt.wildignore:append({ "*.o", "*.obj", "*.pyc", "*.class", "*.jar" })
-
--- Better diff options
-opt.diffopt:append("linematch:60")
-
--- Performance improvements
-opt.redrawtime = 10000
-opt.maxmempattern = 20000
-
--- Create undo directory if it doesn't exist
-local undodir = vim.fn.expand("~/.vim/undodir")
-if vim.fn.isdirectory(undodir) == 0 then
-	vim.fn.mkdir(undodir, "p")
+local undo_dir = vim.fn.stdpath("state") .. "/undo"
+if vim.fn.isdirectory(undo_dir) == 0 then -- Create the directory if it doesn't exist
+  vim.fn.mkdir(undo_dir, "p")
 end
 
+opt.undodir = undo_dir                        -- Directory for undo files
+
+opt.updatetime = 300                          -- Interval for CursorHold (affects swap & diagnostics)
+opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Time to wait for a mapped sequence
+opt.ttimeoutlen = 0                           -- Time to wait for a key code sequence
+opt.autoread = true                           -- Automatically read file when changed outside of Vim
+opt.autowrite = true                          -- Automatically write file when switching buffers
+
+-- Behavior Settings
+opt.hidden = true                                       -- Enable background buffers
+opt.errorbells = false                                  -- Disable beep/flash on errors
+opt.backspace = "indent,eol,start"                      -- Allow backspacing over everything in insert mode
+opt.autochdir = false                                   -- Do not change the working directory automatically
+opt.iskeyword:append("-")                               -- Treat hyphen-separated words as single words
+opt.path:append("**")                                   -- Allow recursive file searching via :find
+opt.mouse = "a"                                         -- Enable mouse support in all modes
+opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Clipboard sync (local only)
+opt.modifiable = true                                   -- Ensure buffers are modifiable
+opt.encoding = "UTF-8"                                  -- Set global encoding
+
+-- Folding Settings (Marker-based for your config)
+opt.smoothscroll = true   -- Smooth scrolling for wrapped lines
+opt.foldmethod = "marker" -- Use {{{ and }}} for folding
+opt.foldlevel = 99        -- Default to all folds open
+opt.foldcolumn = "1"      -- Show fold gutter
+opt.foldtext = ""         -- Use clean 0.10+ fold styling
+
+-- Text Formatting Options
+-- j: Delete comment leader when joining lines
+-- c: Auto-wrap comments using textwidth
+-- r: Auto-insert comment leader after <Enter>
+-- o: Auto-insert comment leader after 'o' or 'O'
+-- q: Allow formatting of comments with 'gq'
+-- l: Long lines are not broken in insert mode
+-- n: Recognize numbered lists
+-- t: Auto-wrap text using textwidth
+opt.formatoptions = "jcroqlnt"
+
+opt.grepformat = "%f:%l:%c:%m" -- Format for grep output (file:line:col:msg)
+opt.grepprg = "rg --vimgrep"   -- Use Ripgrep for internal :grep command
+
+-- Window Splitting
+opt.splitbelow = true    -- Put new horizontal splits below current
+opt.splitright = true    -- Put new vertical splits to the right
+opt.splitkeep = "screen" -- Keep text on the same screen line when splitting
+
+-- Completion & Wildmenu
+opt.wildmenu = true                              -- Visual menu for command-line completion
+opt.completeopt = "menuone,popup,fuzzy,noselect" -- Modern completion behavior
+opt.wildmode = "longest:full,longest,lastused"   -- Shell-like completion
+opt.wildignore:append({ "*.o", "*.obj", "*.pyc", "*.class", "*.jar" })
+
+-- Better Diffing (0.10+ feature)
+opt.diffopt:append("linematch:60") -- Better alignment for moved lines in diffs
+
+-- Performance
+opt.redrawtime = 10000    -- Time in ms to stop highlighting if it's too slow
+opt.maxmempattern = 20000 -- Max memory for pattern matching
+
+
+
+-- Global Variables & UI Tweaks
 vim.g.autoformat = true
 vim.g.trouble_lualine = true
-opt.jumpoptions = "view"
-opt.laststatus = 3 -- global statusline
-opt.linebreak = true -- Wrap lines at convenient points
-opt.shortmess:append({ W = true, I = true, c = true, C = true })
-vim.g.markdown_recommended_style = 0
+opt.jumpoptions = "view"             -- Keep cursor position when jumping back/forward
+opt.laststatus = 3                   -- Global statusline (one for all windows)
+opt.linebreak = true                 -- Break lines at word boundaries rather than characters
+vim.g.markdown_recommended_style = 0 -- Prevent indenting with 4 spaces in Markdown
 
+-- Message Filtering (shortmess)
+-- W: Don't pass [w]ritten to msg
+-- I: Don't show intro message
+-- c: Don't give ins-completion-menu messages
+-- C: Don't give messages while scanning for completion
+opt.shortmess:append({ W = true, I = true, c = true, C = true })
+
+-- Custom Filetypes
 vim.filetype.add({
-	extension = {
-		env = "dotenv",
-	},
-	filename = {
-		[".env"] = "dotenv",
-		["env"] = "dotenv",
-	},
-	pattern = {
-		["[jt]sconfig.*.json"] = "jsonc",
-		["%.env%.[%w_.-]+"] = "dotenv",
-	},
+  extension = { env = "dotenv" },
+  filename = { [".env"] = "dotenv", ["env"] = "dotenv" },
+  pattern = {
+    ["[jt]sconfig.*.json"] = "jsonc",
+    ["%.env%.[%w_.-]+"] = "dotenv",
+  },
 })
 
--- Sets how neovim will display certain whitespace characters in the editor.
+-- Whitespace Visibility
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 opt.list = true -- Show some invisible characters (tabs...)
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
--- Set a variable for the configuration directory (which is where init.lua lives)
+-- Spellcheck Setup
 local config_dir = vim.fn.stdpath("config")
---
--- Set the global spellfile location explicitly
--- This path will be used for all spell-checked buffers.
 vim.opt.spellfile = config_dir .. "/spell/en.utf-8.add"
---
--- Optional: Create the directory if it doesn't exist
+
 local spell_dir = config_dir .. "/spell"
 if vim.fn.isdirectory(spell_dir) == 0 then
-	vim.fn.mkdir(spell_dir, "p")
+  vim.fn.mkdir(spell_dir, "p")
 end
 
 -- vim: fdm=marker

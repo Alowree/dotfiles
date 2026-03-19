@@ -1,0 +1,168 @@
+# --- Ghostty 1.3.0 Configuration ---
+
+# ghostty +show-config --default --docs
+# ghostty +show-config
+#
+# Theme & Appearance
+theme = "light:3024 Day,dark:Broadcast"
+
+background-opacity             = 0.8
+background-blur                = 90
+
+# Option A: hide all three items on titlebar
+macos-titlebar-style           = hidden
+
+# Option B: hide macOS traffic-light buttons and title
+#           but the folder icon stays
+# macos-window-buttons           = hidden
+# title = " "
+
+window-padding-x               = 5
+window-padding-y               = 5
+window-padding-balance         = true
+
+# Option A: Mixed font for EN and CN
+# font-family = NeoXiHei Code
+#
+# The same font as used in iTerm2, not working in Kitty though
+font-family = "JetBrains Maple Mono"
+
+# Option B: Assign EN and CN fonts separately
+# font-family = JetBrainsMonoNL Nerd Font Mono
+# Make sure your CN font has italic and bold-italic
+# But my PingFang SC does not have italic or bold-italic
+# font-family = PingFang SC
+
+# font-codepoint-map = U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0D4,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6AA,U+E700-U+E7C5,U+EA60-U+EBEB,U+F000-U+F2E0,U+F300-U+F32F,U+F400-U+F4A9,U+F500-U+F8FF,U+F0001-U+F1AF0=Symbols Nerd Font Mono
+# font-codepoint-map = U+4E00-U+9FFF,U+3400-U+4DBF=Maple Mono NF CN
+
+
+# The cursor-style=block is already the default setting,
+# so reset it explicitly here does not give you the block,
+# as it appears to be affected by shell-integration-features.
+#
+# cursor-style                   = block
+cursor-style-blink             = false
+
+# Shell Integration
+# This convert the cursor-style from bar to block
+shell-integration-features     = no-cursor
+
+copy-on-select                 = clipboard
+
+# Mouse & Integration
+mouse-hide-while-typing        = true
+mouse-scroll-multiplier        = 2
+
+# Other Configurations
+macos-option-as-alt            = true
+
+# --- Keybinds ---
+#
+# Valid modifiers are `shift`, `ctrl` (alias: `control`), `alt` (alias: `opt`,
+# `option`), and `super` (alias: `cmd`, `command`). You may use the modifier
+# or the alias. When debugging keybinds, the non-aliased modifier will always
+# be used in output.
+
+# These are all default keybinds
+# Pasted here for remembering them
+# --- A: Core keybinds ---
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+keybind = super+enter=toggle_fullscreen
+
+keybind = super+n=new_window
+
+# When with `macos-titlebar-style = hidden` set,
+# `super+t` performs the same as `super+n`
+keybind = super+t=new_tab
+
+# Wihen wth `macos-titlebar-style = transparent`,
+# `super+t` does open new tabs, but appears to
+# mess with the AeroSpace window manager,
+# and disrupts the correct window layouts
+# when switching between tabs.
+
+keybind = super+q=quit
+
+# --- B: New keybinds to be tested ---
+keybind = super+alt+shift+j=write_screen_file:open
+keybind = super+2=goto_tab:2
+keybind = super+digit_6=goto_tab:6
+keybind = super+k=clear_screen
+keybind = super+page_down=scroll_page_down
+keybind = super+4=goto_tab:4
+keybind = super+shift+z=redo
+keybind = super+shift+v=paste_from_selection
+keybind = super+w=close_surface
+keybind = shift+page_down=adjust_selection:page_down
+keybind = super+7=goto_tab:7
+keybind = shift+arrow_down=adjust_selection:down
+keybind = super+bracket_left=goto_split:previous
+keybind = super+5=goto_tab:5
+keybind = super+3=goto_tab:3
+keybind = super+a=select_all
+keybind = super+arrow_left=text:\\x01
+keybind = shift+page_up=adjust_selection:page_up
+keybind = super+0=reset_font_size
+keybind = super+digit_2=goto_tab:2
+keybind = super+shift+bracket_left=previous_tab
+keybind = super+shift+,=reload_config
+keybind = super+,=open_config
+keybind = super+ctrl+shift+j=write_screen_file:copy
+keybind = paste=paste_from_clipboard
+keybind = super+bracket_right=goto_split:next
+keybind = super+alt+arrow_up=goto_split:up
+keybind = super+ctrl+arrow_right=resize_split:right,10
+keybind = alt+arrow_left=esc:b
+keybind = super+equal=increase_font_size:1
+keybind = ctrl+tab=next_tab
+keybind = super+digit_4=goto_tab:4
+keybind = super+shift+arrow_up=jump_to_prompt:-1
+keybind = super+alt+arrow_right=goto_split:right
+keybind = super+ctrl+equal=equalize_splits
+keybind = super+digit_7=goto_tab:7
+keybind = super+ctrl+f=toggle_fullscreen
+keybind = super+backspace=text:\\x15
+keybind = super+6=goto_tab:6
+keybind = super+page_up=scroll_page_up
+keybind = super+1=goto_tab:1
+keybind = super+alt+w=close_tab:this
+keybind = super+end=scroll_to_bottom
+keybind = super+-=decrease_font_size:1
+keybind = super+arrow_up=jump_to_prompt:-1
+keybind = super+shift+t=undo
+keybind = super+alt+arrow_left=goto_split:left
+keybind = super+z=undo
+keybind = super+digit_8=goto_tab:8
+keybind = super+9=last_tab
+keybind = shift+arrow_up=adjust_selection:up
+keybind = super+home=scroll_to_top
+keybind = super+digit_1=goto_tab:1
+keybind = super+shift+w=close_window
+keybind = super+alt+shift+w=close_all_windows
+keybind = super+ctrl+arrow_down=resize_split:down,10
+keybind = shift+end=adjust_selection:end
+keybind = super+v=paste_from_clipboard
+keybind = shift+arrow_right=adjust_selection:right
+keybind = super+c=copy_to_clipboard
+keybind = super+ctrl+arrow_left=resize_split:left,10
+keybind = super+shift+enter=toggle_split_zoom
+keybind = super+arrow_right=text:\\x05
+keybind = super++=increase_font_size:1
+keybind = super+shift+p=toggle_command_palette
+keybind = super+8=goto_tab:8
+keybind = shift+arrow_left=adjust_selection:left
+keybind = super+shift+arrow_down=jump_to_prompt:1
+keybind = super+alt+arrow_down=goto_split:down
+keybind = copy=copy_to_clipboard
+keybind = super+shift+j=write_screen_file:paste
+keybind = super+shift+bracket_right=next_tab
+keybind = super+arrow_down=jump_to_prompt:1
+keybind = ctrl+shift+tab=previous_tab
+keybind = alt+arrow_right=esc:f
+keybind = shift+home=adjust_selection:home
+keybind = super+alt+i=inspector:toggle
+keybind = super+digit_5=goto_tab:5
+keybind = super+digit_3=goto_tab:3
+keybind = super+ctrl+arrow_up=resize_split:up,10

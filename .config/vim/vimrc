@@ -179,10 +179,9 @@ set regexpengine=0
 " Without this setting, the color of GUI Vim will act strange
 set t_Co=256
 
-" gruvbox colorscheme is not installed by plugin manager
-" but downloaded and stored inside the ~/.vim/colors directory
-" colorscheme gruvbox
-colorscheme morning
+" colorscheme gruvbox is not installed by plugin manager,
+" but downloaded and stored at ~/.config/vim/colors/gruvbox.vim
+colorscheme gruvbox
 
 set background=dark
 

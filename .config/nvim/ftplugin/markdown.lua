@@ -1,6 +1,9 @@
 -- Filename: ~/.config/nvim/ftplugin/markdown.lua
 -- ~/.config/nvim/ftplugin/markdown.lua
 
+require("alowree.core.writing").setup()
+-- Add markdown-specific stuff below
+--
 -- ===============================================
 -- 1. General Buffer Options
 -- ===============================================
@@ -47,71 +50,9 @@ vim.opt_local.conceallevel = 0
 -- ===============================================
 -- 4. Useful Key Mappings (Local to Markdown)
 -- ===============================================
+-- Refactored into a single `writing.lua`,
+-- and then sourced by markdown.lua and mail.lua
 
--- **Insert Mode Mapping**
---
--- Triggers immediately as you type the characters
--- No waiting for trigger characters
--- Replaces the input sequence in real-time
---
--- Implementation: I
--- vim.cmd("inoremap <buffer> 【【 「")
--- vim.cmd("inoremap <buffer> 】】 」")
--- vim.cmd("inoremap <buffer> 《《 『")
--- vim.cmd("inoremap <buffer> 》》 』")
---
--- Implementation: II
-local symbols = {
-	["【【"] = "「",
-	["】】"] = "」",
-	["《《"] = "『",
-	["》》"] = "』",
-	-- You could add the date here too if you want it localized to Markdown
-	-- ["adate"] = function()
-	-- 	return os.date("%Y-%m-%d")
-	-- end,
-}
-
-for lhs, rhs in pairs(symbols) do
-	vim.keymap.set("i", lhs, rhs, { buffer = true, expr = (type(rhs) == "function") })
-end
-
--- **Insert Mode Abbreviation**
---
--- Triggers only on specific "trigger characters" like Space, Tab, Enter, or certain punctuation
--- Waits for you to type a trigger character before expanding
--- Designed for typing shortcuts that shouldn't interfere with normal typing
-local abbreviation_special_marks = {
-	["--"] = "—", -- converts two hyphens into em dash
-	[">>"] = "→",
-	["<<"] = "←",
-	["^^"] = "↑",
-	["VV"] = "↓",
-	-- ["【【"] = "「",
-	-- ["】】"] = "」",
-	-- ["《《"] = "『",
-	-- ["》》"] = "』",
-}
-for key, val in pairs(abbreviation_special_marks) do
-	vim.cmd(string.format("iabbrev <buffer> %s %s", key, val))
-end
-
-local abbreviation_phrases = {
-	["btw"] = "By the way,",
-	["fyi"] = "For your information —",
-	["asap"] = "as soon as possible.",
-	["fedex"] = "FedEx",
-	["dhl"] = "DHL",
-	["ndl"] = "Nolan Digital Limited",
-	["tcl"] = "Twine Company Limited",
-}
-for key, val in pairs(abbreviation_phrases) do
-	vim.cmd(string.format("iabbrev <buffer> %s %s", key, val))
-end
-
--- Have Gemini explain the design logic
--- and use case of following code snippet
---
 -- Handle code blocks inside Markdown files
 local function MarkdownCodeBlock(outside)
 	vim.cmd("call search('```', 'cb')")

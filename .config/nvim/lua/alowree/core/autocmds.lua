@@ -27,6 +27,27 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- 3. Strip trailing whitespace on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+	group = general_group,
+	desc = "Strip trailing whitespace on save (except markdown)",
+	callback = function()
+		-- Skip markdown files
+		if vim.bo.ft == "markdown" then
+			return
+		end
+
+		-- Save cursor position
+		local cursor = vim.fn.getpos(".")
+
+		-- Strip trailing whitespace
+		vim.cmd([[%s/\s\+$//e]])
+
+		-- Restore cursor position
+		vim.fn.setpos(".", cursor)
+	end,
+})
+
 -- ============================================================================
 -- Automatic Input Method Switching for Windows & macOS
 -- ============================================================================
