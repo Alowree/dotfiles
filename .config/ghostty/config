@@ -4,7 +4,7 @@
 # ghostty +show-config
 #
 # Theme & Appearance
-theme = "light:3024 Day,dark:Broadcast"
+theme = light:3024 Day,dark:Broadcast
 
 background-opacity             = 0.8
 background-blur                = 90
@@ -25,7 +25,7 @@ window-padding-balance         = true
 # font-family = NeoXiHei Code
 #
 # The same font as used in iTerm2, not working in Kitty though
-font-family = "JetBrains Maple Mono"
+font-family = JetBrains Maple Mono
 
 # Option B: Assign EN and CN fonts separately
 # font-family = JetBrainsMonoNL Nerd Font Mono
@@ -45,6 +45,10 @@ font-family = "JetBrains Maple Mono"
 cursor-style-blink             = false
 
 # Shell Integration
+#
+# Detect the shell based on the filename - default value
+# shell-integration              = detect
+#
 # This convert the cursor-style from bar to block
 shell-integration-features     = no-cursor
 
@@ -77,7 +81,7 @@ keybind = super+n=new_window
 # `super+t` performs the same as `super+n`
 keybind = super+t=new_tab
 
-# Wihen wth `macos-titlebar-style = transparent`,
+# When with `macos-titlebar-style = transparent`,
 # `super+t` does open new tabs, but appears to
 # mess with the AeroSpace window manager,
 # and disrupts the correct window layouts
@@ -166,3 +170,7 @@ keybind = super+alt+i=inspector:toggle
 keybind = super+digit_5=goto_tab:5
 keybind = super+digit_3=goto_tab:3
 keybind = super+ctrl+arrow_up=resize_split:up,10
+
+# There is no default keybind for toggling the quick terminal.
+# To enable, bind the toggle_quick_terminal action to a key.
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
