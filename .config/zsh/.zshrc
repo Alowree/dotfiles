@@ -17,6 +17,7 @@ fi
 # ====================================================
 
 # START of `~/.zshenv`
+#
 # Set up relevant XDG base directories.
 # Spec: https://specifications.freedesktop.org/basedir-spec/latest/index.html
 # ------------------------------------------------------------------------------
@@ -46,10 +47,11 @@ fi
 # # ------------------------------------------------------------------------------
 # export EDITOR=nvim
 # export VISUAL=nvim
+#
 # END of `~/.zshenv`
 
-# START of `$ZDOTRID/.zprofile`
-
+# START of `$ZDOTDIR/.zprofile`
+#
 # # 1. Homebrew FIRST (system package manager)
 # if [[ -f "/opt/homebrew/bin/brew" ]]; then
 #     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -80,8 +82,8 @@ fi
 # # Priority: Highest - checked first when running commands
 # # Use case: User-installed tools should override system ones
 # export PATH="$USER_BIN:$PATH"
-
-# END of `$ZDOTRID/.zprofile`
+#
+# END of `$ZDOTDIR/.zprofile`
 
 # ====================================================
 # SECTION 3: ZSH CORE CONFIGURATION

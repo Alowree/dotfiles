@@ -11,7 +11,7 @@ alias ls='ls -G'     # -G enables color on macOS
 # Basic daily use (essential 4)
 alias l='ls -l'      # Long list
 alias la='ls -la'    # Long list, all files (including hidden)
-alias ll='ls -lh'    # Long list, human readable sizes
+alias lh='ls -lh -D "%Y-%m-%d %H:%M"'    # Long list, human readable sizes
 alias l1='ls -1'     # One file per line (Great for piping)
 
 # Time-based navigation (very useful)
