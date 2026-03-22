@@ -9,19 +9,20 @@
 alias ls='ls -G'     # -G enables color on macOS
 
 # Basic daily use (essential 4)
-alias l='ls -l'      # Long list
+alias ll='ls -l'     # Long list
 alias la='ls -la'    # Long list, all files (including hidden)
-alias lh='ls -lh -D "%Y-%m-%d %H:%M"'    # Long list, human readable sizes
+alias lh='ls -lh'    # Long list, human readable sizes
+alias lhD='ls -lh -D "%Y-%m-%d %H:%M"'    # Long list, human readable sizes, YYYY-mm-dd
 alias l1='ls -1'     # One file per line (Great for piping)
 
-# Time-based navigation (very useful)
-alias lt='ls -lt'    # Newest first
-alias ltr='ls -ltr'  # Oldest first (find old files)
-
-# Less frequently used but handy
-alias lS='ls -lS'    # Largest files first
-alias lr='ls -lR'    # Recursive (use sparingly!)
-alias lf='ls -lF'    # Type indicators (/, *, @, =, etc.)
+# # Time-based navigation (very useful)
+# alias lt='ls -lt'    # Newest first
+# alias ltr='ls -ltr'  # Oldest first (find old files)
+#
+# # Less frequently used but handy
+# alias lS='ls -lS'    # Largest files first
+# alias lr='ls -lR'    # Recursive (use sparingly!)
+# alias lf='ls -lF'    # Type indicators (/, *, @, =, etc.)
 
 # Combined utilities
 alias pls='pwd && ls'    # Show path then list contents
@@ -55,8 +56,7 @@ alias help=run-help
 
 # Zsh configuration management
 alias zshrc='$EDITOR "${ZDOTDIR:-$HOME}/.zshrc"'    # Edit Zsh config
-alias reload='source "${ZDOTDIR:-$HOME}/.zshrc"'    # Reload Zsh config
-alias src='source "${ZDOTDIR:-$HOME}/.zshrc"'       # Short alias for reload
+alias src='source "${ZDOTDIR:-$HOME}/.zshrc"'       # Reload Zsh config
 
 # }}}
 
@@ -78,12 +78,12 @@ fi
 # SECTION 4: GLOBAL ALIASES (Pipe Shortcuts)  {{{
 
 # These work anywhere in the command line
-alias -g H='| head'             # Pipe to head (first lines)
-alias -g T='| tail'             # Pipe to tail (last lines)
-alias -g G='| grep'             # Pipe to grep (search)
-alias -g L='| less'             # Pipe to less (pager)
-alias -g NUL='> /dev/null 2>&1' # Discard all output completely
-alias -g NE='2> /dev/null'      # Discard stderr only (silent errors)
+# alias -g H='| head'             # Pipe to head (first lines)
+# alias -g T='| tail'             # Pipe to tail (last lines)
+# alias -g G='| grep'             # Pipe to grep (search)
+# alias -g L='| less'             # Pipe to less (pager)
+# alias -g NUL='> /dev/null 2>&1' # Discard all output completely
+# alias -g NE='2> /dev/null'      # Discard stderr only (silent errors)
 
 # }}}
 
@@ -169,6 +169,11 @@ alias ...='cd ../../'
 alias .3='cd ../../../'
 alias .4='cd ../../../../'
 
+# Open browser from CLI
+alias chrome='open -a "Google Chrome"'
+alias chrome-incog='open -a "Google Chrome" --args --incognito'
+alias safari='open -a Safari'
+alias brave='open -a "Brave Browser"'
 
 mcd() {
     # DESC: Create a directory and enter it

@@ -109,13 +109,13 @@ deskhide() {
 # Google Search from the terminal
 # with default browser Chrome
 google() {
-    open "https://www.google.com/search?q=$*"
+    open -a "Google Chrome" "https://www.google.com/search?q=$*"
 }
 
 # Chrome redirects to https://cn.bing.com/
 # but why?
 bing() {
-    open "https://www.bing.com/search?q=$*"
+    open -a "Brave Browser" "https://www.bing.com/search?q=$*"
 }
 
 
