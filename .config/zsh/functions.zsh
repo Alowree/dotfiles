@@ -107,17 +107,44 @@ deskhide() {
 }
 
 # Google Search from the terminal
-# with default browser Chrome
 google() {
-    open -a "Google Chrome" "https://www.google.com/search?q=$*"
+    local url="https://www.google.com/search?q=$*"
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS
+        open -a "Google Chrome" "$url"
+    elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+        # Windows (Git Bash / MSYS2)
+        # explorer.exe is the most reliable way to trigger the default browser
+        explorer.exe "$url"
+    else
+        # Linux Fallback
+        xdg-open "$url" 2>/dev/null
+    fi
 }
 
-# Chrome redirects to https://cn.bing.com/
-# but why?
+# Bing Search via Brave Browser
 bing() {
-    open -a "Brave Browser" "https://www.bing.com/search?q=$*"
-}
+    local url="https://www.bing.com/search?q=$*"
 
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS
+        open -a "Brave Browser" "$url"
+    elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+        # Windows (Git Bash / MSYS2)
+        # Use the absolute Windows path in Git Bash format (/c/...)
+        local brave_path="/c/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
+
+        if [[ -f "$brave_path" ]]; then
+            "$brave_path" "$url"
+        else
+            explorer.exe "$url"
+        fi
+    else
+        # Linux Fallback
+        brave-browser "$url" 2>/dev/null || xdg-open "$url"
+    fi
+}
 
 # Function to clean up zsh cache
 # Don't run it unless experiencing issues
