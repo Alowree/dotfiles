@@ -95,6 +95,7 @@ copyfile() {
     fi
 }
 
+
 # Toggle macOS Desktop Icons
 deskhide() {
     local state
@@ -106,17 +107,19 @@ deskhide() {
     fi
 }
 
+# --- Web & Search ---
 # Google Search from the terminal
 google() {
-    local url="https://www.google.com/search?q=$*"
+    local query="${*// /%20}"
+    local url="https://www.google.com/search?q=${query}"
 
     if [[ "$OSTYPE" == "darwin"* ]]; then
         # macOS
         open -a "Google Chrome" "$url"
     elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
-        # Windows (Git Bash / MSYS2)
-        # explorer.exe is the most reliable way to trigger the default browser
-        explorer.exe "$url"
+        # Windows (Git Bash) - Try Chrome binary, fallback to 'start'
+        local chrome_path="/c/Program Files/Google/Chrome/Application/chrome.exe"
+        [[ -f "$chrome_path" ]] && "$chrome_path" "$url" || start "$url"
     else
         # Linux Fallback
         xdg-open "$url" 2>/dev/null
@@ -125,21 +128,16 @@ google() {
 
 # Bing Search via Brave Browser
 bing() {
-    local url="https://www.bing.com/search?q=$*"
+    local query="${*// /%20}"
+    local url="https://www.bing.com/search?q=${query}"
 
     if [[ "$OSTYPE" == "darwin"* ]]; then
         # macOS
         open -a "Brave Browser" "$url"
     elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
-        # Windows (Git Bash / MSYS2)
-        # Use the absolute Windows path in Git Bash format (/c/...)
+        # Windows (Git Bash) - Try Brave binary, fallback to 'start'
         local brave_path="/c/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
-
-        if [[ -f "$brave_path" ]]; then
-            "$brave_path" "$url"
-        else
-            explorer.exe "$url"
-        fi
+        [[ -f "$brave_path" ]] && "$brave_path" "$url" || start "$url"
     else
         # Linux Fallback
         brave-browser "$url" 2>/dev/null || xdg-open "$url"
