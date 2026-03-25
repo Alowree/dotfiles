@@ -144,6 +144,62 @@ bing() {
     fi
 }
 
+# Core tracking engine
+# Usage: track-it <service> <tracking_number>
+function track-it() {
+    local service="${1:l}" # Force to lowercase for the switch case
+    local track="$2"
+    local url=""
+
+    if [[ -z "$track" ]]; then
+        echo "Usage: $service <tracking_number>"
+        return 1
+    fi
+
+    case "$service" in
+        ups)   url="https://www.ups.com/track?tracknum=$track" ;;
+        fedex) url="https://www.fedex.com/fedextrack/?trknbr=$track" ;;
+        usps)  url="https://tools.usps.com/go/TrackConfirmAction?tLabels=$track" ;;
+        dhl)   url="https://www.dhl.com/en/express/tracking.html?AWB=$track" ;;
+        *)
+            echo "Unknown service: $service"
+            return 1
+            ;;
+    esac
+
+    # Cross-platform browser opener
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        open "$url"
+    elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+        # Native Windows (Git Bash / MSYS2)
+        start "$url"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        xdg-open "$url"
+    fi
+}
+
+# Define the pairs of commands you want (lowercase and display-case)
+# Structure: "lowercase_name:DisplayCaseName"
+local tracking_pairs=(
+    "ups:UPS"
+    "fedex:FedEx"
+    "usps:USPS"
+    "dhl:DHL"
+)
+
+# Loop through the pairs and create both versions of the command
+for pair in $tracking_pairs; do
+    # Split the pair by the colon
+    local lower="${pair%%:*}"
+    local display="${pair#*:}"
+
+    # Create the lowercase function (e.g., fedex)
+    eval "function $lower() { track-it '$lower' \"\$1\"; }"
+
+    # Create the display-case function (e.g., FedEx)
+    eval "function $display() { track-it '$lower' \"\$1\"; }"
+done
+
 # Function to clean up zsh cache
 # Don't run it unless experiencing issues
 zsh_clean_cache() {
