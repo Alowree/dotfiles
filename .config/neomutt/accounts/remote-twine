@@ -1,0 +1,63 @@
+# vim: set filetype=neomuttrc:
+
+# What does this do?
+# unmailboxes *
+
+# in/out mail servers
+set from = "alowree@twineintl.com"
+set real_name = "Alowree Xu - Twine"
+
+set imap_user = $from
+set imap_pass = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+set imap_check_subscribed = no
+
+set smtp_url = "smtps://alowree@twineintl.com@ud.1025.hk:465"
+set smtp_authenticators = 'login'
+set smtp_pass = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+# set smtp_pass = $imap_pass
+
+# set query_command = "notmuch address 'folder:twine/**' and '(from:\"/%s/\"' or 'to:\"/%s/\")' and not 'folder:\"/.*(Junk|Spam|Trash).*/\"'"
+
+# set envelope_from
+# set use_from = "yes"
+
+# If you want to read your mails from the remote server
+set folder = "imaps://alowree@twineintl.com@twineintlcom.securemail.hk:993"
+
+# If you want to sync your mails to the local storage
+# set folder = "~/.maildir/twine"
+# set mbox_type = maildir
+
+set spool_file = "+INBOX"
+# set move = no
+
+# initial mailboxes
+set postponed = "+Drafts"
+set trash = "+Trash"
+set record = "+Sent"
+
+
+
+# Account 1: mailboxes and folder hook (remote server only)
+# Local maildir polling removed to avoid showing local sync results.
+# The remote IMAP mailboxes are exposed below for use with the IMAP folder.
+
+# mailboxes in the sidebar
+mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
+
+# Allow Mutt to open a new IMAP connection automatically.
+unset imap_passive
+
+# Keep the IMAP connection alive by polling intermittently (time in seconds).
+set imap_keepalive = 300
+
+## Hook -- IMPORTANT!
+account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
+
+
+# 设置签名文件的位置
+set signature = "~/.config/neomutt/accounts/twine-signature"
+
+# Ensure this account will be sourced automatically when changing to its folder
+# Keep the hook here so account-specific hooks live inside the account file
+folder-hook $folder 'source ~/.config/neomutt/accounts/twine'

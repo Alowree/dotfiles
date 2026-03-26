@@ -1,0 +1,29 @@
+# HTML emails
+# Option A: Best practice w3m configuration
+text/html; w3m -I %{charset} -T text/html -dump; copiousoutput;
+# Option B: Fallback to lynx only if w3m has issues
+# WARNING: does not render table inside message
+# text/html; lynx -dump %s; copiousoutput; nametemplate=%s.html
+
+# View attachment in text
+text/plain; nvim %s;
+
+# View attachment in PDFs
+application/pdf; zathura %s
+# Trying to resolve blackout window when openning PDFs
+
+# Open images in external viewer instead
+image/*; open %s; needsterminal
+
+# --- Interactive Spreadsheets (VisiData) ---
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; vd %s
+application/vnd.ms-excel; vd %s
+application/octet-stream; vd %s; test=echo %s | grep -qiE '\.(xlsx|xls)$'
+
+# --- Text-based Documents (Pandoc/Antiword) ---
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; pandoc -t plain %s; copiousoutput
+application/msword; antiword %s; copiousoutput
+
+# Final robust Word fallback
+application/octet-stream; pandoc -t plain %s; copiousoutput; test=echo %s | grep -qi '\.docx$'
+application/octet-stream; antiword %s; copiousoutput; test=echo %s | grep -qi '\.doc$'

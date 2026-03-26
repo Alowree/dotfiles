@@ -1,0 +1,32 @@
+# Filename: ~/.config/neomutt/neomuttrc
+# ~/.config/neomutt/neomuttrc
+
+# I have found the right formatter for muttrc/neomuttrc files,
+# therefore all current file formats are manually managed.
+#
+set mailcap_path = $HOME/.config/neomutt/mailcap      # This file describe how to view messages
+#
+#### ------------------------------------------------------------------------------------------
+#### Account-spesific, and Mailboxes
+#### ------------------------------------------------------------------------------------------
+# Set your default email account
+source $HOME/.config/neomutt/accounts/twine
+
+# Set shortcuts for switching email accounts
+macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/twine<enter><change-folder>!<enter>'
+macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/biaget<enter><change-folder>!<enter>'
+macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/remote-soundfreaq <enter><change-folder>!<enter>'
+
+#### ------------------------------------------------------------------------------------------
+#### General Settings
+#### ------------------------------------------------------------------------------------------
+source options
+
+source mappings
+
+#### ------------------------------------------------------------------------------------------
+#### Theme
+#### ------------------------------------------------------------------------------------------
+source themes/rebelot.neomuttrc
+
+# vim: set filetype=neomuttrc:

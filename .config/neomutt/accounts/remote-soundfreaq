@@ -1,0 +1,50 @@
+# vim: set filetype=neomuttrc:
+
+# What does this do?
+# unmailboxes *
+
+# in/out mail servers
+set from = "alowree@soundfreaq.com"
+set real_name = "Alowree Xu - Soundfreaq"
+
+# Basic Account Setup
+set imap_user = $from
+# set imap_authenticators = 'oauthbearer:xoauth2'
+set imap_authenticators = 'oauthbearer'
+# set smtp_authenticators = 'oauthbearer:xoauth2'
+set smtp_authenticators = 'oauthbearer'
+
+# Token Retrieval Command
+# This tells NeoMutt: "Don't ask for a password, run this script instead"
+set imap_oauth_refresh_command = "$HOME/.local/bin/mutt_oauth2.py ~/.config/secrets/soundfreaq.tokens"
+set smtp_oauth_refresh_command = "$HOME/.local/bin/mutt_oauth2.py ~/.config/secrets/soundfreaq.tokens"
+
+set folder = "imaps://imap.gmail.com:993"
+set spool_file = "+INBOX"
+set smtp_url = "smtps://alowree@soundfreaq.com@smtp.gmail.com:465/"
+
+# initial mailboxes
+set postponed = "+Drafts"
+set trash = "+Trash"
+set record = "+Sent"
+
+
+
+# Account 1: mailboxes and folder hook (remote server only)
+# Local maildir polling removed to avoid showing local sync results.
+# The remote IMAP mailboxes are exposed below for use with the IMAP folder.
+
+# mailboxes in the sidebar
+mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
+
+
+## Hook -- IMPORTANT!
+# account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
+
+
+# 设置签名文件的位置
+# set signature = "~/.config/neomutt/accounts/twine-signature"
+
+# Ensure this account will be sourced automatically when changing to its folder
+# Keep the hook here so account-specific hooks live inside the account file
+# folder-hook $folder 'source ~/.config/neomutt/accounts/twine'

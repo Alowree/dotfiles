@@ -1,0 +1,204 @@
+# vim: set filetype=neomuttrc:
+
+# NeoMutt Configuration - General Options
+# Refactored: 2024-01-23
+
+# Official manual page: https://neomutt.org/guide/reference
+
+###############################################################################
+# EDITOR AND COMPOSITION
+###############################################################################
+set editor = "nvim"                         # Use Neovim as editor
+set edit_headers                           # Show headers when composing
+set ask_cc                                 # Prompt for CC recipients
+set forward_quote                          # Include message in forwards
+set forward_decode                         # Decode when forwarding
+set forward_format = "Fwd: %s"             # Format of subject when forwarding
+set reply_to                               # Reply to Reply-To: field
+set fast_reply                             # Skip to compose when replying
+set include                                # Include message in replies
+set attribution_intro = "On %d, %n wrote:" # Format of quoting header
+set sig_dashes = no                        # No '-- ' dashes before signature
+set sig_on_top = yes                       # Signature above quoted text
+set text_flowed = yes                      # Use format=flowed for outgoing text
+set fcc_attach                             # Save attachments with the body
+
+# Note: forward_attachments = yes is DEFAULT setting
+
+###############################################################################
+# DISPLAY AND PAGER
+###############################################################################
+set pager_index_lines = 10                 # Show 10 lines of Index in Pager
+set pager_context = 5                      # Lines of context between pages
+set pager_stop                             # Don't auto-advance at message end
+set smart_wrap                             # Wrap at word boundaries
+set wrap = 90                              # Email view width
+set tilde                                  # Show ~ at end of message
+set markers = no                           # No '+' for wrapped lines
+set allow_ansi                             # Allow ANSI codes in messages
+set arrow_cursor = "no"                    # Use block cursor
+set menu_scroll                            # Scroll in menus
+
+###############################################################################
+# CHARACTER ENCODING
+###############################################################################
+set charset = "utf-8"                      # Display/input encoding
+set send_charset = "utf-8"                 # Outgoing email encoding
+set assumed_charset = ""                   # Assume no charset if unspecified
+
+# Note: These are redundant but kept for clarity
+# Default: charset = "" (auto from locale)
+# Default: send_charset = "us-ascii:iso-8859-1:utf-8"
+# Default: assumed_charset = ""
+
+###############################################################################
+# REGULAR EXPRESSIONS
+###############################################################################
+set reply_regex = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+# Custom reply detection (handles [R], [RE], tags)
+# Default: "^((re|aw|sv)(\[[0-9]+\])*:[ \t]*)*"
+
+set quote_regex = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+# Quote detection in replies
+# Default: "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+
+###############################################################################
+# MESSAGE HANDLING AND SORTING
+###############################################################################
+set sort = reverse-date                    # Sort by date, newest first
+# Note: sort = date is default for non-threaded
+
+set wait_key = no                          # No "press key to continue"
+set mark_old = yes                         # Mark read messages as old on exit
+set collapse_all                           # Collapse all threads by default
+set uncollapse_jump                        # Uncollapse when jumping to thread
+set sleep_time = 0                         # No pause for info messages
+set beep_new                               # Beep on new mail
+set pipe_decode                            # Strip headers when piping
+set thorough_search                        # Search in decoded messages
+set flag_safe                              # Flagged messages protected
+set auto_tag                               # Commands apply to all tagged
+set use_envelope_from                      # Use envelope-from for delivery
+
+# Note: beep is a global bell control, beep_new only for new mail
+# Default: beep = yes, beep_new = no
+
+###############################################################################
+# SIDEBAR CONFIGURATION
+###############################################################################
+# set sidebar_visible                      # Uncomment to enable sidebar
+set sidebar_width = 30                      # Width of sidebar
+set sidebar_format = "%B %<N?(%N)>%* %S"   # Sidebar display format
+set sidebar_sort = unread                   # Sort by unread count
+set sidebar_folder_indent = no              # No indentation for folders
+set sidebar_short_path = yes                # Show short folder paths
+set sidebar_next_new_wrap = yes             # Wrap when navigating new messages
+
+###############################################################################
+# FOLDER BROWSER
+###############################################################################
+set browser_sort = alpha                    # Sort folders alphabetically
+set imap_check_subscribed                   # Only check subscribed folders
+set auto_subscribe                          # Auto-subscribe to new folders
+
+# Note: sidebar_sort = browser_sort is DEFAULT setting
+# You have sidebar_sort = unread overriding this
+
+###############################################################################
+# HEADER DISPLAY
+###############################################################################
+ignore *                                    # Ignore all headers
+unignore from: to: cc: date: subject: x-label:  # Show only these
+unhdr_order *                               # Clear header order
+hdr_order from: to: cc: date: subject: x-label:  # Set order
+
+# --- Notmuch Integration ---
+set nm_default_url = "notmuch:///Users/alowree/.maildir" # Use your absolute path
+set virtual_spool_file = yes                             # Allow virtual folders
+
+# Define Virtual Mailboxes (saved searches)
+# virtual-mailboxes \
+#   "Unread" "notmuch://?query=tag:unread and NOT tag:spam" \
+#   "Today"  "notmuch://?query=date:today" \
+#   "Starred" "notmuch://?query=tag:flagged"
+
+# --- Macros for Searching ---
+# Press 'L' to search all mail via Notmuch
+# macro index L "<vfolder-from-query>" "Search with Notmuch"
+
+###############################################################################
+# MIME AND ATTACHMENTS
+# https://neomutt.org/guide/mimesupport.html#auto-view
+###############################################################################
+set mime_type_query_command = "file --mime-type -b %s"  # Detect MIME types
+set count_alternatives = yes                # Recurse into multipart
+
+auto_view text/html text/calendar application/ics  # Auto-view these types
+
+# Auto-view these MIME types when opening messages
+auto_view application/vnd.openxmlformats-officedocument.wordprocessingml.document
+auto_view application/msword
+
+# Can I have to auto_view here?
+# auto_view image/jpeg image/png image/gif
+#
+# alternative_order text/html text/plain text/enriched text/*  # Preference order
+
+###############################################################################
+# CACHING
+###############################################################################
+set header_cache = "~/.cache/neomutt"
+set message_cache_dir = "~/.cache/neomutt"    # Message cache location
+
+###############################################################################
+# NETWORK AND MAIL CHECKING
+###############################################################################
+set mail_check = 120                        # Check mail every 120 seconds
+set mail_check_stats = yes                  # Show stats on mail check
+set mail_check_stats_interval = 120         # Update stats every 120s
+set timeout = 30                            # Network timeout in seconds
+set imap_idle = yes                         # Use IMAP IDLE for push
+
+###############################################################################
+# QUIT AND CONFIRMATION
+###############################################################################
+set confirm_append = no                     # Don't ask to save to folder
+set quit                                    # Don't ask to quit
+# Note: quit requires confirm_append=no to be truly silent
+
+###############################################################################
+# STATUS BAR
+###############################################################################
+set status_chars = " *%A"                   # Status bar characters
+set status_format = "[ Folder: %f ] [%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]%>─%?p?( %p postponed )?"
+
+###############################################################################
+# TEMPORARY FILES
+###############################################################################
+set tmp_dir = /tmp/$USER/neomutt            # Temporary directory
+
+###############################################################################
+# EXTERNAL TOOLS
+###############################################################################
+set query_command = "khard email --parsable --search-in-source-files '%s'"  # Address book
+
+###############################################################################
+# MISC SETTINGS
+###############################################################################
+set date_format = "%d.%m.%Y %H:%M"          # Date display format
+
+# Tell NeoMutt to allow ANSI codes
+# for image handling inside mailcap
+set allow_ansi = yes
+set pipe_decode = yes
+
+###############################################################################
+# NOTES AND ISSUES
+###############################################################################
+# 1. charset is set twice (lines 63 and 139) - removed duplicate
+# 2. message_cache_clean = yes is NOT recommended for IMAP (can cause issues)
+# 3. forward_attachments = yes is DEFAULT, can be removed
+# 4. beep_new = yes but global beep not set (beep controls all bell usage)
+# 5. auto_view lines commented out as they duplicate alternative_order
+# 6. sidebar_visible is commented out - sidebar won't show without this
+# 7. Consider setting use_threads for threaded view with reverse-date sorting

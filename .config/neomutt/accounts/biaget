@@ -1,0 +1,39 @@
+# vim: filetype=muttrc
+unmailboxes *
+
+# in/out mail servers
+set realname = "Alowree Xu - Biaget"
+set imap_pass = `security find-generic-password -a 'alowree@biaget.com' -s 'neomutt-biaget' -w`
+set smtp_url = "smtps://alowree@biaget.com@smtp.263.net:465"
+set smtp_pass = `security find-generic-password -a 'alowree@biaget.com' -s 'neomutt-biaget' -w`
+set folder = "imaps://alowree@biaget.com@imap.263.net:993"
+set spoolfile = "+Inbox"
+
+set from = "alowree@biaget.com"
+set envelope_from
+set use_from = "yes"
+# set record = "+Sent"
+set record = "+已发送"
+# set trash = "+Deleted Items"
+set trash = "+已删除"
+# set postponed = "+Drafts"
+set postponed = "+草稿箱"
+set mail_check = 6
+
+
+mailboxes "+Inbox" "+已发送" "+草稿箱" "+已删除"
+
+# Allow Mutt to open a new IMAP connection automatically.
+unset imap_passive
+
+# Keep the IMAP connection alive by polling intermittently (time in seconds).
+set imap_keepalive = 300
+
+# Hook - I don't know what this is for
+account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@biaget.com' -s 'neomutt-biaget' -w`"
+
+# Signature
+set signature = "~/.config/neomutt/accounts/biaget-signature"
+
+# Ensure account is sourced automatically when changing to its folder
+folder-hook $folder 'source ~/.config/neomutt/accounts/biaget'
