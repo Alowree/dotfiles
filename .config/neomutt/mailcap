@@ -1,29 +1,116 @@
-# HTML emails
-# Option A: Best practice w3m configuration
-text/html; w3m -I %{charset} -T text/html -dump; copiousoutput;
-# Option B: Fallback to lynx only if w3m has issues
+# Filename: ~/.config/neomutt/mailcap
+# ~/.config/neomutt/mailcap
+#
+# ============================================================================
+# NeoMutt Mailcap Configuration
+# ============================================================================
+#
+# MAILCAP FLAGS REFERENCE:
+# ------------------------
+# copiousoutput  : Command outputs text for inline display (converters)
+# needsterminal  : Command requires terminal access (TUI apps)
+# (no flags)     : GUI app launches separately, no terminal needed
+#
+# See: man mailcap
+
+# ============================================================================
+# HTML EMAILS
+# ============================================================================
+# -dump converts HTML to plain text for inline display
+text/html; w3m -I %{charset} -T text/html -dump; copiousoutput
+
+# Fallback (if w3m unavailable - but lynx does not render tables)
 # WARNING: does not render table inside message
 # text/html; lynx -dump %s; copiousoutput; nametemplate=%s.html
 
-# View attachment in text
-text/plain; nvim %s;
+# ============================================================================
+# PLAIN TEXT
+# ============================================================================
+text/plain; nvim %s; needsterminal
 
-# View attachment in PDFs
+# ============================================================================
+# DOCUMENTS (PDF, EPUB)
+# ============================================================================
+# GUI viewers - launch detached, no flags needed
 application/pdf; zathura %s
-# Trying to resolve blackout window when openning PDFs
+application/epub+zip; zathura %s
 
-# Open images in external viewer instead
-image/*; open %s; needsterminal
+# Fallback for octet-stream PDF
+# Test shows that fallback not required
 
-# --- Interactive Spreadsheets (VisiData) ---
+# ============================================================================
+# IMAGES
+# ============================================================================
+# Option A: Terminal viewer (Ghostty with Kitty graphics protocol)
+# Requires ~/.local/bin/ghostty-image-viewer script
+# For portability consideration, move it to ~/.config/neomutt/bin
+image/*; ~/.config/neomutt/bin/ghostty-image-viewer %s; needsterminal
+
+# Option B: GUI viewer (Preview - simpler, always works)
+# image/*; open -a Preview %s; needsterminal
+
+# ============================================================================
+# MEDIA (VIDEO/AUDIO)
+# ============================================================================
+# Can I use the following utilities on macOS?
+#
+video/*; mpv --loop %s;
+audio/*; mpv --loop --audio-display=no %s;
+
+# Alternative: QuickTime Player (macOS native)
+# video/*; open -a "QuickTime Player" %s
+# audio/*; open -a Music %s
+
+# ============================================================================
+# SPREADSHEETS (Excel)
+# ============================================================================
+# VisiData - TUI spreadsheet viewer
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; vd %s
 application/vnd.ms-excel; vd %s
+
+# Fallback for misidentified Excel files
 application/octet-stream; vd %s; test=echo %s | grep -qiE '\.(xlsx|xls)$'
 
-# --- Text-based Documents (Pandoc/Antiword) ---
+# ============================================================================
+# WORD PROCESSING DOCUMENTS
+# ============================================================================
+# Modern .docx files (requires pandoc: brew install pandoc)
 application/vnd.openxmlformats-officedocument.wordprocessingml.document; pandoc -t plain %s; copiousoutput
+
+# Legacy .doc files (requires antiword: brew install antiword)
 application/msword; antiword %s; copiousoutput
 
-# Final robust Word fallback
+# Fallback for misidentified Word documents
 application/octet-stream; pandoc -t plain %s; copiousoutput; test=echo %s | grep -qi '\.docx$'
 application/octet-stream; antiword %s; copiousoutput; test=echo %s | grep -qi '\.doc$'
+
+# ============================================================================
+# ARCHIVES
+# ============================================================================
+# Requires: brew install unar
+#
+# Unified archive listing with lsar (part of unar package)
+#
+# RAR files
+application/x-rar-compressed; lsar -l %s; copiousoutput
+
+# ZIP files
+# application/zip; lsar -l %s; copiousoutput
+
+# TAR archives (lsar handles these too)
+# application/x-tar; lsar -l %s; copiousoutput
+# application/x-gzip; lsar -l %s; copiousoutput
+# application/x-bzip2; lsar -l %s; copiousoutput
+
+# 7-Zip archives
+# application/x-7z-compressed; lsar -l %s; copiousoutput
+
+# ============================================================================
+# ADDITIONAL FORMATS (Optional)
+# ============================================================================
+# Source code with syntax highlighting (requires highlight)
+text/x-c; highlight -O ansi %s; copiousoutput; needsterminal
+text/x-python; highlight -O ansi %s; copiousoutput; needsterminal
+
+# Markdown with pandoc
+text/markdown; pandoc -t plain %s; copiousoutput

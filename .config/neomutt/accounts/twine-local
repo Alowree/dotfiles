@@ -3,17 +3,18 @@
 # Local Maildir sync via mbsync
 
 # ------------------------------------------------------------------------------
-# Identity & Authentication
+# Identity
 # ------------------------------------------------------------------------------
 set from            = "alowree@twineintl.com"
 set real_name       = "Alowree Xu - Twine"
-set imap_user       = $from
+
+# ------------------------------------------------------------------------------
+# SMTP
+# ------------------------------------------------------------------------------
 set smtp_url        = "smtps://alowree@twineintl.com@ud.1025.hk:465"
 set smtp_authenticators = "login"
-
-# Password from macOS keychain
-set imap_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
 set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+set imap_user       = $from
 
 # ------------------------------------------------------------------------------
 # Mail Storage (Local Maildir)
@@ -23,7 +24,9 @@ set mbox_type       = maildir
 set spool_file      = "+INBOX"
 set move            = no
 
-# Standard folders
+# ------------------------------------------------------------------------------
+# Standard Folders
+# ------------------------------------------------------------------------------
 set postponed       = "+Drafts"
 set trash           = "+Trash"
 set record          = "+Sent"
@@ -45,22 +48,16 @@ mailboxes -label "📁 2025"    -nonotify "~/.maildir/2025" \
           -label "📁 2026"    -nonotify "~/.maildir/2026"
 
 # ------------------------------------------------------------------------------
-# Folder Hooks (per-folder settings)
-# ------------------------------------------------------------------------------
-# Apply twine account settings when in twine folders
-folder-hook ~/.maildir/twine/ 'source ~/.config/neomutt/accounts/twine'
-
-# Optional: different signature for replies from archive
-# folder-hook ~/.maildir/2025/ 'set signature="~/.config/neomutt/accounts/twine-archive-signature"'
-# folder-hook ~/.maildir/2026/ 'set signature="~/.config/neomutt/accounts/twine-archive-signature"'
-
-# ------------------------------------------------------------------------------
 # Macros for Quick Archive Access
 # ------------------------------------------------------------------------------
 # Press '25' to go to 2025 archive, '26' for 2026
 bind index,pager 2 noop
 macro index,pager 25 "<change-folder>~/.maildir/2025<enter>" "Go to 2025 archive"
 macro index,pager 26 "<change-folder>~/.maildir/2026<enter>" "Go to 2026 archive"
+
+# Optional: different signature for replies from archive
+# folder-hook ~/.maildir/2025/ 'set signature="~/.config/neomutt/accounts/twine-archive-signature"'
+# folder-hook ~/.maildir/2026/ 'set signature="~/.config/neomutt/accounts/twine-archive-signature"'
 
 # ------------------------------------------------------------------------------
 # Notes

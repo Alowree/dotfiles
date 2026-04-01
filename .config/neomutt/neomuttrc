@@ -1,10 +1,13 @@
 # Filename: ~/.config/neomutt/neomuttrc
 # ~/.config/neomutt/neomuttrc
+# @author Alowree XU
+# @since 2026
 
-# I have found the right formatter for muttrc/neomuttrc files,
+# I have not found the right formatter for muttrc/neomuttrc files,
 # therefore all current file formats are manually managed.
 #
-set mailcap_path = $HOME/.config/neomutt/mailcap      # This file describe how to view messages
+# Or maybe these are merely bash scripts,
+# which might be formatted by shfmt or beautysh?
 #
 #### ------------------------------------------------------------------------------------------
 #### Account-spesific, and Mailboxes
@@ -21,7 +24,6 @@ macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/neomutt/ac
 #### General Settings
 #### ------------------------------------------------------------------------------------------
 source options
-
 source mappings
 
 #### ------------------------------------------------------------------------------------------

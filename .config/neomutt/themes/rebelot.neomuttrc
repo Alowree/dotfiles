@@ -1,4 +1,5 @@
-# vim: set filetype=neomuttrc:
+# Filename: ~/.config/neomutt/themes/rebelot.neomuttrc
+# ~/.config/neomutt/themes/rebelot.neomuttrc
 
 set index_format="%3C %zs %zt %zc %9@date@ %-35.35n %?H? ?%?y?[%y] ?%?g?[%g] ?%?X?󰁦& ? %?M?(%M) ?%s"
 # set index_format="%3C %zs %zt %zc %-35.35n %?H? ?%?y?[%y] ?%?g?[%g] ?%?X?󰁦& ? %?M?(%M) ?%s%* %@date@"
@@ -142,3 +143,5 @@ color body brightyellow default "^gpg: "
 color body brightyellow red "^gpg: BAD signature from.*"
 mono body bold "^gpg: Good signature"
 mono body bold "^gpg: BAD signature from.*"
+
+# vim: set filetype=neomuttrc:

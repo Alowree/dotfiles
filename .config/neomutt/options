@@ -1,14 +1,17 @@
-# vim: set filetype=neomuttrc:
+# Filename: ~/.config/neomutt/options
+# ~/.config/neomutt/options
+
+# @author Alowree XU
+# @since 2026-01-23
 
 # NeoMutt Configuration - General Options
-# Refactored: 2024-01-23
 
 # Official manual page: https://neomutt.org/guide/reference
 
 ###############################################################################
 # EDITOR AND COMPOSITION
 ###############################################################################
-set editor = "nvim"                         # Use Neovim as editor
+set editor = "nvim"                        # Use Neovim as editor
 set edit_headers                           # Show headers when composing
 set ask_cc                                 # Prompt for CC recipients
 set forward_quote                          # Include message in forwards
@@ -73,7 +76,8 @@ set mark_old = yes                         # Mark read messages as old on exit
 set collapse_all                           # Collapse all threads by default
 set uncollapse_jump                        # Uncollapse when jumping to thread
 set sleep_time = 0                         # No pause for info messages
-set beep_new                               # Beep on new mail
+set beep = no
+set beep_new = yes                         # Beep on new mail
 set pipe_decode                            # Strip headers when piping
 set thorough_search                        # Search in decoded messages
 set flag_safe                              # Flagged messages protected
@@ -86,30 +90,31 @@ set use_envelope_from                      # Use envelope-from for delivery
 ###############################################################################
 # SIDEBAR CONFIGURATION
 ###############################################################################
-# set sidebar_visible                      # Uncomment to enable sidebar
+# set sidebar_visible                       # Uncomment to enable sidebar
 set sidebar_width = 30                      # Width of sidebar
-set sidebar_format = "%B %<N?(%N)>%* %S"   # Sidebar display format
-set sidebar_sort = unread                   # Sort by unread count
+set sidebar_format = "%B %<N?(%N)>%* %S"    # Sidebar display format
+# set sidebar_sort = unread                   # Sort by unread count
 set sidebar_folder_indent = no              # No indentation for folders
 set sidebar_short_path = yes                # Show short folder paths
 set sidebar_next_new_wrap = yes             # Wrap when navigating new messages
-
-###############################################################################
-# FOLDER BROWSER
-###############################################################################
-set browser_sort = alpha                    # Sort folders alphabetically
-set imap_check_subscribed                   # Only check subscribed folders
-set auto_subscribe                          # Auto-subscribe to new folders
 
 # Note: sidebar_sort = browser_sort is DEFAULT setting
 # You have sidebar_sort = unread overriding this
 
 ###############################################################################
+# FOLDER BROWSER
+###############################################################################
+# set browser_sort = alpha                    # Sort folders alphabetically
+set imap_check_subscribed                   # Only check subscribed folders
+set auto_subscribe                          # Auto-subscribe to new folders
+
+
+###############################################################################
 # HEADER DISPLAY
 ###############################################################################
-ignore *                                    # Ignore all headers
-unignore from: to: cc: date: subject: x-label:  # Show only these
-unhdr_order *                               # Clear header order
+ignore *                                         # Ignore all headers
+unignore from: to: cc: date: subject: x-label:   # Show only these
+unhdr_order *                                    # Clear header order
 hdr_order from: to: cc: date: subject: x-label:  # Set order
 
 # --- Notmuch Integration ---
@@ -118,9 +123,10 @@ set virtual_spool_file = yes                             # Allow virtual folders
 
 # Define Virtual Mailboxes (saved searches)
 # virtual-mailboxes \
-#   "Unread" "notmuch://?query=tag:unread and NOT tag:spam" \
-#   "Today"  "notmuch://?query=date:today" \
-#   "Starred" "notmuch://?query=tag:flagged"
+#     "Unread" "notmuch://?query=tag:unread and not tag:spam" \
+#     "Today" "notmuch://?query=date:today" \
+#     "Last Week" "notmuch://?query=date:7days..now" \
+#     "Starred" "notmuch://?query=tag:flagged"
 
 # --- Macros for Searching ---
 # Press 'L' to search all mail via Notmuch
@@ -131,18 +137,29 @@ set virtual_spool_file = yes                             # Allow virtual folders
 # https://neomutt.org/guide/mimesupport.html#auto-view
 ###############################################################################
 set mime_type_query_command = "file --mime-type -b %s"  # Detect MIME types
-set count_alternatives = yes                # Recurse into multipart
+set count_alternatives = yes                            # Recurse into multipart
 
-auto_view text/html text/calendar application/ics  # Auto-view these types
+# Explicitly telling NeoMutt to view an attachment with the MIME viever
+# defined in the mailcap file
+set mailcap_path = $HOME/.config/neomutt/mailcap
 
-# Auto-view these MIME types when opening messages
-auto_view application/vnd.openxmlformats-officedocument.wordprocessingml.document
-auto_view application/msword
-
-# Can I have to auto_view here?
-# auto_view image/jpeg image/png image/gif
+# Auto viewing MIME attachments while in the pager
+# For this to work, you must define a viewer in the mailcap file
+# which uses the `copiousoutput` option to denote that it is non-ineractive.
+# Usually, you also use the entry to convert the attachment to
+# a text representation which you can view in the pager.
 #
-# alternative_order text/html text/plain text/enriched text/*  # Preference order
+# Since I normally view the attachment in separate window,
+# I probably do not need this at all.
+# You still need this to auto view HTML emails
+auto_view text/html text/enriched text/x-vcard application/x-pkcs7-signature
+
+# Control which version is displayed when both plain text and HTML exist
+# - text/plain first: shows markdown-style bullets (- item)
+# - text/html first: shows round bullets (• item)
+#
+# When commented out, HTML style takes precedence
+# alternative_order text/plain text/html
 
 ###############################################################################
 # CACHING
@@ -185,20 +202,13 @@ set query_command = "khard email --parsable --search-in-source-files '%s'"  # Ad
 ###############################################################################
 # MISC SETTINGS
 ###############################################################################
-set date_format = "%d.%m.%Y %H:%M"          # Date display format
+# I'm not sure why this is not taking effect ...
+# because I don't the corrent date format in index menu
+# the current date format is of "Day dd/mm"
+set date_format = "%Y-%m-%d %H:%M"          # Date display format
+# Do I have to configure `index_format` separately?
+#
+set index_format = "%D %-15.15F %?X?[%4X] ?%Z %s"
+# set index_format = "[%D] %-20.20F %?X?[%4X] ?%Z %s"
 
-# Tell NeoMutt to allow ANSI codes
-# for image handling inside mailcap
-set allow_ansi = yes
-set pipe_decode = yes
-
-###############################################################################
-# NOTES AND ISSUES
-###############################################################################
-# 1. charset is set twice (lines 63 and 139) - removed duplicate
-# 2. message_cache_clean = yes is NOT recommended for IMAP (can cause issues)
-# 3. forward_attachments = yes is DEFAULT, can be removed
-# 4. beep_new = yes but global beep not set (beep controls all bell usage)
-# 5. auto_view lines commented out as they duplicate alternative_order
-# 6. sidebar_visible is commented out - sidebar won't show without this
-# 7. Consider setting use_threads for threaded view with reverse-date sorting
+# vim: set filetype=neomuttrc:

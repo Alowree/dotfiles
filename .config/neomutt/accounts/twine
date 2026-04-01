@@ -1,19 +1,12 @@
 # vim: set filetype=neomuttrc:
+# NeoMutt Twine Account Selector
+# Choose between local (maildir) and remote (IMAP) modes
 
-# option 1 =====================================================
-# use emails from the IMAP remote server
-# source ~/.config/neomutt/accounts/remote-twine
+# ------------------------------------------------------------------------------
+# Mode Selection - Uncomment ONE line to switch modes
+# ------------------------------------------------------------------------------
+# twine-local  → Uses ~/.maildir/twine (fast, offline-capable)
+# twine-remote → Uses IMAP server      (slow, always synced)
 
-# option 1 known problems ============================================
-# 1.1 Takes time fetching messages on each restart of NeoMutt
-
-# option 2 =====================================================
-# use emails from the local store
-source ~/.config/neomutt/accounts/maildir-twine
-
-# option 2 known problems ============================================
-# Main problem is that new emails, already viewed in the last NeoMutt session,
-# will be marked as New again after restart of NeoMutt.
-# That means the status of local emails will remain the same as when they
-# were synced from the remote server to the local store,
-# and never changes despite the browsing activities by NeoMutt.
+source ~/.config/neomutt/accounts/twine-local
+# source ~/.config/neomutt/accounts/twine-remote

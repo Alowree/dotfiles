@@ -1,19 +1,27 @@
-# vim: set filetype=neomuttrc:
+# Filename: ~/.config/neomutt/accounts/twine-remote
+# ~/.config/neomutt/accounts/twine-remote
+
 # NeoMutt configuration for Twine account (alowree@twineintl.com)
 # Remote IMAP server access
 
 # ------------------------------------------------------------------------------
-# Identity & Authentication
+# Identity
 # ------------------------------------------------------------------------------
 set from            = "alowree@twineintl.com"
 set real_name       = "Alowree Xu - Twine"
-set imap_user       = $from
+
+# ------------------------------------------------------------------------------
+# SMTP
+# ------------------------------------------------------------------------------
 set smtp_url        = "smtps://alowree@twineintl.com@ud.1025.hk:465"
 set smtp_authenticators = "login"
-
-# Password from macOS keychain
-set imap_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
 set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+
+# ------------------------------------------------------------------------------
+# IMAP Authentication
+# ------------------------------------------------------------------------------
+set imap_user       = $from
+set imap_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
 
 # ------------------------------------------------------------------------------
 # Mail Storage (Remote IMAP)
@@ -27,18 +35,22 @@ set imap_keepalive    = 300
 unset imap_passive
 
 # ------------------------------------------------------------------------------
-# Mailboxes (Sidebar)
+# Standard Folders
 # ------------------------------------------------------------------------------
-mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
-
-# Standard folders
 set postponed       = "+Drafts"
 set trash           = "+Trash"
 set record          = "+Sent"
 set signature       = "~/.config/neomutt/accounts/twine-signature"
 
 # ------------------------------------------------------------------------------
+# Mailboxes (Sidebar)
+# ------------------------------------------------------------------------------
+mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
+
+# ------------------------------------------------------------------------------
 # Hooks
 # ------------------------------------------------------------------------------
 # Re-fetch password when connecting to this account
 account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
+
+# vim: set filetype=neomuttrc:

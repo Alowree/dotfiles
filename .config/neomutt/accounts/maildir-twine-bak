@@ -1,0 +1,66 @@
+# vim: set filetype=neomuttrc:
+
+# What does this do?
+# unmailboxes *
+
+# in/out mail servers
+set from = "alowree@twineintl.com"
+set real_name = "Alowree Xu - Twine"
+
+set imap_user = $from
+set imap_pass = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+set imap_check_subscribed = no
+
+set smtp_url = "smtps://alowree@twineintl.com@ud.1025.hk:465"
+set smtp_authenticators = 'login'
+set smtp_pass = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+# set smtp_pass = $imap_pass
+
+# set query_command = "notmuch address 'folder:twine/**' and '(from:\"/%s/\"' or 'to:\"/%s/\")' and not 'folder:\"/.*(Junk|Spam|Trash).*/\"'"
+
+# set envelope_from
+# set use_from = "yes"
+
+# If you want to read your mails from the remote server
+# set folder = "imaps://alowree@twineintl.com@twineintlcom.securemail.hk:993"
+
+# If you want to sync your mails to the local storage
+# I want to save the emails locally starting 2026
+# And then in in 2027 I can revise the folder name to twine-2026
+# and keep using the "twine" folder for 2027 and onwards
+set folder = "~/.maildir/twine"
+set mbox_type = maildir
+
+set spool_file = "+INBOX"
+set move = no
+
+# initial mailboxes
+set postponed = "+Drafts"
+set trash = "+Trash"
+set record = "+Sent"
+
+
+
+# Account 1: mailboxes and folder hook
+mailboxes -label R:Inbox -notify -poll ~/.maildir/twine/INBOX \
+          -label R:Drafts -nonotify -poll ~/.maildir/twine/Drafts \
+          -label R:Sent -nonotify -poll ~/.maildir/twine/Sent \
+          -label R:Trash -nonotify -nopoll ~/.maildir/twine/Trash
+
+folder-hook ~/.maildir/twine/ 'source ~/.config/neomutt/accounts/twine'
+
+# mailboxes in the sidebar
+mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
+
+# Allow Mutt to open a new IMAP connection automatically.
+# unset imap_passive
+
+# Keep the IMAP connection alive by polling intermittently (time in seconds).
+# set imap_keepalive = 300
+
+## Hook -- IMPORTANT!
+# account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
+
+
+# 设置签名文件的位置
+set signature = "~/.config/neomutt/accounts/twine-signature"

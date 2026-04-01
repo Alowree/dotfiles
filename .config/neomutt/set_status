@@ -1,3 +1,6 @@
-# vim: set filetype=neomuttrc:
+# Filename: ~/.config/neomutt/set_status
+# ~/.config/neomutt/set_status
 
 set status_format="%r %D  %<M?%M/>%m%<n? 󰎔 %n>%<u?  %u>%<R?  %R>%<o? Old:%o>%<d?  %d>%<F? 󰈽 %F>%<t?  %t>%<p?  %p>%<b? 󰶎 %b>%<l?  %l>%> 󱋇 `~/.config/neomutt/bin/last_sync`  %T %s/%S %5P"
+
+# vim: set filetype=neomuttrc:

@@ -1,113 +1,152 @@
-# vim: set filetype=neomuttrc:
+# Filename: ~/.config/neomutt/mappings
+# ~/.config/neomutt/mappings
 
 # Read more at https://neomutt.org/guide/reference#4-%C2%A0functions
 
-# 1. Current mailbox only
-bind index L limit
-macro index x "<limit>all\n" "show all messages (undo limit)"
+# ============================================================================
+# GLOBAL & EXIT
+# ============================================================================
+bind index,pager,attach,browser,query,alias,compose q exit
 
-# 2. Global all mailboxes
-macro index S "<vfolder-from-query>" "Notmuch Global Search"
+# ============================================================================
+# GENERAL NAVIGATION (Consistent across all modes)
+# ============================================================================
+bind index,pager,attach,browser       g       noop
+bind index,pager                      d       noop
+bind index,pager                      r       noop
+bind index                            z       noop
+
+bind index,attach,browser             gg      first-entry
+bind index,attach,browser             G       last-entry
+
+# Scrolling (Consistent across all relevant modes)
+bind index,pager,browser              \CF     next-page
+bind index,pager,browser              \CB     previous-page
+bind index,pager,browser              \CU     half-up
+bind index,pager,browser              \CD     half-down
+bind index,pager,browser              \CE     next-line
+bind index,pager,browser              \CY     previous-line
+
+# Search Navigation
+bind index,pager,browser              N       search-opposite
+
+# ============================================================================
+# INDEX MODE (Message list)
+# ============================================================================
+bind index           h noop
+bind index           j next-entry
+bind index           k previous-entry
+bind index           l display-message
+
+# Filtering & Search
+bind index           L limit
+macro index          x "<limit>all\n" "show all messages (undo limit)"
+macro index          S "<vfolder-from-query>" "Notmuch Global Search"
 # macro index <Esc>S "<change-vfolder>^" "Go back to previous folder"
 
 # 3. The "Hybrid" Workflow ---
 # Sometimes you want to limit the current Notmuch search results even further!
-# Since Notmuch results are just a virtual mailbox, your 'L' limit 
+# Since Notmuch results are just a virtual mailbox, your 'L' limit
 # will still work on the results returned by Notmuch.
 
-bind index h noop
-bind pager,attach h exit
-bind index l display-message
-bind pager l view-attachments   # displays the attachment menu for a message
-bind browser h goto-parent
-bind browser l select-entry
+# ============================================================================
+# PAGER MODE (Viewing messages)
+# ============================================================================
+bind pager                      h       exit
+bind pager                      l       view-attachments
+bind pager                      H       display-toggle-weed
 
+# Local Pager Navigation
+bind pager                      gg      top
+bind pager                      G       bottom
 
-# Sidebar
-bind index,pager                B sidebar-toggle-visible
-bind index,pager                \Cp sidebar-prev
-bind index,pager                \Cn sidebar-next
-bind index,pager                <Return> sidebar-open
+bind pager                      j       next-line
+bind pager                      k       previous-line
+bind pager                      <Up>    previous-line
+bind pager                      <Down>  next-line
 
-# Email completion bindings
-bind editor                     ^T complete
-bind editor                     <Tab> complete-query
-bind editor                     <space> noop
+# Jump previous/next emails while staying in Pager
+bind pager                      J       next-entry
+bind pager                      K       previous-entry
+
+# ============================================================================
+# ATTACHMENT MODE
+# ============================================================================
+# To be consolildated ...
+bind attach,browser,alias       h       exit
+
+# l, Space, Enter all works to open/view the attachment
+bind attach                     l       view-attach
 bind attach                     <space> view-mailcap
 
-macro index,pager A "<pipe-message>khard add-email --headers=from,cc --skip-already-added<return>"
+# ============================================================================
+# BROWSER MODE (Folder navigation)
+# ============================================================================
+bind browser                    h       goto-parent
+bind browser                    l       descend-directory
+bind browser,alias              \r      select-entry
 
-bind index,pager i noop
-bind index,pager,attach,browser,query,alias,compose q exit
-bind index t tag-entry
-bind index T tag-thread
-bind index * tag-pattern
+# ============================================================================
+# SIDEBAR
+# ============================================================================
+bind index,pager                B        sidebar-toggle-visible
+# Only works when sidebar is visible
+bind index,pager                \Ck      sidebar-prev
+bind index,pager                \Cj      sidebar-next
+bind index,pager                <Return> sidebar-open
 
-
-# Moving around
-bind index,pager,attach,browser g   noop
-bind index,attach,browser       gg  first-entry
-bind index,attach,browser       G   last-entry
-bind pager                      gg  top
-bind pager                      G   bottom
-
-bind pager                      k   previous-line
-bind pager                      j   next-line
-bind pager                      <Up> previous-line
-bind pager                      <Down> next-line
-
-# Generic Menu
+# Note:
+# Functions `<sidebar-prev>` and `<sidebar-next>` move the Sidebar highlight.
+# They do not change the open mailbox.
 #
-# The generic menu is not a real menu, but specifies common functions
-# (such as movement) available in all menus except for pager and editor.
-#
-# bind index                      j   next-entry
-# bind index                      k   previous-entry
-# bind index                      <Up>   next-entry
-# bind index                      <Down>   previous-entry
+# Press Enter to open the highlight mailbox.
 
-# Jump previous/next emails in pager view
-bind pager                        J   next-entry
-bind pager                        K   previous-entry
+# bind index,pager i noop
 
-# 2025-12-02 stopped here
-# 
-# Scrolling
-bind attach,browser,pager,index \CF next-page
-bind attach,browser,pager,index \CB previous-page
-bind attach,browser,pager,index \Cu half-up
-bind attach,browser,pager,index \Cd half-down
-bind browser,pager              \Ce next-line
-bind browser,pager              \Cy previous-line
-bind index                      \Ce next-line
-bind index                      \Cy previous-line
-
-# Delete
-bind index,pager                d   noop
-bind index,pager                dd  delete-message
-bind index,pager                D   purge-message
-bind index                      u   undelete-message
-
-# Mail & Reply
-bind index,pager                r   noop
+# ============================================================================
+# MAIL & REPLY
+# ============================================================================
+# Reply Logic
 bind index,pager                gr  group-reply
-
 bind index,pager                rl  list-reply
 bind index,pager                ro  reply
 
-# Threads
-bind browser,pager,index        N   search-opposite
-bind pager,index                dT  delete-thread
-bind pager,index                dt  delete-subthread
-bind pager,index                gt  next-thread
-bind pager,index                gT  previous-thread
-bind index                      z noop
+bind index,pager                f   flag-message
+bind index,pager,attach         F   forward-message
+
+# Deletion Logic
+bind index,pager                dd  delete-message
+bind index,pager                D   purge-message
+bind index,pager                dT  delete-thread
+bind index,pager                dt  delete-subthread
+bind index                      u   undelete-message
+
+# Thread Management
+bind index,pager                gt  next-thread
+bind index,pager                gT  previous-thread
 bind index                      za  collapse-thread
 bind index                      zA  collapse-all
-bind index                      zz current-middle
-bind index                      zt current-top
-bind index                      zb current-bottom
+bind index                      zz  current-middle
+bind index                      zt  current-top
+bind index                      zb  current-bottom
 
-# List files in $HOME with fzf and send them to attachments
-# Use Tab to select multiple files and press Enter to confirm
+# Press 'Q' in the message list to search your address book
+# bind index                      Q   query
+
+bind editor                     ^T  complete
+
+set query_command = "khard email --parsable --search-in-source-files '%s'"  # Address book
+bind editor                     <tab>   complete-query
+bind editor                     <space> noop
+bind attach                     <space> view-mailcap
+
+# ============================================================================
+# EXTERNAL INTEGRATIONS & MACROS
+# ============================================================================
+# FZF Attachment (Compose Mode)
 macro compose \Ca ":source ~/.config/neomutt/bin/attach_browser_fzf.sh|<enter>"
+
+# Khard Address Book Integration
+macro index,pager A "<pipe-message>khard add-email --headers=from,cc --skip-already-added<return>"
+
+# vim: set filetype=neomuttrc:

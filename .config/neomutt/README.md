@@ -1,7 +1,7 @@
 ---
 date: 2025-12-03 16:20:24
-title: NeoMutt 配置
-permalink: /pages/neomutt
+title: Remote Server
+permalink: /pages/neomutt-imap
 categories:
   - Tool
   - CLI
@@ -12,450 +12,998 @@ This configuration, in essence, retrieves emails from the IMAP server and loads 
 
 <!-- more -->
 
-使用 NeoMutt 做为邮件客户端的益处：
+Benefits of using NeoMutt as an email client:
 
-- 使用 NeoVim 作为文本编辑器，手动编辑邮件速度飞快
+- Uses NeoVim as the text editor, making manual email editing extremely fast
 
-使用 NeoMutt 做为邮件客户端的问题：
+Drawbacks of using NeoMutt as an email client:
 
-- 许多制作精美的 HTML 邮件可能无法完全渲染
-- NeoMutt 的配置相当复杂，新手劝退
+- Many beautifully crafted HTML emails may not render properly
+- NeoMutt configuration is quite complex, which can be discouraging for beginners
 
-配置环境如下：
+Configuration environment:
 
-- 操作系统：macOS Tahoe 26.0.1
-- 终端命令行：iTerm2 或 Kitty
-- 文本编辑器：Neovim
-- 邮件客户端：NeoMutt
-- 管理联系人：khard
-- 查看富文件格式的工具：w3m/zathura/imgcat
+- Operating System: macOS Tahoe 26.0.1
+- Terminal: iTerm2 or Kitty
+- Text Editor: Neovim
+- Email Client: NeoMutt
+- Contact Management: khard
+- Rich Format Viewing Tools: w3m/zathura
 
-整个配置基于即时登录远程邮件服务器。当服务器邮件数量较多时，每次登录刷新邮件列表需要耗费一点时间，1000 封邮件的加载时间大约是几秒或十几秒的样子。
+The entire configuration is based on instant login to remote mail servers. When there are many emails on the server, refreshing the mail list during each login takes some time—loading 1000 emails takes approximately a few seconds to over ten seconds.
 
-## 目录结构
+## File Structure
 
-为提高全套配置文件的可移植性，尽量把全部的配置文件放置在同一个目录下，主要的功能也采用模块化的配置文件。
+For this article (remote IMAP mode only), here is the simplified file structure you need:
 
-```bash
+```
 ~/.config/neomutt/
-├── neomuttrc                # Main entry that sources everything else
-├── options                  # General settings (editor, options, etc.)
-├── mappings                 # Keybindings and macros
-├── mailcap                  # External program handlers
-├── accounts/                # Accounts and signatures
-└── themes/                  # Theme
+├── neomuttrc                 # Main entry point
+├── options                   # General settings
+├── mappings                  # Keybindings and macros
+├── set_status                # Dynamic status bar
+├── mailcap                   # MIME type handlers
+├── accounts/
+│   ├── twine                 # Account selector (sources twine-remote)
+│   ├── twine-remote          # Remote IMAP configuration
+│   └── twine-signature       # Email signature
+└── themes/
+    └── rebelot.neomuttrc     # Color theme
 ```
 
-其中，`neomuttrc` 是配置主要入口，文件内部引用另外的几个独立的配置文件：
+The `neomuttrc` is the main entry point, which sources the following independent configuration files:
 
 - `options`
 - `mappings`
-- `themes/rebelot.neomuttrc`
-- `mailboxes`
+  - `themes/rebelot.neomuttrc`
+- `accounts/twine` (default account)
 
-配置了这四个文件之后，就可以在终端里顺畅地使用 NeoMutt 接收、查看、编辑、发送、回复、转发邮件，邮件客户端的基本功能已经具备。
+  With these four files configured, you can smoothly use NeoMutt in the terminal to receive, view, edit, send, reply to, and forward emails—covering all basic email client functionalities.
 
-最后的一个配置文件 `mailcap` 是在实现了最初的文本邮件的基本功能之后，再增加几个额外的功能，例如，在 NeoMutt 中查看 HTML 格式的邮件，查看 PDF 格式的附件，查看图片格式的附件，等等。这个配置文件是在 `options` 内部被引用。
+  The `mailcap` file adds extra capabilities after the basic text email functionality is set up, such as viewing HTML-formatted emails, PDF attachments, and image attachments in NeoMutt. This configuration file is referenced within `options`.
 
-## 安装工具
+  The `set_status` file defines a dynamic status bar format with Unicode glyphs and a command substitution that displays the last mail sync time. It is sourced periodically via a `timeout-hook` defined in the theme file.
 
-在 macOS 系统上，我们使用 Homebrew 来安装所有必要的软件。打开你的终端，比如我使用的是 iTerm2，运行以下命令：
+## Installation
+
+On macOS, we use Homebrew to install all necessary software. Open your terminal (I use iTerm2) and run the following commands:
 
 ```bash
 brew install neomutt
-brew install w3m zathura imgcat
+brew install w3m zathura
 ```
 
-## 配置文件
-
-按照建议的目录结构创建相应的目录和文件。
+## Configuration Files
 
 ### neomuttrc
 
-主配置文件 `~/.config/neomutt/neomuttrc` 作为主要入口，依次引入其他几个配置文件：
+The main configuration file `~/.config/neomutt/neomuttrc` serves as the primary entry point, sourcing other configuration files in sequence:
 
 ```muttrc
-# vim: set filetype=neomuttrc:
+# Filename: ~/.config/neomutt/neomuttrc
+# @author Alowree XU
+# @since 2026
 
-# Source general settings, mappings, and theme
+#### Account-specific and Mailboxes ####
+# Set your default email account
+source $HOME/.config/neomutt/accounts/twine
+
+# Set shortcuts for switching email accounts
+macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/twine<enter><change-folder>!<enter>'
+macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/biaget<enter><change-folder>!<enter>'
+macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/remote-soundfreaq <enter><change-folder>!<enter>'
+
+#### General Settings ####
 source options
 source mappings
-# source themes/dracula.neomuttrc
+
+#### Theme ####
 source themes/rebelot.neomuttrc
-source mailboxes
 ```
 
-主文件依次分别引入基本配置、快捷键、主题颜色、邮箱帐户。子目录 `themes` 下有多个主题可选，这里设置使用了 `rebelot` 主题；子目录 `accounts` 下有包含默认帐户 `twine` 在内的其他多个邮箱帐户，切换各个帐户的快捷键 `F2`、`F3` 定义在 `mailboxes` 里面。
+The main file sources the account configuration, basic settings, keybindings, and theme in sequence. The `themes` subdirectory contains multiple themes to choose from; here we use the `rebelot` theme. The `accounts` subdirectory contains the default `twine` account and several other email accounts; the keybindings for switching between accounts (`F2`, `F3`, `F4`) are defined here.
+
+### accounts
+
+The `accounts/twine` file acts as a **switch/selector** between two modes for the Twine email account:
+
+| Mode            | File Sourced   | Description                                                          |
+| --------------- | -------------- | -------------------------------------------------------------------- |
+| Local (maildir) | `twine-local`  | Uses `~/.maildir/twine` — fast, offline-capable, synced via `mbsync` |
+| Remote (IMAP)   | `twine-remote` | Uses IMAP server — slower, but always synced in real-time            |
+
+**Important:** For this guide, you should **manually edit** `~/.config/neomutt/accounts/twine` to select the **remote mode**:
+
+```muttrc
+# In ~/.config/neomutt/accounts/twine:
+# source ~/.config/neomutt/accounts/twine-local
+source ~/.config/neomutt/accounts/twine-remote
+```
+
+This ensures you are connecting directly to the remote IMAP server rather than using the local maildir copy. This virtually uses `twine-remote` as our account.
+
+```muttrc
+# Filename: ~/.config/neomutt/accounts/twine-remote
+# ~/.config/neomutt/accounts/twine-remote
+
+# NeoMutt configuration for Twine account (alowree@twineintl.com)
+# Remote IMAP server access
+
+# ------------------------------------------------------------------------------
+# Identity
+# ------------------------------------------------------------------------------
+set from            = "alowree@twineintl.com"
+set real_name       = "Alowree Xu - Twine"
+
+# ------------------------------------------------------------------------------
+# SMTP
+# ------------------------------------------------------------------------------
+set smtp_url        = "smtps://alowree@twineintl.com@ud.1025.hk:465"
+set smtp_authenticators = "login"
+set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+
+# ------------------------------------------------------------------------------
+# IMAP Authentication
+# ------------------------------------------------------------------------------
+set imap_user       = $from
+set imap_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+
+# ------------------------------------------------------------------------------
+# Mail Storage (Remote IMAP)
+# ------------------------------------------------------------------------------
+set folder          = "imaps://alowree@twineintl.com@twineintlcom.securemail.hk:993"
+set spool_file      = "+INBOX"
+
+# IMAP connection settings
+set imap_check_subscribed = no
+set imap_keepalive    = 300
+unset imap_passive
+
+# ------------------------------------------------------------------------------
+# Standard Folders
+# ------------------------------------------------------------------------------
+set postponed       = "+Drafts"
+set trash           = "+Trash"
+set record          = "+Sent"
+set signature       = "~/.config/neomutt/accounts/twine-signature"
+
+# ------------------------------------------------------------------------------
+# Mailboxes (Sidebar)
+# ------------------------------------------------------------------------------
+mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
+
+# ------------------------------------------------------------------------------
+# Hooks
+# ------------------------------------------------------------------------------
+# Re-fetch password when connecting to this account
+account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
+
+# vim: set filetype=neomuttrc:
+```
+
+Key points:
+
+- We use the `Passwords` app on macOS to manage the passwords, so that you don't need to configure `imap_pass` and `smtp_pass` in explicit text
+- **When `account-hook` will be triggered?** The `account-hook` is triggered whenever NeoMutt connects to the IMAP folder specified in `$folder` (e.g., when opening the mailbox, checking for new mail, or switching to this account). It re-fetches the password from macOS Keychain at connection time, ensuring fresh credentials are used for each session.
+- **IMAP Keepalive**: Set to 300 seconds (5 minutes) to maintain persistent connections to the remote server
+- **IMAP Passive Mode**: Disabled (`unset imap_passive`) to allow NeoMutt to actively check for new mail rather than waiting for user action
+- **IMAP Subscribed Folders**: Disabled (`set imap_check_subscribed = no`) to check all folders on the server, not just subscribed ones
 
 ### options
 
 ```muttrc
-# vim: set filetype=neomuttrc:
+# Filename: ~/.config/neomutt/options
+# ~/.config/neomutt/options
 
-# set help
-# set help = yes
+# @author Alowree XU
+# @since 2026-01-23
+
+# NeoMutt Configuration - General Options
+
+# Official manual page: https://neomutt.org/guide/reference
+
+###############################################################################
+# EDITOR AND COMPOSITION
+###############################################################################
+set editor = "nvim"                        # Use Neovim as editor
+set edit_headers                           # Show headers when composing
+set ask_cc                                 # Prompt for CC recipients
+set forward_quote                          # Include message in forwards
+set forward_decode                         # Decode when forwarding
+set forward_format = "Fwd: %s"             # Format of subject when forwarding
+set reply_to                               # Reply to Reply-To: field
+set fast_reply                             # Skip to compose when replying
+set include                                # Include message in replies
+set attribution_intro = "On %d, %n wrote:" # Format of quoting header
+set sig_dashes = no                        # No '-- ' dashes before signature
+set sig_on_top = yes                       # Signature above quoted text
+set text_flowed = yes                      # Use format=flowed for outgoing text
+set fcc_attach                             # Save attachments with the body
+
+# Note: forward_attachments = yes is DEFAULT setting
+
+###############################################################################
+# DISPLAY AND PAGER
+###############################################################################
+set pager_index_lines = 10                 # Show 10 lines of Index in Pager
+set pager_context = 5                      # Lines of context between pages
+set pager_stop                             # Don't auto-advance at message end
+set smart_wrap                             # Wrap at word boundaries
+set wrap = 90                              # Email view width
+set tilde                                  # Show ~ at end of message
+set markers = no                           # No '+' for wrapped lines
+set allow_ansi                             # Allow ANSI codes in messages
+set arrow_cursor = "no"                    # Use block cursor
+set menu_scroll                            # Scroll in menus
+
+###############################################################################
+# CHARACTER ENCODING
+###############################################################################
+set charset = "utf-8"                      # Display/input encoding
+set send_charset = "utf-8"                 # Outgoing email encoding
+set assumed_charset = ""                   # Assume no charset if unspecified
+
+# Note: These are redundant but kept for clarity
+# Default: charset = "" (auto from locale)
+# Default: send_charset = "us-ascii:iso-8859-1:utf-8"
+# Default: assumed_charset = ""
+
+###############################################################################
+# REGULAR EXPRESSIONS
+###############################################################################
+set reply_regex = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+# Custom reply detection (handles [R], [RE], tags)
+# Default: "^((re|aw|sv)(\[[0-9]+\])*:[ \t]*)*"
+
+set quote_regex = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+# Quote detection in replies
+# Default: "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+
+###############################################################################
+# MESSAGE HANDLING AND SORTING
+###############################################################################
+set sort = reverse-date                    # Sort by date, newest first
+# Note: sort = date is default for non-threaded
+
+set wait_key = no                          # No "press key to continue"
+set mark_old = yes                         # Mark read messages as old on exit
+set collapse_all                           # Collapse all threads by default
+set uncollapse_jump                        # Uncollapse when jumping to thread
+set sleep_time = 0                         # No pause for info messages
+set beep = no
+set beep_new = yes                         # Beep on new mail
+set pipe_decode                            # Strip headers when piping
+set thorough_search                        # Search in decoded messages
+set flag_safe                              # Flagged messages protected
+set auto_tag                               # Commands apply to all tagged
+set use_envelope_from                      # Use envelope-from for delivery
+
+# Note: beep is a global bell control, beep_new only for new mail
+# Default: beep = yes, beep_new = no
+
+###############################################################################
+# SIDEBAR CONFIGURATION
+###############################################################################
+# set sidebar_visible                       # Uncomment to enable sidebar
+set sidebar_width = 30                      # Width of sidebar
+set sidebar_format = "%B %<N?(%N)>%* %S"    # Sidebar display format
+# set sidebar_sort = unread                   # Sort by unread count
+set sidebar_folder_indent = no              # No indentation for folders
+set sidebar_short_path = yes                # Show short folder paths
+set sidebar_next_new_wrap = yes             # Wrap when navigating new messages
+
+# Note: sidebar_sort = browser_sort is DEFAULT setting
+# You have sidebar_sort = unread overriding this
+
+###############################################################################
+# FOLDER BROWSER
+###############################################################################
+# set browser_sort = alpha                    # Sort folders alphabetically
+set imap_check_subscribed                   # Only check subscribed folders
+set auto_subscribe                          # Auto-subscribe to new folders
+
+
+###############################################################################
+# HEADER DISPLAY
+###############################################################################
+ignore *                                         # Ignore all headers
+unignore from: to: cc: date: subject: x-label:   # Show only these
+unhdr_order *                                    # Clear header order
+hdr_order from: to: cc: date: subject: x-label:  # Set order
+
+# --- Notmuch Integration ---
+set nm_default_url = "notmuch:///Users/alowree/.maildir" # Use your absolute path
+set virtual_spool_file = yes                             # Allow virtual folders
+
+# Define Virtual Mailboxes (saved searches)
+# virtual-mailboxes \
+#     "Unread" "notmuch://?query=tag:unread and not tag:spam" \
+#     "Today" "notmuch://?query=date:today" \
+#     "Last Week" "notmuch://?query=date:7days..now" \
+#     "Starred" "notmuch://?query=tag:flagged"
+
+# --- Macros for Searching ---
+# Press 'L' to search all mail via Notmuch
+# macro index L "<vfolder-from-query>" "Search with Notmuch"
+
+###############################################################################
+# MIME AND ATTACHMENTS
+# https://neomutt.org/guide/mimesupport.html#auto-view
+###############################################################################
+set mime_type_query_command = "file --mime-type -b %s"  # Detect MIME types
+set count_alternatives = yes                            # Recurse into multipart
+
+# Explicitly telling NeoMutt to view an attachment with the MIME viever
+# defined in the mailcap file
+set mailcap_path = $HOME/.config/neomutt/mailcap
+
+# Auto viewing MIME attachments while in the pager
+# For this to work, you must define a viewer in the mailcap file
+# which uses the `copiousoutput` option to denote that it is non-ineractive.
+# Usually, you also use the entry to convert the attachment to
+# a text representation which you can view in the pager.
 #
-# unset help                           # No help bar at the top of Index
-# set help = no                        # No help bar at the top of Index
+# Since I normally view the attachment in separate window,
+# I probably do not need this at all.
+# You still need this to auto view HTML emails
+auto_view text/html text/enriched text/x-vcard application/x-pkcs7-signature
 
-# Used when creating an email
-set tmpdir = /tmp/$USER/neomutt       # Where to keep temp files
+# Control which version is displayed when both plain text and HTML exist
+# - text/plain first: shows markdown-style bullets (- item)
+# - text/html first: shows round bullets (• item)
+#
+# When commented out, HTML style takes precedence
+# alternative_order text/plain text/html
 
-set editor = "nvim"
+###############################################################################
+# CACHING
+###############################################################################
+set header_cache = "~/.cache/neomutt"
+set message_cache_dir = "~/.cache/neomutt"    # Message cache location
 
-set imap_check_subscribed
+###############################################################################
+# NETWORK AND MAIL CHECKING
+###############################################################################
+set mail_check = 120                        # Check mail every 120 seconds
+set mail_check_stats = yes                  # Show stats on mail check
+set mail_check_stats_interval = 120         # Update stats every 120s
+set timeout = 30                            # Network timeout in seconds
+set imap_idle = yes                         # Use IMAP IDLE for push
 
-# Pager View Options
-set pager_index_lines = 10      # show 10 lines of Index when Pager is active
-set pager_context = 5           # lines of context between pages
-set pager_stop
-set smart_wrap
-set menu_scroll
-set tilde
-set markers = no                # do not show plus sign for wrapped lines in the pager
-set allow_ansi
+###############################################################################
+# QUIT AND CONFIRMATION
+###############################################################################
+set confirm_append = no                     # Don't ask to save to folder
+set quit                                    # Don't ask to quit
+# Note: quit requires confirm_append=no to be truly silent
 
-# Main options
-set edit_headers                     # show headers when composing
-set askcc                            # ask for CC:
-
-set text_flowed = yes
-
-set beep_new              # bell on new mails
-set pipe_decode           # strip headers and eval mimes when piping
-set envelope_from
-set collapse_all
-set uncollapse_jump
-set sleep_time = 0
-set mark_old = yes                   # marking new, unread emails as old when you exit a mailbox
-set mime_forward = no                # forward attachments as part of body
-set forward_attachments = yes
-set wait_key = no
-set fast_reply                       # skip to compose when replying
-set fcc_attach                       # save attachments with the body
-set forward_format = "Fwd: %s"       # format of subject when forwarding
-set date_format = "%d.%m.%Y %H:%M"
-set send_charset = "utf-8"
-set assumed_charset = "utf-8:us-ascii"
-set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
-set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
-set forward_quote                    # include message in forwards
-set reverse_name                     # reply as whomever it was to
-set include                          # include message in replies
-set mail_check = 10
-set count_alternatives = yes
-set auto_tag
-set auto_subscribe
-set flag_safe
-set browser_sort = unsorted
-
-### index sorting
-# set use_threads = reverse
-# set sort = last-date
-set sort = reverse-date
-
-### sidebar
-set sidebar_format = "%B %<N?(%N)>%* %S"
-set mail_check_stats = yes
-set mail_check_stats_interval = 60
-# set sidebar_visible
-set sidebar_width = 30
-set sidebar_folder_indent = no
-set sidebar_next_new_wrap = yes
-set sidebar_short_path = yes
-
-### headers
-ignore *
-unignore from: to: cc: date: subject: x-label:
-unhdr_order *
-hdr_order from: to: cc: date: subject: x-label:
-
-### Attachments
-set mime_type_query_command = "file --mime-type -b %s"
-# set mailcap_path = $HOME/.config/neomutt/mailcap
-set mailcap_path = ~/.config/neomutt/mailcap
-# set display_filter = "tac | sed '/\\\[-- Autoview/,+1d' | tac"
-# auto_view application/ics
-# auto_view text/calendar
-# auto_view text/plain
-# auto_view text/html
-# auto_view application/pgp-encrypted
-# alternative_order text/calendar text/html text/enriched text/plain text/*
-
-# Set preferred view modes (used before but now replaced by the upper section)
-# view html automatically
-auto_view text/html text/calendar application/ics
-alternative_order text/html text/plain text/enriched text/*
-
-set timeout = 30
-
-### These are the settings not categorized yet
-set forward_decode                   # decode when forwarding
-set attribution = "On %d, %n wrote:"
-set reply_to                         # reply to Reply to: field
-
-
-set sig_dashes = no                  # no default `-- ` dashes before signature
-set sig_on_top = yes                 # signature shall always stick to your email body
-
-set confirmappend = no      # don't ask, just do!
-set quit                    # don't ask, just do!
-set thorough_search         # strip headers and eval mimes before searching
-
-# Status bar, date format, finding stuff etc.
-set status_chars = " *%A"
+###############################################################################
+# STATUS BAR
+###############################################################################
+set status_chars = " *%A"                   # Status bar characters
 set status_format = "[ Folder: %f ] [%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]%>─%?p?( %p postponed )?"
-set sort_re
 
-set charset = "utf-8"
-set arrow_cursor = "no"
+###############################################################################
+# TEMPORARY FILES
+###############################################################################
+set tmp_dir = /tmp/$USER/neomutt            # Temporary directory
 
-# set header_cache = ~/.cache/mutt
-# set message_cachedir = ~/.cache/mutt
+###############################################################################
+# EXTERNAL TOOLS
+###############################################################################
+set query_command = "khard email --parsable --search-in-source-files '%s'"  # Address book
 
-set header_cache = ~/.cache/neomutt/headers
-set message_cachedir = ~/.cache/neomutt/bodies
+###############################################################################
+# MISC SETTINGS
+###############################################################################
+# I'm not sure why this is not taking effect ...
+# because I don't the corrent date format in index menu
+# the current date format is of "Day dd/mm"
+set date_format = "%Y-%m-%d %H:%M"          # Date display format
+# Do I have to configure `index_format` separately?
+#
+set index_format = "%D %-15.15F %?X?[%4X] ?%Z %s"
+# set index_format = "[%D] %-20.20F %?X?[%4X] ?%Z %s"
 
-set query_command = "khard email --parsable --search-in-source-files '%s'"
+# vim: set filetype=neomuttrc:
 ```
 
-注意要点如下：
+Key points:
 
-- `editor` 设置为调用 Neovim 用以编辑邮件头部和主体内容
-- `query_command` 设置使用 `Tab` 键搜索和补全联系人的电邮地址：主要使用在当编辑邮件头部的表单区域，例如 `To:`/`Cc:`/`Bcc:` 等位置，需要添加电邮地址的时候，随便打几个你依稀记得的收件人姓名或者电邮地址的若干字母，然后按 `Tab` 键就可一键补全，非常快捷实用
+- **Editor**: Uses Neovim (`nvim`) for editing email headers and body content
+- **Reply Detection**: Custom `reply_regex` handles various reply formats including `[R]`, `[RE]`, and numbered tags like `[RE[2]]`
+- **Sorting**: Emails sorted by `reverse-date` (newest first)
+- **Threading**: `collapse_all` enabled by default for cleaner thread view; `uncollapse_jump` expands threads when navigating to them
+- **Sidebar**: Width set to 30 columns with short folder paths; wraps around when navigating new messages
+- **Notmuch Integration**: Configured for mail indexing with virtual folders (currently commented out); enables powerful search capabilities
+- **MIME Handling**: Auto-views HTML, vCard, and S/MIME signatures inline using `mailcap` viewers
+- **Caching**: Both header and message caches stored in `~/.cache/neomutt` for faster access
+- **IMAP IDLE**: Enabled for push-like email delivery notifications
+- **Date Format**: Custom format `%Y-%m-%d %H:%M` for consistent date display; `index_format` shows sender, flags, and subject
 
 ### mappings
 
-```muttrc
-# vim: set filetype=neomuttrc:
-
-# Read more at https://neomutt.org/guide/reference#4-%C2%A0functions
-
-bind index L limit
-macro index x "<limit>all\n" "show all messages (undo limit)"
-
-bind index h noop
-bind pager,attach h exit
-bind index l display-message
-bind pager l view-attachments
-bind browser h goto-parent
-bind browser l select-entry
-
-# Sidebar
-bind index,pager                B sidebar-toggle-visible
-bind index,pager                \Cp sidebar-prev
-bind index,pager                \Cn sidebar-next
-bind index,pager                <Return> sidebar-open
-
-# Email completion bindings
-bind editor                     ^T complete
-bind editor                     <Tab> complete-query
-bind editor                     <space> noop
-bind attach                     <space> view-mailcap
-
-macro index,pager A "<pipe-message>khard add-email --headers=from,cc --skip-already-added<return>"
-
-bind index,pager i noop
-bind index,pager,attach,browser,query,alias,compose q exit
-bind index t tag-entry
-bind index T tag-thread
-bind index * tag-pattern
-
-
-# Moving around
-bind index,pager,attach,browser g   noop
-bind index,attach,browser       gg  first-entry
-bind index,attach,browser       G   last-entry
-bind pager                      gg  top
-bind pager                      G   bottom
-
-bind pager                      k   previous-line
-bind pager                      j   next-line
-bind pager                      <Up> previous-line
-bind pager                      <Down> next-line
-
-# Generic Menu
-#
-# The generic menu is not a real menu, but specifies common functions
-# (such as movement) available in all menus except for pager and editor.
-#
-# bind index                      j   next-entry
-# bind index                      k   previous-entry
-# bind index                      <Up>   next-entry
-# bind index                      <Down>   previous-entry
-
-# Jump previous/next emails in pager view
-bind pager                        J   next-entry
-bind pager                        K   previous-entry
-
-# 2025-12-02 stopped here
-#
-# Scrolling
-bind attach,browser,pager,index \CF next-page
-bind attach,browser,pager,index \CB previous-page
-bind attach,browser,pager,index \Cu half-up
-bind attach,browser,pager,index \Cd half-down
-bind browser,pager              \Ce next-line
-bind browser,pager              \Cy previous-line
-bind index                      \Ce next-line
-bind index                      \Cy previous-line
-
-# Delete
-bind index,pager                d   noop
-bind index,pager                dd  delete-message
-bind index,pager                D   purge-message
-bind index                      u   undelete-message
-
-# Mail & Reply
-bind index,pager                r   noop
-bind index,pager                gr  group-reply
-
-bind index,pager                rl  list-reply
-bind index,pager                ro  reply
-
-# Threads
-bind browser,pager,index        N   search-opposite
-bind pager,index                dT  delete-thread
-bind pager,index                dt  delete-subthread
-bind pager,index                gt  next-thread
-bind pager,index                gT  previous-thread
-bind index                      z noop
-bind index                      za  collapse-thread
-bind index                      zA  collapse-all
-bind index                      zz current-middle
-bind index                      zt current-top
-bind index                      zb current-bottom
-
-# List files in $HOME with fzf and send them to attachments
-# Use Tab to select multiple files and press Enter to confirm
-macro compose \Ca ":source ~/.config/neomutt/bin/attach_browser_fzf.sh|<enter>"
-```
-
-### 配置签名
-
-每个帐户使用独立的签名文件，在相应的帐户配置文件中通过 `set signature` 来指定。
-
-例如，`twine` 帐户的签名在 `~/.config/neomutt/accounts/twine-signature` 中定义，并在 `~/.config/neomutt/accounts/remote-twine` 中通过以下命令引用：
+Keybinding syntax:
 
 ```neomuttrc
-set signature = "twine-signature"
+bind [mode] [keysequence] [function] [description]
+macro [mode] [keysequence] [actionstring] [description]
 ```
 
-### 管理联系人
+Actual `mappings` file:
 
-1. 安装 khard
+```muttrc
+# Filename: ~/.config/neomutt/mappings
+# @author Alowree XU
+# @since 2026
 
-   ```bash
-   brew install khard
-   ```
+# ============================================================================
+# GLOBAL & EXIT
+# ============================================================================
+bind index,pager,attach,browser,query,alias,compose q exit
 
-2. 在 NeoMutt 配置文件内添加关于 khard 的配置：
+# ============================================================================
+# GENERAL NAVIGATION
+# ============================================================================
+bind index,pager,attach,browser       g       noop
+bind index,pager                      d       noop
+bind index,pager                      r       noop
+bind index                            z       noop
 
-   ```neomuttrc
-   # =============================================================================
-   # 通讯录 (Address Book)
-   # =============================================================================
-   # 设置 khard 为地址查询命令
-   set query_command = "khard email --parsable --search-in-source-files '%s'"
+bind index,attach,browser             gg      first-entry
+bind index,attach,browser             G       last-entry
 
-   bind editor <Tab> complete-query
+# Scrolling
+bind index,pager,browser              \CF     next-page
+bind index,pager,browser              \CB     previous-page
+bind index,pager,browser              \CU     half-up
+bind index,pager,browser              \CD     half-down
+bind index,pager,browser              \CE     next-line
+bind index,pager,browser              \CY     previous-line
 
-   # 在邮件列表或邮件内容界面按 "A" 键，将发件人添加到 khard
-   macro index,pager A "<pipe-message>khard add-email<enter>"
-   ```
+# Search Navigation
+bind index,pager,browser              N       search-opposite
 
-   这个配置成功之后，在撰写邮件、添加收件人时，只需先简单敲入几个字符，例如 `mich`，然后使用 `Tab` 可以自动补全收件人 `Michael` 的电邮地址 `mchui@example.com`（当仅有一个搜索匹配时），或弹出下拉列表供选择多个待选电邮（当存在多个搜索匹配时）。
+# ============================================================================
+# INDEX MODE (Message list)
+# ============================================================================
+bind index           h noop
+bind index           j next-entry
+bind index           k previous-entry
+bind index           l display-message
+
+# Filtering & Search
+bind index           L limit
+macro index          x "<limit>all\n" "show all messages (undo limit)"
+macro index          S "<vfolder-from-query>" "Notmuch Global Search"
+
+# ============================================================================
+# PAGER MODE (Viewing messages)
+# ============================================================================
+bind pager                      h       exit
+bind pager                      l       view-attachments
+bind pager                      H       display-toggle-weed
+
+# Local Pager Navigation
+bind pager                      gg      top
+bind pager                      G       bottom
+bind pager                      j       next-line
+bind pager                      k       previous-line
+bind pager                      <Up>    previous-line
+bind pager                      <Down>  next-line
+
+# Jump previous/next emails while staying in Pager
+bind pager                      J       next-entry
+bind pager                      K       previous-entry
+
+# ============================================================================
+# ATTACHMENT MODE
+# ============================================================================
+bind attach,browser,alias       h       exit
+bind attach                     l       view-attach
+bind attach                     <space> view-mailcap
+
+# ============================================================================
+# BROWSER MODE (Folder navigation)
+# ============================================================================
+bind browser                    h       goto-parent
+bind browser                    l       descend-directory
+bind browser,alias              \r      select-entry
+
+# ============================================================================
+# SIDEBAR
+# ============================================================================
+bind index,pager                B        sidebar-toggle-visible
+bind index,pager                \Ck      sidebar-prev
+bind index,pager                \Cj      sidebar-next
+bind index,pager                <Return> sidebar-open
+
+# ============================================================================
+# MAIL & REPLY
+# ============================================================================
+bind index,pager                gr  group-reply
+bind index,pager                rl  list-reply
+bind index,pager                ro  reply
+bind index,pager                f   flag-message
+bind index,pager,attach         F   forward-message
+
+# Deletion Logic
+bind index,pager                dd  delete-message
+bind index,pager                D   purge-message
+bind index,pager                dT  delete-thread
+bind index,pager                dt  delete-subthread
+bind index                      u   undelete-message
+
+# Thread Management
+bind index,pager                gt  next-thread
+bind index,pager                gT  previous-thread
+bind index                      za  collapse-thread
+bind index                      zA  collapse-all
+bind index                      zz  current-middle
+bind index                      zt  current-top
+bind index                      zb  current-bottom
+
+# ============================================================================
+# EDITOR & COMPLETION
+# ============================================================================
+bind editor                     ^T      complete
+bind editor                     <tab>   complete-query
+bind editor                     <space> noop
+
+# ============================================================================
+# EXTERNAL INTEGRATIONS & MACROS
+# ============================================================================
+# FZF Attachment (Compose Mode)
+macro compose \Ca ":source ~/.config/neomutt/bin/attach_browser_fzf.sh|<enter>"
+
+# Khard Address Book Integration
+macro index,pager A "<pipe-message>khard add-email --headers=from,cc --skip-already-added<return>"
+```
+
+If you want to have a better understanding on each of the UI components such as `index`, `pager`, or `browser`, go to [Screens and Menus](#screens-and-menus) for more details.
+
+### signature
+
+Each account uses an independent signature file, specified via `set signature` in the corresponding account configuration file.
+
+For example, the `twine` account's signature is defined in `~/.config/neomutt/accounts/twine-signature` and referenced in `~/.config/neomutt/accounts/twine-remote` with:
+
+```neomuttrc
+set signature = "~/.config/neomutt/accounts/twine-signature"
+```
+
+### khard
+
+NeoMutt integrates with [`khard`](https://github.com/lucc/khard), a command-line address book that manages contacts stored in vCard files. This integration provides two key features:
+
+#### Email Address Completion
+
+When composing an email, you can autocomplete recipient addresses by pressing `Tab`. The `query_command` setting defines how NeoMutt queries khard:
+
+```muttrc
+# ~/.config/neomutt/options
+set query_command = "khard email --parsable --search-in-source-files '%s'"
+# ~/.config/neomutt/mappings
+bind editor <Tab> complete-query
+```
+
+These two lines of code each is in a separate code file, one in `options` and the other `mappings`, but they work together as a feature.
+
+**How it works:**
+
+- Type a few characters of a contact's name or email (e.g., `mich`)
+- Press `Tab` to trigger completion
+- If there's a single match, it autocompletes immediately
+- If there are multiple matches, a dropdown list appears for selection
+
+The `--parsable` flag ensures khard outputs in a format NeoMutt can parse, and `--search-in-source-files` searches across all configured vCard files.
+
+#### Adding Contacts from Emails
+
+Press `A` in the index or pager to add the current email's sender to your address book:
+
+```muttrc
+macro index,pager A "<pipe-message>khard add-email --headers=from,cc --skip-already-added<return>"
+```
+
+This pipes the message headers to khard, which extracts the email address and adds it to your contacts. The `--skip-already-added` flag prevents duplicate entries.
+
+### mailcap
+
+```muttrc
+# Filename: ~/.config/neomutt/mailcap
+# ~/.config/neomutt/mailcap
+#
+# ============================================================================
+# NeoMutt Mailcap Configuration
+# ============================================================================
+#
+# MAILCAP FLAGS REFERENCE:
+# ------------------------
+# copiousoutput  : Command outputs text for inline display (converters)
+# needsterminal  : Command requires terminal access (TUI apps)
+# (no flags)     : GUI app launches separately, no terminal needed
+#
+# See: man mailcap
+
+# ============================================================================
+# HTML EMAILS
+# ============================================================================
+# -dump converts HTML to plain text for inline display
+text/html; w3m -I %{charset} -T text/html -dump; copiousoutput
+
+# Fallback (if w3m unavailable - but lynx does not render tables)
+# WARNING: does not render table inside message
+# text/html; lynx -dump %s; copiousoutput; nametemplate=%s.html
+
+# ============================================================================
+# PLAIN TEXT
+# ============================================================================
+text/plain; nvim %s; needsterminal
+
+# ============================================================================
+# DOCUMENTS (PDF, EPUB)
+# ============================================================================
+# GUI viewers - launch detached, no flags needed
+application/pdf; zathura %s
+application/epub+zip; zathura %s
+
+# Fallback for octet-stream PDF
+# Test shows that fallback not required
+
+# ============================================================================
+# IMAGES
+# ============================================================================
+# Option A: Terminal viewer (Ghostty with Kitty graphics protocol)
+# Requires ~/.local/bin/ghostty-image-viewer script
+# For portability consideration, I should move the script to ./bin folder
+image/*; ./bin/ghostty-image-viewer %s; needsterminal
+
+# Option B: GUI viewer (Preview - simpler, always works)
+# image/*; open -a Preview %s; needsterminal
+
+# ============================================================================
+# MEDIA (VIDEO/AUDIO)
+# ============================================================================
+# Can I use the following utilities on macOS?
+#
+video/*; mpv --loop %s;
+audio/*; mpv --loop --audio-display=no %s;
+
+# Alternative: QuickTime Player (macOS native)
+# video/*; open -a "QuickTime Player" %s
+# audio/*; open -a Music %s
+
+# ============================================================================
+# SPREADSHEETS (Excel)
+# ============================================================================
+# VisiData - TUI spreadsheet viewer
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; vd %s
+application/vnd.ms-excel; vd %s
+
+# Fallback for misidentified Excel files
+application/octet-stream; vd %s; test=echo %s | grep -qiE '\.(xlsx|xls)$'
+
+# ============================================================================
+# WORD PROCESSING DOCUMENTS
+# ============================================================================
+# Modern .docx files (requires pandoc: brew install pandoc)
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; pandoc -t plain %s; copiousoutput
+
+# Legacy .doc files (requires antiword: brew install antiword)
+application/msword; antiword %s; copiousoutput
+
+# Fallback for misidentified Word documents
+application/octet-stream; pandoc -t plain %s; copiousoutput; test=echo %s | grep -qi '\.docx$'
+application/octet-stream; antiword %s; copiousoutput; test=echo %s | grep -qi '\.doc$'
+
+# ============================================================================
+# ARCHIVES
+# ============================================================================
+# Requires: brew install unar
+#
+# Unified archive listing with lsar (part of unar package)
+#
+# RAR files
+application/x-rar-compressed; lsar -l %s; copiousoutput
+
+# ZIP files
+# application/zip; lsar -l %s; copiousoutput
+
+# TAR archives (lsar handles these too)
+# application/x-tar; lsar -l %s; copiousoutput
+# application/x-gzip; lsar -l %s; copiousoutput
+# application/x-bzip2; lsar -l %s; copiousoutput
+
+# 7-Zip archives
+# application/x-7z-compressed; lsar -l %s; copiousoutput
+
+# ============================================================================
+# ADDITIONAL FORMATS (Optional)
+# ============================================================================
+# Source code with syntax highlighting (requires highlight)
+text/x-c; highlight -O ansi %s; copiousoutput; needsterminal
+text/x-python; highlight -O ansi %s; copiousoutput; needsterminal
+
+# Markdown with pandoc
+text/markdown; pandoc -t plain %s; copiousoutput
+```
+
+Key points:
+
+- **HTML Emails**: Uses `w3m` to render HTML as plain text inline in the pager
+- **PDF/EPUB**: Opens in `zathura` (GUI viewer) for documents
+- **Images**: Uses custom Ghostty script with Kitty graphics protocol for terminal display; Preview.app as fallback
+- **Video/Audio**: Uses `mpv` for media playback
+- **Excel Files**: Opens in `VisiData` (`vd`) for TUI spreadsheet viewing
+- **Word Documents**: Uses `pandoc` for `.docx` and `antiword` for `.doc` to convert to plain text
+- **Archives**: Uses `lsar` (from `unar` package) to list RAR archive contents
+- **Syntax Highlighting**: Uses `highlight` for C and Python source files with ANSI colors
+
+### themes
+
+```muttrc
+# Filename: ~/.config/neomutt/themes/rebelot.neomuttrc
+# ~/.config/neomutt/themes/rebelot.neomuttrc
+
+set index_format="%3C %zs %zt %zc %9@date@ %-35.35n %?H? ?%?y?[%y] ?%?g?[%g] ?%?X?󰁦& ? %?M?(%M) ?%s"
+timeout-hook 'source ~/.config/neomutt/set_status'
+set pager_format="%C/%m %zs %zt %zc %?y?[%y] ?%?g?[%g] ?%n: %s%*  %{!%d %b %H:%M}  %-5c %?X?󰁦 %X ?%3P"
+set attach_format = "%u%D%I %t%4n 󰁦 %T%d%*  %s [%m/%M]"
+set compose_format = "Compose Message:   %l   󰁦 %a"
+set sidebar_format = "%D%> %<F?󰈽 %-3F&     > %<N?󰎔 %-3N&     > %<S?%5S>"
+
+index-format-hook  date  "~d<1d"    "%[%H:%M]"
+index-format-hook  date  "~d<1y"    "%[%a %d/%m]"
+index-format-hook  date  "~A"       "%[%d/%m/%y]"
+
+set hidden_tags = "inbox,unread,draft,flagged,passed,replied,attachment,signed,encrypted"
+set to_chars=" "
+set flag_chars = "󰈽󱫅󰎔󰎔 "
+set crypt_chars = " "
+set status_chars = "󱧄"
+
+# Default index colors
+color index yellow default
+color index_collapsed brightblue default
+color index_label brightgreen default
+color index_flags magenta default
+color index_flags brightgreen default "~N"
+color index_flags brightred default "~D"
+color index_author cyan default
+color index_subject white default
+color index_number lightblack default
+
+# New mail is boldened
+color index brightyellow default "~N"
+color index_author brightcyan default "~N"
+color index_subject brightwhite default "~N"
+
+# Tagged mail is highlighted
+color index brightyellow brightblack "~T"
+color index_author brightcyan brightblack "~T"
+color index_subject brightwhite brightblack "~T"
+
+# Flagged mail is highlighted
+color index brightgreen default "~F"
+color index_subject brightgreen default "~F"
+color index_author brightgreen default "~F"
+
+# Other colors and aesthetic settings
+mono bold bold
+mono underline underline
+mono indicator reverse
+mono error bold
+
+color normal default default
+color indicator brightblack yellow
+color tree bold red default
+
+color sidebar_background white black
+color sidebar_divider black black
+color sidebar_flagged default default
+color sidebar_new blue default
+color sidebar_highlight white brightblack
+color sidebar_indicator brightblack yellow
+color sidebar_spool_file underline default default
+
+color error red default
+color tilde black default
+color message cyan default
+color markers red white
+color search brightblack brightyellow
+
+color status lightyellow black
+color status magenta default '[]'
+color status blue default '[󰁦]'
+color status blue default ' [0-9]{1,2} [A-Za-z]+ [0-9]{2}:[0-9]{2}'
+color status red default '( [0-9]+)?'
+color status red default '󱫅'
+color status blue default "󰎔|([󰶎󰎔] [0-9]+)"
+color status green default '󰈽 [0-9]+'
+color status cyan default ' [0-9]+'
+color status lightgreen default "[]"
+color status green default '[󱋇]'
+color status red default '[󱧄]'
+color status brightcyan default '([A-Za-z ]*) ' 1
+
+color compose_header white black
+color compose_security_sign brightgreen default
+color compose_security_encrypt brightyellow default
+color compose_security_both brightblue default
+color compose_security_none brightblack default
+
+color attachment lightblack default
+
+color quoted magenta default
+color quoted1 green default
+color quoted2 blue default
+color quoted3 yellow default
+color quoted4 cyan default
+color quoted5 red default
+color signature yellow default
+color bold brightwhite default
+color underline lightwhite default
+
+# Message headers
+color hdrdefault default default
+color header cyan default "^From:"
+color header magenta default "^To:"
+color header white default "^(CC|BCC):"
+color header yellow default "^Date:"
+color header brightwhite default "^Subject:"
+color header brightblue default "^X-Label:"
+
+color body blue default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+"
+color body lightblue default "(https?|s?ftp|smb|scp|ssh|file)://[\-\.,/@%~_:\?&=\#a-zA-Z0-9]+"
+color body green default "\`[^\`]*\`"
+color body brightblue default "^# \.*"
+color body brightcyan default "^## \.*"
+color body brightyellow default "^### \.*"
+color body yellow default "^(\t| )*(-|\\*) \.*"
+color body brightcyan default "[;:][-o][)/(|]"
+color body brightcyan default "[;:][)(|]"
+color body brightcyan default "[ ][*][^*]*[*][ ]?"
+color body brightcyan default "[ ]?[*][^*]*[*][ ]"
+color body brightred default "(BAD signature)"
+color body brightgreen default "(Good signature)"
+color body brightblack default "^gpg: Good signature .*"
+color body brightyellow default "^gpg: "
+color body brightyellow red "^gpg: BAD signature from.*"
+mono body bold "^gpg: Good signature"
+mono body bold "^gpg: BAD signature from.*"
+
+# vim: set filetype=neomuttrc:
+```
+
+### set_status
+
+```muttrc
+# Filename: ~/.config/neomutt/set_status
+# ~/.config/neomutt/set_status
+
+set status_format="%r %D  %<M?%M/>%m%<n? 󰎔 %n>%<u?  %u>%<R?  %R>%<o? Old:%o>%<d?  %d>%<F? 󰈽 %F>%<t?  %t>%<p?  %p>%<b? 󰶎 %b>%<l?  %l>%> 󱋇 `~/.config/neomutt/bin/last_sync`  %T %s/%S %5P"
+
+# vim: set filetype=neomuttrc:
+```
+
+**Note:** This file is sourced by `timeout-hook` every 30 seconds (matching `set timeout = 30`) to refresh the last sync timestamp displayed in the status bar. The command substitution `` `~/.config/neomutt/bin/last_sync` `` is re-evaluated each time, ensuring the displayed time stays current.
 
 ## FAQ
 
 ::: details How to re-edit a draft email in NeoMutt?
 
-By default, use `R` key to recall a postponed message.
+1. Press `R` to recall a postponed message.
+2. The draft will open in your editor for modification.
+3. Save and exit the editor to return to the compose menu.
 
 :::
 
 ::: details What is the difference between `delete-message` and `purge-message`?
 
-a. `delete-message` delete the current entry (into Trash)
-b. `purge-message` delete the current entry, bypassing the trash folder
+**Difference:**
 
-To delete a message:
+1. `delete-message`: Marks the message for deletion (moves to Trash folder on sync).
+2. `purge-message`: Permanently deletes the message, bypassing the Trash folder.
 
-i. Navigate to the message you want to delete in the index.
-ii. Press `dd`. The message will be marked with a 'D' flag.
-iii. To move the message to the trash folder, you need to sync the mailbox. The default keybinding for this is `$`. After pressing `$`, the message will disappear from in inbox and be moved to the "+Trash" folder.
+**To delete a message:**
 
-To undelete a message:
+1. Navigate to the message you want to delete in the index.
+2. Press `dd`. The message will be marked with a 'D' flag.
+3. Press `$` to sync the mailbox and move the message to the "+Trash" folder.
 
-i. Go to the Trash folder
-ii. Select the message, press `t` to tag the message
-iii. Press `s` (for "save message"). At the "Save to mailbox:" prompt, type `+INBOX` and press Enter.
+**To undelete a message:**
+
+1. Go to the Trash folder.
+2. Select the message and press `t` to tag it.
+3. Press `s` (save message).
+4. At the "Save to mailbox:" prompt, type `+INBOX` and press Enter.
 
 :::
 
 ::: details How to show your mailboxes in NeoMutt?
-Method 1: Using the mailbox browser
-In the index/pager view, press `c` to open the mailbox browser.
-To see a list of all mailboxes, press `?`.
 
-Method 2: These two steps are now combined into just one `y`.
-Use the arrow keys to navigate the list and press `Enter` to switch to the selected mailbox.
+**Method 1: Using the mailbox browser**
+
+1. In the index/pager view, press `c` to open the mailbox browser.
+2. Press `?` to see a list of all mailboxes.
+3. Use the arrow keys to navigate the list.
+4. Press `Enter` to switch to the selected mailbox.
+
+**Method 2: Using the mailbox shortcut (recommended)**
+
+1. Press `y` to open the mailbox list directly.
+2. Use the arrow keys to navigate.
+3. Press `Enter` to switch to the selected mailbox.
 
 :::
 
 ::: details How to add attachments to your email message?
 
-- Press `a` to pull up the browser to jump among folders and select attachment, press `Tab` for multiple selections, press `Enter` to confirm selections.
-- Press `C-a` to pull up `fzf` for file finding and selection.
+**Method 1: Using the file browser**
+
+1. Press `a` to open the file browser.
+2. Navigate to the folder containing your attachment.
+3. Press `Tab` to select multiple files (optional).
+4. Press `Enter` to confirm your selection.
+
+**Method 2: Using fzf for fuzzy finding**
+
+1. Press `Ctrl+a` (`C-a`) to open fzf file finder.
+2. Type to fuzzy search for your file.
+3. Press `Enter` to select and attach.
 
 :::
 
-::: details After adding attachments, what if you added some files by mistake and you want to delete certain attachments from `attach` view?
+::: details After adding attachments, how do you remove an attachment by mistake from the `attach` view?
 
-In the `attach` menu, navigate to the attachment you want to remove using the arrow keys or `j`/`k`. Then press `D` (for `delete-attachment`) to mark it for deletion. The attachment will be removed from the list immediately. If you have multiple attachments to delete, you can tag them first by pressing `T` on each one, then press `D` to delete all tagged attachments at once.
+1. In the `attach` menu, navigate to the attachment you want to remove using arrow keys or `j`/`k`.
+2. Press `D` (delete-attachment) to remove it immediately.
+3. For multiple attachments: Press `T` on each attachment to tag them, then press `D` to delete all tagged attachments at once.
 
 :::
 
 ::: details Is it possible to revise an email's headers when you are already in `attach` status?
 
-The email has been composed ready, and the UI has moved from `compose` to `attach`. Now what if we want to add additional contacts to either `To:` or `Cc:` field?
+Yes, you can edit email headers at any time before sending.
 
-Yes, you can edit the email headers at any time before sending. Press `e` (for `edit-headers`) in the attach menu to reopen the header editor. This allows you to modify the `To:`, `Cc:`, `Bcc:`, `Subject:`, and other header fields. After making your changes, save and exit the editor to return to the attach menu.
+1. Press `e` (edit-headers) in the attach menu.
+2. The header editor opens in your editor, showing `To:`, `Cc:`, `Bcc:`, `Subject:`, and other fields.
+3. Make your changes (e.g., add recipients to `To:` or `Cc:`).
+4. Save and exit the editor to return to the attach menu.
 
 :::
 
 ::: details What separator should I use when adding multiple email addresses to headers such as `To:` or `Cc:`?
 
-When you have `edit_headers` enabled in NeoMutt, you should use a comma (`,`) to separate multiple email addresses within headers like `To:`, `Cc:`, and `Bcc:`.
+**Answer:** Use a comma (`,`) to separate multiple email addresses.
 
-How to Format Multiple Recipients
+**How to format multiple recipients:**
 
-You can list recipients as plain email addresses or include names for better readability:
+1. **Plain addresses:**
+   `To: alice@example.com, bob@example.com, carol@example.com`
+2. **With names (RFC822 style):**
+   `To: Alice <alice@example.com>, Bob <bob@example.com>`
 
-- Plain addresses:
-  `To: alice@example.com, bob@example.com, carol@example.com`
-- With names (RFC822 style):
-  `To: Alice <alice@example.com>, Bob <bob@example.com>`
+**Key rules for editing headers:**
 
-Key Rules for Editing Headers
+1. **Comma is required:** NeoMutt follows the [RFC recommendation](https://support.litera.com/article/Why-Commas-Are-Used-to-Separate-Email-Addresses-in-Campaign-Links) of using commas for address separation.
+2. **No spaces before colons:** Ensure there is no space between the header name and the colon (e.g., use `To:`, not `To :`).
+3. **Line continuation:** For long recipient lists, continue on the next line by starting with at least one space or tab (header folding).
 
-- Comma is required: NeoMutt follows the [RFC recommendation](https://support.litera.com/article/Why-Commas-Are-Used-to-Separate-Email-Addresses-in-Campaign-Links) of using commas for address separation.
-- No spaces before colons: Ensure there is no space between the header name and the colon (e.g., use `To:`, not `To :`), as NeoMutt enforces this standard strictly.
-- Line continuation: If your list of recipients is very long, you can continue it on the next line by starting the new line with at least one space or tab (this is known as "header folding").
+**Alternative: Using aliases**
 
-Alternative: Using Aliases
+1. Define an alias in your `~/.neomuttrc`:
 
-If you frequently email the same group, you can define an alias in your `~/.neomuttrc` using the same comma separator:
+   ```bash
+   alias theguys alice@example.com, bob@example.com, carol@example.com
+   ```
 
-```bash
-alias theguys alice@example.com, bob@example.com, carol@example.com
-```
-
-Then, in your editor, you can simply type `To: theguys` and NeoMutt will expand it when you send.
+2. In your editor, simply type `To: theguys` and NeoMutt will expand it when sending.
 
 :::
 
-## Core Interface Components
+## Screens and Menus
 
 These are the NeoMutt terminologies when describing the various and different UI components and when navigating inside the NeoMutt application.
 
@@ -471,31 +1019,25 @@ The message viewer that displays the full content of a selected email, including
 
 **Purpose**: Reading email content without opening external applications.
 
-### 3. **attach**
-
-The attachment menu that appears when viewing messages with MIME attachments. Allows you to save, view, or pipe attachments to external programs.
-
-**Purpose**: Managing email attachments directly within NeoMutt.
-
-### 4. **browser**
+### 3. **file browser**
 
 The file browser used for selecting mailboxes (folders), files for attaching, or directories when saving attachments.
 
 **Purpose**: Filesystem navigation within NeoMutt.
 
-### 5. **query**
+### 4. **sidebar**
 
-The interface for querying external address books (LDAP, query_command, etc.) when addressing emails.
+The optional sidebar that displays a list of mailboxes/folders with unread counts and flags.
 
-**Purpose**: Searching for contacts/addresses.
+**Purpose**: Quick navigation between mailboxes without opening the browser.
 
-### 6. **alias**
+### 5. **help**
 
-The alias menu for selecting from your configured email aliases (often used as an address book).
+The help screen showing available keybindings for the current menu.
 
-**Purpose**: Quick addressing using predefined contact aliases.
+**Purpose**: Quick reference for commands.
 
-### 7. **compose**
+### 6. **compose menu**
 
 The composition screen where you write new emails, replies, or forwards. Includes editor, header fields, and attachment management.
 
@@ -506,14 +1048,27 @@ NeoMutt creates temporary files for composition (e.g., `neomutt-hostname-PID-XXX
 
 Run `set filetype=?` to verify.
 
-## Keybinding Syntax Components
+### 7. **alias menu**
 
-```neomuttrc
-bind [mode] [keysequence] [function] [description]
-macro [mode] [keysequence] [actionstring] [description]
-```
+The alias menu for selecting from your configured email aliases (often used as an address book).
 
-## 参考
+**Purpose**: Quick addressing using predefined contact aliases.
+
+### 8. **attachment menu**
+
+The attachment menu that appears when viewing messages with MIME attachments. Allows you to save, view, or pipe attachments to external programs.
+
+**Purpose**: Managing email attachments directly within NeoMutt.
+
+### 9. **query**
+
+This interface is not included in the official [NeoMutt Screens and Menus](https://neomutt.org/guide/gettingstarted#2-%C2%A0screens-and-menus).
+
+The interface for querying external address books (LDAP, query_command, etc.) when addressing emails.
+
+**Purpose**: Searching for contacts/addresses.
+
+## References
 
 - [NeoMutt Reference: Configuration Variables](https://neomutt.org/guide/reference)
 - [NeoMutt: introduction to CLI email](https://www.futurile.net/2025/05/17/neomutt-email-mailbox-tutorial/)

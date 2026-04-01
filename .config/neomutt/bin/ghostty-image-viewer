@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# ~/.locayl/bin/ghostty-image-viewer
+
+# Get terminal size for better fit
+if command -v tput >/dev/null 2>&1; then
+    COLS=$(tput cols)
+    LINES=$(tput lines)
+    # Use 80% of terminal width for image
+    WIDTH=$((COLS * 3 / 4))
+    HEIGHT=$((LINES - 5))
+else
+    WIDTH=80
+    HEIGHT=40
+fi
+
+# Clear screen and show image
+clear
+echo "Displaying image: $(basename "$1")"
+echo ""
+
+chafa --format=kitty --size="${WIDTH}x${HEIGHT}" "$1"
+
+echo ""
+echo "Press Enter to return to NeoMutt..."
+read -r
