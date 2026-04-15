@@ -1,5 +1,5 @@
--- Filename: ~/.config/nvim/lua/alowree/core/keymaps.lua
--- ~/.config/nvim/lua/alowree/core/keymaps.lua
+-- Filename: ~/.config/nvim-alex/lua/core/keymaps.lua
+-- ~/.config/nvim-alex/lua/core/keymaps.lua
 
 -- stylua: ignore start
 
@@ -20,13 +20,10 @@ local map            = vim.keymap.set
 local opts           = { noremap = true, silent = true }
 
 map("n", "<leader>n", ":norm ", { desc = "ENTER NORM COMMAND." })
-map(
-  "n",
-  "<leader>o",
-  ":update<CR> :source " .. vim.fn.expand("$MYVIMRC") .. "<CR>",
-  { desc = "Source " .. vim.fn.expand("$MYVIMRC") }
-)
-map("n", "<leader>O", "<Cmd>restart<CR>", { desc = "Restart nvim." })
+
+-- Quick source and restart
+map("n", "<leader>S", "<cmd>source " .. vim.fn.expand("$MYVIMRC") .. "<cr>", { desc = "Source config" })
+map("n", "<leader>R", "<cmd>restart<cr>", { desc = "Restart Neovim" })
 
 -- Resize window using Ctrl + arrow keys
 -- Works on Windows only
@@ -90,10 +87,6 @@ map("v", ">", ">gv", opts)
 -- commenting
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
-
--- Open Lazy.nvim plugin manager
--- map("n", "<leader>zz", "<cmd>Lazy<cr>", { desc = "Lazy" })
-map("n", "<leader>L", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
 -- new file
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })

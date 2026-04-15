@@ -53,32 +53,33 @@ vim.opt_local.conceallevel = 0
 -- Refactored into a single `writing.lua`,
 -- and then sourced by markdown.lua and mail.lua
 
--- Handle code blocks inside Markdown files
+-- Handle code blocks as text objects
+-- inside Markdown files
 local function MarkdownCodeBlock(outside)
-	vim.cmd("call search('```', 'cb')")
-	vim.cmd(outside and "normal! Vo" or "normal! j0Vo")
-	vim.cmd("call search('```')")
-	if not outside then
-		vim.cmd("normal! k")
-	end
+  vim.cmd("call search('```', 'cb')")
+  vim.cmd(outside and "normal! Vo" or "normal! j0Vo")
+  vim.cmd("call search('```')")
+  if not outside then
+    vim.cmd("normal! k")
+  end
 end
 
 -- Set keymaps
 local function set_keymaps()
-	-- Code block text objects
-	for _, mode in ipairs({ "o", "x" }) do
-		for _, mapping in ipairs({
-			{ "am", true },
-			{ "im", false },
-		}) do
-			vim.keymap.set(mode, mapping[1], function()
-				MarkdownCodeBlock(mapping[2])
-			end, { buffer = true, desc = "Around markdown code block" })
-		end
-	end
+  -- Code block text objects
+  for _, mode in ipairs({ "o", "x" }) do
+    for _, mapping in ipairs({
+      { "am", true },
+      { "im", false },
+    }) do
+      vim.keymap.set(mode, mapping[1], function()
+        MarkdownCodeBlock(mapping[2])
+      end, { buffer = true, desc = "Around markdown code block" })
+    end
+  end
 end
 
 pcall(function()
-	vim.keymap.del("n", "]c", { buffer = true })
+  vim.keymap.del("n", "]c", { buffer = true })
 end)
 set_keymaps()

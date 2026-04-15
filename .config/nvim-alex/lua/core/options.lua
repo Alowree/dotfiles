@@ -1,5 +1,5 @@
--- Filename: ~/.config/nvim/lua/alowree/core/options.lua
--- ~/.config/nvim/lua/alowree/core/options.lua
+-- Filename: ~/.config/nvim-alex/lua/core/options.lua
+-- ~/.config/nvim-alex/lua/core/options.lua
 
 -- See `:help options`
 
@@ -9,7 +9,7 @@ local opt = vim.opt
 opt.number = true         -- Show absolute line number
 opt.relativenumber = true -- Show relative line numbers for easier jumping
 opt.cursorline = true     -- Highlight the text line of the cursor
--- opt.wrap = true           -- Enable line wrapping (break long lines) Default setting
+opt.wrap = true           -- Enable line wrapping (break long lines)
 opt.scrolloff = 10        -- Vertical scroll offset (keep 10 lines visible)
 opt.sidescrolloff = 8     -- Horizontal scroll offset (keep 8 columns visible)
 
