@@ -27,12 +27,8 @@ nvims() {
     local config
     local -a items=(
         "default"
-        "nvim-alex"
         "nvim-cap153"
-        "nvim-pack"
         "nvim-pack-tduyng"
-        "nvim-josean"
-        "nvim-from-scratch"
     )
 
     config=$(printf "%s\n" "${items[@]}" | \

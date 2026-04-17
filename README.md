@@ -38,6 +38,7 @@ Use `~/.config/nvim` as the canonical Neovim config folder (tracked in your dotf
    ```
 
 5. **Add and commit your config:**
+
    ```sh
    gitbare add .config/nvim
    gitbare commit -m "Add Neovim config"
@@ -96,13 +97,10 @@ Use `~/.config/nvim` as the canonical Neovim config folder (tracked in your dotf
    ```
 
    The warning "The system cannot find the path specified" means that either the target or the parent directory of the link does not exist. Here are the most common issues to check:
-
    1. Parent Directory Must Exist:
-
       - The parent directory of the link (everything before the last `\` in `-Path`) must already exist. PowerShell will not create intermediate directories.
 
    2. Target Directory Must Exist:
-
       - The target directory (`$HOME\.config\yazi`) must exist for a directory symlink.
 
    :::

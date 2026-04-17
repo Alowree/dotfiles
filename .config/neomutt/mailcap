@@ -62,14 +62,24 @@ audio/*; mpv --loop --audio-display=no %s;
 # audio/*; open -a Music %s
 
 # ============================================================================
-# SPREADSHEETS (Excel)
+# SPREADSHEETS (Excel) Option A: TUI
 # ============================================================================
-# VisiData - TUI spreadsheet viewer
-application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; vd %s
-application/vnd.ms-excel; vd %s
+# # VisiData - TUI spreadsheet viewer
+# application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; vd %s
+# application/vnd.ms-excel; vd %s
+#
+# # Fallback for misidentified Excel files
+# application/octet-stream; vd %s; test=echo %s | grep -qiE '\.(xlsx|xls)$'
+
+# ============================================================================
+# SPREADSHEETS (Excel) Option B: GUI
+# ============================================================================
+# Let macOS handle the file association (will open Excel for .xlsx/.xls)
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; open %s
+application/vnd.ms-excel; open %s
 
 # Fallback for misidentified Excel files
-application/octet-stream; vd %s; test=echo %s | grep -qiE '\.(xlsx|xls)$'
+application/octet-stream; open %s; test=echo %s | grep -qiE '\.(xlsx|xls)$'
 
 # ============================================================================
 # WORD PROCESSING DOCUMENTS

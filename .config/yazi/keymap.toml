@@ -1,56 +1,15 @@
-# 全局快捷键配置
-[global]
-# 全局退出应用程序
-quit = "Ctrl+Q"
-# 打开文件或目录
-open = "Enter"
-# 返回上级目录
-back = "Backspace"
-# 搜索功能触发
-search = "/"
-# 复制路径
-copy_path = "Ctrl+C"
+[mgr]
+prepend_keymap = [
+  # default keymaps
+  { on = ["g", "h"], run = "cd ~",                        desc = "Go Home" },
+  { on = ["g", "c"], run = "cd ~/.config",                desc = "Go ~/.config" },
+  # custom keymaps
+  { on = ["g", "d"], run = "cd ~/OneDrive/Documents",     desc = "Go ~/OneDrive/Documents" },
+  { on = ["g", "t"], run = "cd ~/Teek",                   desc = "cd to ~/Teek" },
 
-# 窗口控制快捷键
-[window]
-# 切换窗口
-switch_window = "Tab"
-# 新建窗口
-new_window = "Ctrl+N"
-# 关闭窗口
-close_window = "Ctrl+W"
-
-# 文件操作快捷键
-[file]
-# 删除文件
-delete_file = "D"
-# 重命名文件
-rename_file = "R"
-# 复制文件
-copy_file = "Y"
-# 粘贴文件
-paste_file = "P"
-# 移动文件
-move_file = "M"
-
-# 文件选择快捷键
-[selection]
-# 全选
-select_all = "Ctrl+A"
-# 取消所有选择
-deselect_all = "Ctrl+D"
-# 反选
-invert_selection = "Ctrl+I"
-# 选择当前文件/目录
-select_item = "Space"
-
-# 页面导航快捷键
-[navigation]
-# 向上移动光标
-move_up = "K"
-# 向下移动光标
-move_down = "J"
-# 向左切换标签
-move_left = "H"
-# 向右切换标签
-move_right = "L"
+  # TODO: firstly learn about marks in Vim
+  { on = ["m"],      run = "plugin bookmarks save",       desc = "Save current position as a bookmark" },
+  { on = ["'"],      run = "plugin bookmarks jump",       desc = "Jump to a bookmark" },
+  { on = ["b", "d"], run = "plugin bookmarks delete",     desc = "Delete a bookmark" },
+  { on = ["b", "D"], run = "plugin bookmarks delete_all", desc = "Delete all bookmarks" },
+]

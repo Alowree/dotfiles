@@ -1,18 +1,57 @@
-[manager]
-ratio = [2,2,4]
+[mgr]
+ratio = [ 2, 4, 4 ]
 show_hidden = true
-show_symlink = true
 
 [opener]
-play = [
-	{ run = 'mpv "$@"', orphan = true, for = "unix" },
-	{ run = '"C:\Program Files\mpv.exe" %*', orphan = true, for = "windows" }
-]
+# Currently I only use macOS and Windows
+# I use Neovim as my default text editor on both systems
+# If you use the same editor on all systems,
+# removing the `for` attribute entirely makes it a "universal" rule
+#
+# edit = [
+#   { run = "${EDITOR:-nvim} %s", desc = "$EDITOR", block = true },
+# ]
 edit = [
-	{ run = '$EDITOR "$@"', block = true, for = "unix" },
-	{ run = "%EDITOR% %*",  block = true, for = "windows" },
-]
-open = [
-	{ run = 'xdg-open "$@"', desc = "Open" },
+  { run = '${EDITOR:-nvim} "$@"', desc = "Neovim", block = true }
 ]
 
+# Although already in yazi-default.toml
+# we still need to explicitly set this reveal here
+# Otherwise, "Show EXIF" will appear as the last menu item
+# after pressing `O` to open file interactively
+reveal = [
+  { run = 'open -R "$1"',                          desc = "Reveal", for = "macos" },
+  { run = 'explorer /select, "%1"', orphan = true, desc = "Reveal", for = "windows" },
+]
+
+# Custom defined opener for text files
+# Need to have `code` in path
+vscode = [
+  { run = 'code "$@"', desc = "VS Code", orphan = true }
+]
+typora = [
+  # If Typora has a CLI, use it; otherwise, we'll keep the open -a for now
+  { run = 'open -a "Typora" "$@"', desc = "Typora", orphan = true }
+]
+
+# Custom defined openers for PDFs
+zathura = [
+  { run = 'zathura "$@"', block = true, desc = "Zathura" }
+]
+preview = [
+  { run = 'open -a "Preview" "$@"', orphan = true, desc = "Preview" }
+]
+
+# The `[open]` block behaves differently depending on which key you use
+# `prepend_rules`: merges your rules to the top of default list
+# `append_rules`: merges your rules to the bottom of the default list
+# `rules`: completely replaces the entire default list
+
+[open]
+prepend_rules = [
+  # 1. Matches first, then stops (append = false)
+  { mime = "text/*", use = [ "edit", "vscode", "typora", "reveal" ], append = false },
+  
+  # 2. Matches first, then stops
+  { mime = "application/pdf", use = [ "zathura", "preview", "reveal" ], append = false },
+]

@@ -1,1 +1,4 @@
 dotfiles
+
+# Local secrets
+.zshrc.local
