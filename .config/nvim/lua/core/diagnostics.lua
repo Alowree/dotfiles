@@ -1,6 +1,6 @@
--- Direct copy from rebelot-dotfiles
--- This is more like a ui
--- Setting up the display icons on sign column
+-- Modern diagnostic configuration for Neovim 0.10+
+-- Filename: ~/.config/nvim-alex/lua/core/diagnostics.lua
+-- ~/.config/nvim-alex/lua/core/diagnostics.lua
 local fn = vim.fn
 local api = vim.api
 local map = vim.keymap.set

@@ -1,5 +1,5 @@
--- Filename: ~/.config/nvim/lua/alowree/core/writing.lua
--- ~/.config/nvim/lua/alowree/core/writing.lua
+-- Filename: ~/.config/nvim-alex/lua/core/writing.lua
+-- ~/.config/nvim-alex/lua/core/writing.lua
 
 -- All my logic for "writing/prose" is in this one file.
 -- If I want to add a new abbreviation, you only edit it once.

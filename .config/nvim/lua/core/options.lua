@@ -1,5 +1,5 @@
--- Filename: ~/.config/nvim/lua/alowree/core/options.lua
--- ~/.config/nvim/lua/alowree/core/options.lua
+-- Filename: ~/.config/nvim-alex/lua/core/options.lua
+-- ~/.config/nvim-alex/lua/core/options.lua
 
 -- See `:help options`
 
@@ -9,7 +9,7 @@ local opt = vim.opt
 opt.number = true         -- Show absolute line number
 opt.relativenumber = true -- Show relative line numbers for easier jumping
 opt.cursorline = true     -- Highlight the text line of the cursor
--- opt.wrap = true           -- Enable line wrapping (break long lines) Default setting
+opt.wrap = true           -- Enable line wrapping (break long lines)
 opt.scrolloff = 10        -- Vertical scroll offset (keep 10 lines visible)
 opt.sidescrolloff = 8     -- Horizontal scroll offset (keep 8 columns visible)
 
@@ -23,10 +23,7 @@ opt.autoindent = true  -- Copy indent from current line when starting a new one
 opt.shiftround = true  -- Round indent to multiple of 'shiftwidth'
 
 -- Search Settings
-opt.ignorecase = true -- Case-insensitive searching...
-opt.smartcase = true  -- ...unless the query contains capital letters
-opt.hlsearch = true   -- Highlight all matches on previous search pattern
-opt.incsearch = true  -- Show search matches as you type
+opt.smartcase = true  -- Case-insensitive searching... unless the query contains capital letters
 
 -- Visual & Rendering
 opt.termguicolors = true  -- Enable 24-bit RGB colors
@@ -66,7 +63,6 @@ opt.autoread = true                           -- Automatically read file when ch
 opt.autowrite = true                          -- Automatically write file when switching buffers
 
 -- Behavior Settings
-opt.hidden = true                                       -- Enable background buffers
 opt.errorbells = false                                  -- Disable beep/flash on errors
 opt.backspace = "indent,eol,start"                      -- Allow backspacing over everything in insert mode
 opt.autochdir = false                                   -- Do not change the working directory automatically
@@ -75,7 +71,6 @@ opt.path:append("**")                                   -- Allow recursive file 
 opt.mouse = "a"                                         -- Enable mouse support in all modes
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Clipboard sync (local only)
 opt.modifiable = true                                   -- Ensure buffers are modifiable
-opt.encoding = "UTF-8"                                  -- Set global encoding
 
 -- Folding Settings {{{
 opt.smoothscroll = true   -- Smooth scrolling for wrapped lines

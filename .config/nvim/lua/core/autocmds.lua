@@ -1,5 +1,8 @@
+-- Filename: ~/.config/nvim-alex/lua/core/autocmds.lua
+-- ~/.config/nvim-alex/lua/core/autocmds.lua
+
 local function augroup(name)
-	return vim.api.nvim_create_augroup("alowree_" .. name, { clear = true })
+	return vim.api.nvim_create_augroup("core_" .. name, { clear = true })
 end
 
 -- Create general groups
@@ -24,27 +27,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	callback = function()
 		vim.hl.on_yank({ timeout = 200 })
-	end,
-})
-
--- 3. Strip trailing whitespace on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-	group = general_group,
-	desc = "Strip trailing whitespace on save (except markdown)",
-	callback = function()
-		-- Skip markdown files
-		if vim.bo.ft == "markdown" then
-			return
-		end
-
-		-- Save cursor position
-		local cursor = vim.fn.getpos(".")
-
-		-- Strip trailing whitespace
-		vim.cmd([[%s/\s\+$//e]])
-
-		-- Restore cursor position
-		vim.fn.setpos(".", cursor)
 	end,
 })
 
@@ -73,8 +55,8 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 local ime_config = {
 	executable = nil, -- The command-line tool to use.
 	english_id = nil, -- The identifier for your English input method.
-	get_current_cmd = nil, -- Command to get the current input method ID.
-	set_ime_cmd = nil, -- Command to set a specific input method ID.
+	get_current_args = nil, -- Args to get the current input method ID.
+	set_ime_args = nil, -- Args to set a specific input method ID.
 	enabled = false, -- Becomes true if the setup is successful.
 }
 
@@ -82,11 +64,9 @@ local ime_config = {
 if vim.fn.has("win32") == 1 then
 	ime_config.executable = vim.fn.stdpath("config") .. "/z-bin/im-select.exe"
 	ime_config.english_id = "1033" -- Standard English (US) ID for Windows.
-	ime_config.get_current_cmd = function()
-		return ime_config.executable
-	end
-	ime_config.set_ime_cmd = function(ime_id)
-		return ime_config.executable .. " " .. ime_id
+	ime_config.get_current_args = {}
+	ime_config.set_ime_args = function(ime_id)
+		return { ime_id }
 	end
 
 -- Platform-specific setup for macOS
@@ -97,11 +77,9 @@ elseif vim.fn.has("mac") == 1 then
 	-- /usr/local/bin/InputSourceSelector list-enabled
 	ime_config.executable = "/usr/local/bin/InputSourceSelector"
 	ime_config.english_id = "com.apple.keylayout.ABC" -- Default US English layout. Change if yours is different.
-	ime_config.get_current_cmd = function()
-		return ime_config.executable .. " current"
-	end
-	ime_config.set_ime_cmd = function(ime_id)
-		return ime_config.executable .. " select " .. ime_id
+	ime_config.get_current_args = { "current" }
+	ime_config.set_ime_args = function(ime_id)
+		return { "select", ime_id }
 	end
 end
 
@@ -139,18 +117,17 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 	group = ime_autogroup,
 	pattern = "*",
 	callback = function()
-		local current_ime_output = vim.fn.trim(vim.fn.system(ime_config.get_current_cmd()))
-		-- On macOS, the output can be "com.apple.keylayout.ABC (ABC)".
-		-- We parse it to get only the ID part (the first word).
-		local current_ime_id = string.match(current_ime_output, "%S+")
+		vim.system({ ime_config.executable, unpack(ime_config.get_current_args) }, { text = true }, function(obj)
+			local current_ime_output = vim.trim(obj.stdout)
+			local current_ime_id = string.match(current_ime_output, "%S+")
 
-		if current_ime_id ~= ime_config.english_id then
-			last_ime_id = current_ime_id
-			vim.fn.system(ime_config.set_ime_cmd(ime_config.english_id))
-		else
-			-- If we are already in English, clear the last saved ID.
-			last_ime_id = nil
-		end
+			if current_ime_id ~= ime_config.english_id then
+				last_ime_id = current_ime_id
+				vim.system({ ime_config.executable, unpack(ime_config.set_ime_args(ime_config.english_id)) })
+			else
+				last_ime_id = nil
+			end
+		end)
 	end,
 })
 
@@ -163,7 +140,7 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 	pattern = "*",
 	callback = function()
 		if last_ime_id then
-			vim.fn.system(ime_config.set_ime_cmd(last_ime_id))
+			vim.system({ ime_config.executable, unpack(ime_config.set_ime_args(last_ime_id)) })
 		end
 		-- Reset the state for the next cycle.
 		last_ime_id = nil

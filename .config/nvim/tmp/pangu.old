@@ -1,3 +1,0 @@
-return {
-	"hotoo/pangu.vim",
-}
