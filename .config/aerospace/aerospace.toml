@@ -78,11 +78,6 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 on-focus-changed = ['move-mouse window-lazy-center']
 
-# Possible values: (qwerty|dvorak|colemak)
-# See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
-[key-mapping]
-    preset = 'qwerty'
-
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
 # - Constant:     gaps.outer.top = 8
@@ -98,6 +93,11 @@ on-focus-changed = ['move-mouse window-lazy-center']
     outer.bottom =     8
     outer.top =        0
     outer.right =      8
+
+# Possible values: (qwerty|dvorak|colemak)
+# See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
+[key-mapping]
+preset = 'qwerty'
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -131,6 +131,25 @@ on-focus-changed = ['move-mouse window-lazy-center']
     #     activate
     # end tell'
     # '''
+    alt-enter = 'exec-and-forget open -n /Applications/Ghostty.app'
+    # A: alt-enter: opens the terminal (Ghostty) ttys000
+    # B: ctrl-` toggles on/off quick terminal (Ghostty) ttys001
+    # C: cmd-n: When already in Ghostty, opens terminal (Ghostty) ttys001
+    # Explain the numbering logic of ttys000/001/002
+
+    # Open/focus apps using keybinds
+    # I don't use but keep them for inspirations.
+    #
+    # cmd-alt-ctrl-shift-b = 'exec-and-forget open -a "Brave Browser.app"'
+    # cmd-alt-ctrl-shift-d = 'exec-and-forget open -a "IntelliJ IDEA Ultimate.app"'
+    # cmd-alt-ctrl-shift-t = 'exec-and-forget open -a "WezTerm.app"'
+    # cmd-alt-ctrl-shift-a = 'exec-and-forget open -a "Ghostty.app"'
+    # cmd-alt-ctrl-shift-z = 'exec-and-forget open -a "Obsidian.app"'
+    # cmd-alt-ctrl-shift-r = 'exec-and-forget open -a "Windows App"'
+    # cmd-alt-ctrl-shift-c = 'exec-and-forget open -a "Slack.app"'
+    # cmd-alt-ctrl-shift-w = 'exec-and-forget open -a "Microsoft Teams.app"'
+    # cmd-alt-ctrl-shift-s = 'exec-and-forget open -a "Spotify.app"'
+    # cmd-alt-ctrl-shift-h = 'exec-and-forget open -a "Claude.app"'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     alt-slash = 'layout tiles horizontal vertical'
@@ -191,7 +210,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
     ]
     alt-x = 'workspace X'
     alt-y = 'workspace Y'
-    # alt-z = 'workspace Z' # Reserved for NeoVim - insert three lines
+    # alt-z = 'workspace Z'
+    #
+    # Give up on workspace Z, because I use alt-z inside nvim
+    # Reserved for NeoVim - insert three lines
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
     alt-shift-1 = 'move-node-to-workspace 1'
@@ -224,7 +246,10 @@ on-focus-changed = ['move-mouse window-lazy-center']
     alt-shift-w = 'move-node-to-workspace W'
     alt-shift-x = 'move-node-to-workspace X'
     alt-shift-y = 'move-node-to-workspace Y'
-    # alt-shift-z = 'move-node-to-workspace Z' # Give up on workspace Z, cause I use this keymap inside nvim
+    # alt-shift-z = 'move-node-to-workspace Z'
+    #
+    # Give up on workspace Z, because I use alt-z inside nvim
+    # Reserved for NeoVim - insert three lines
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-tab = 'workspace-back-and-forth'
@@ -238,7 +263,7 @@ on-focus-changed = ['move-mouse window-lazy-center']
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
     esc = ['reload-config', 'mode main']
-    r = ['flatten-workspace-tree', 'mode main'] # reset layout
+    r = ['flatten-workspace-tree', 'mode main'] # reset all tiles at the same width
     f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
     backspace = ['close-all-windows-but-current', 'mode main']
 
@@ -276,9 +301,14 @@ run = 'move-node-to-workspace G'
 if.app-id = 'com.apple.Safari'
 run = 'move-node-to-workspace S'
 
+# Floating
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
 run = 'move-node-to-workspace F'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = ['layout floating', 'move-node-to-workspace F']
 
 # Mail
 [[on-window-detected]]
