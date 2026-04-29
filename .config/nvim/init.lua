@@ -1,9 +1,9 @@
--- Filename: ~/.config/nvim-alex/init.lua
--- ~/.config/nvim-alex/init.lua
+-- Filename: ~/.config/nvim/init.lua
+-- ~/.config/nvim/init.lua
 
 -- Config Structure:
 --
--- ~/.config/nvim-alex/
+-- ~/.config/nvim/
 -- ├── init.lua                  # Entry point (this file)
 -- ├── nvim-pack-lock.json       # Auto-generated lockfile by vim.pack
 -- ├── lua/
@@ -33,6 +33,28 @@
 -- │   └── en.utf-8.add          # Accepted custom words for spell check
 -- └── utils/                    # External tool configurations
 --     └── .markdownlint-cli2.yaml  # Rules for markdownlint-cli2
+
+-- vim ui2
+-- added 2026-04-24 for experiments
+require('vim._core.ui2').enable({
+	enable = true,
+	msg = {
+		targets = 'cmd',
+		cmd = {        -- Options related to messages in the cmdline window.
+			height = 0.5 -- Maximum height while expanded for messages beyond 'cmdheight'.
+		},
+		dialog = {     -- Options related to dialog window.
+			height = 0.5, -- Maximum height.
+		},
+		msg = {        -- Options related to msg window.
+			height = 0.5, -- Maximum height.
+			timeout = 4000, -- Time a message is visible in the message window.
+		},
+		pager = {      -- Options related to message window.
+			height = 1,  -- Maximum height.
+		},
+	},
+})
 
 -- Core modules
 require("core.options")

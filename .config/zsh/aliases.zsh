@@ -3,7 +3,7 @@
 
 # Description: Clean, focused Zsh aliases for macOS
 
-# SECTION 1: FILE LISTING  {{{
+## SECTION 1: FILE LISTING
 
 # Core ls for macOS (BSD)
 alias ls='ls -G'     # -G enables color on macOS
@@ -15,15 +15,6 @@ alias lh='ls -lh'    # Long list, human readable sizes
 alias lhD='ls -lh -D "%Y-%m-%d %H:%M"'    # Long list, human readable sizes, YYYY-mm-dd
 alias l1='ls -1'     # One file per line (Great for piping)
 
-# # Time-based navigation (very useful)
-# alias lt='ls -lt'    # Newest first
-# alias ltr='ls -ltr'  # Oldest first (find old files)
-#
-# # Less frequently used but handy
-# alias lS='ls -lS'    # Largest files first
-# alias lr='ls -lR'    # Recursive (use sparingly!)
-# alias lf='ls -lF'    # Type indicators (/, *, @, =, etc.)
-
 # Combined utilities
 alias pls='pwd && ls'    # Show path then list contents
 
@@ -32,9 +23,7 @@ alias tc="tree -C"   # Colored tree view
 alias t2="tree -L2"  # Tree view, level 2
 alias t3="tree -L3"  # Tree view, level 3
 
-# }}}
-
-# SECTION 2: HELP SYSTEM ENHANCEMENTS  {{{
+## SECTION 2: HELP SYSTEM ENHANCEMENTS
 
 # Start a clean zsh with NO configs by `zsh -f`
 # Then run `alias`, and you will see two default aliases
@@ -58,9 +47,7 @@ alias help=run-help
 alias zshrc='$EDITOR "${ZDOTDIR:-$HOME}/.zshrc"'    # Edit Zsh config
 alias src='source "${ZDOTDIR:-$HOME}/.zshrc"'       # Reload Zsh config
 
-# }}}
-
-# SECTION 3: GIT ENHANCEMENTS  {{{
+# SECTION 3: GIT ENHANCEMENTS
 
 # Only define if git is available
 if (( $+commands[git] )); then
@@ -73,9 +60,9 @@ if (( $+commands[git] )); then
     fi
 fi
 
-# }}}
 
-# SECTION 4: GLOBAL ALIASES (Pipe Shortcuts)  {{{
+
+# SECTION 4: GLOBAL ALIASES (Pipe Shortcuts)
 
 # These work anywhere in the command line
 # alias -g H='| head'             # Pipe to head (first lines)
@@ -85,9 +72,9 @@ fi
 # alias -g NUL='> /dev/null 2>&1' # Discard all output completely
 # alias -g NE='2> /dev/null'      # Discard stderr only (silent errors)
 
-# }}}
 
-# SECTION 5: SUFFIX ALIASES (Auto-open by Extension) {{{
+
+# SECTION 5: SUFFIX ALIASES (Auto-open by Extension)
 
 # Automatically transform command lines based on file extensions
 # When you type a filename with a known extension,
@@ -137,12 +124,13 @@ fi
 #     done
 # fi
 
-# }}}
 
-# SECTION 6: QUICK COMMAND SHORTCUTS  {{{
+
+# SECTION 6: QUICK COMMAND SHORTCUTS
 
 alias c='clear'         # Clear terminal screen
 alias q='exit'          # Quick exit
+alias v='vim'           # Short alias for Vim
 alias nv='nvim'         # Short alias for Neovim
 alias edit='nvim'       # Primary editor command
 
@@ -150,9 +138,9 @@ alias edit='nvim'       # Primary editor command
 (( $+commands[yt-dlp.exe] )) && alias yt='yt-dlp.exe'
 (( $+commands[neomutt] )) && alias nm='neomutt'
 
-# }}}
 
-# SECTION 7: SAFETY & CONVENIENCE  {{{
+
+# SECTION 7: SAFETY & CONVENIENCE
 
 # Prevent accidental overwrites (optional - uncomment if wanted)
 alias cp='cp -i'      # Interactive copy
@@ -186,6 +174,6 @@ mcd() {
 [[ "$(command -v bat)" ]] \
     && alias cat="bat"
 
-# }}}
+
 
 # vim:set expandtab shiftwidth=2 tabstop=2 foldmethod=marker:

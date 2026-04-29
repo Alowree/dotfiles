@@ -21,7 +21,7 @@ map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Decrease Window Height" })
 map("n", "<C-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
 map("n", "<C-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
--- Move Lines
+-- Move Lines & Visual Block
 map("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move Line Down" })
 map("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move Line Up" })
 map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Line Down" })
@@ -38,7 +38,7 @@ map("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Previous Buffer" })
 map("v", "<", "<gv", opts)
 map("v", ">", ">gv", opts)
 
--- commenting
+-- Commenting
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
@@ -68,7 +68,7 @@ map("n", "<leader>qa", "<cmd>quitall<cr>", { desc = "Quit All" })
 -- A commented line with Filename: <file_path>
 -- A commented line with just the <file_path>
 -- An empty line
-map("n", "<M-z>", function()
+map("n", "<M-a>", function()
   local file_path = vim.fn.expand("%:p:~")
   local comment_format = vim.bo.commentstring
   if not comment_format or comment_format == "" then

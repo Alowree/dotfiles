@@ -118,3 +118,7 @@ A modern, fast Neovim configuration optimized for version 0.13 nightly, powered 
 - [Ripgrep](https://github.com/BurntSushi/ripgrep) (for Snacks picker)
 - [Rust & Cargo](https://rustup.rs/) (for Blink.cmp fuzzy matcher)
 - [InputSourceSelector](https://github.com/minoki/InputSourceSelector) (for macOS IME switching)
+
+## Test on chezmoi
+
+Currently I manage my dotfiles with a bare directory, but I'm considering chezmoi as the potential replacement.

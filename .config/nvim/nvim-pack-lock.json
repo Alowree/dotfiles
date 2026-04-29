@@ -59,7 +59,7 @@
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "pangu.nvim": {
-      "rev": "7a64825a126e873a144dd8a5f9449dafa6bdfc88",
+      "rev": "6f4e2d4c413fc934658c056529d7094c47c21326",
       "src": "https://github.com/alowree/pangu.nvim"
     },
     "plenary.nvim": {

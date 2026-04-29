@@ -1,7 +1,4 @@
--- Filename: ~/.config/nvim-pack/lua/plugins/tokyonight.lua
--- ~/.config/nvim-pack/lua/plugins/tokyonight.lua
-
-vim.pack.add({"https://github.com/folke/tokyonight.nvim"})
+vim.pack.add({ "https://github.com/folke/tokyonight.nvim" })
 
 -- Local Helper Functions for Highlight Overrides
 local function get_markdown_highlights(c)

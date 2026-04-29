@@ -183,7 +183,7 @@ preset = 'qwerty'
     alt-7 = 'workspace 7'
     alt-8 = 'workspace 8'
     alt-9 = 'workspace 9'
-    alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
+    # alt-a = 'workspace A'
     alt-b = 'workspace B'
     alt-c = 'workspace C'
     alt-d = 'workspace D'
@@ -210,8 +210,8 @@ preset = 'qwerty'
     ]
     alt-x = 'workspace X'
     alt-y = 'workspace Y'
-    # alt-z = 'workspace Z'
-    #
+    alt-z = 'workspace Z'
+    
     # Give up on workspace Z, because I use alt-z inside nvim
     # Reserved for NeoVim - insert three lines
 
@@ -225,7 +225,11 @@ preset = 'qwerty'
     alt-shift-7 = 'move-node-to-workspace 7'
     alt-shift-8 = 'move-node-to-workspace 8'
     alt-shift-9 = 'move-node-to-workspace 9'
-    alt-shift-a = 'move-node-to-workspace A'
+
+    # Give up on workspace A, because I use alt-a inside nvim
+    # Reserved for NeoVim - insert three lines
+
+    # alt-shift-a = 'move-node-to-workspace A'
     alt-shift-b = 'move-node-to-workspace B'
     alt-shift-c = 'move-node-to-workspace C'
     alt-shift-d = 'move-node-to-workspace D'
@@ -246,11 +250,8 @@ preset = 'qwerty'
     alt-shift-w = 'move-node-to-workspace W'
     alt-shift-x = 'move-node-to-workspace X'
     alt-shift-y = 'move-node-to-workspace Y'
-    # alt-shift-z = 'move-node-to-workspace Z'
-    #
-    # Give up on workspace Z, because I use alt-z inside nvim
-    # Reserved for NeoVim - insert three lines
-
+    alt-shift-z = 'move-node-to-workspace Z'
+    
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-tab = 'workspace-back-and-forth'
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor

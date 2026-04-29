@@ -1,6 +1,3 @@
--- Filename: ~/.config/nvim-alex/lua/core/options.lua
--- ~/.config/nvim-alex/lua/core/options.lua
-
 -- See `:help options`
 
 local opt = vim.opt
@@ -23,7 +20,7 @@ opt.autoindent = true  -- Copy indent from current line when starting a new one
 opt.shiftround = true  -- Round indent to multiple of 'shiftwidth'
 
 -- Search Settings
-opt.smartcase = true  -- Case-insensitive searching... unless the query contains capital letters
+opt.smartcase = true -- Case-insensitive searching... unless the query contains capital letters
 
 -- Visual & Rendering
 opt.termguicolors = true  -- Enable 24-bit RGB colors
@@ -51,7 +48,7 @@ opt.undolevels = 10000  -- Maximum number of changes that can be undone
 
 local undo_dir = vim.fn.stdpath("state") .. "/undo"
 if vim.fn.isdirectory(undo_dir) == 0 then -- Create the directory if it doesn't exist
-  vim.fn.mkdir(undo_dir, "p")
+	vim.fn.mkdir(undo_dir, "p")
 end
 
 opt.undodir = undo_dir                        -- Directory for undo files
@@ -134,12 +131,12 @@ opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
 -- Custom Filetypes
 vim.filetype.add({
-  extension = { env = "dotenv" },
-  filename = { [".env"] = "dotenv", ["env"] = "dotenv" },
-  pattern = {
-    ["[jt]sconfig.*.json"] = "jsonc",
-    ["%.env%.[%w_.-]+"] = "dotenv",
-  },
+	extension = { env = "dotenv" },
+	filename = { [".env"] = "dotenv", ["env"] = "dotenv" },
+	pattern = {
+		["[jt]sconfig.*.json"] = "jsonc",
+		["%.env%.[%w_.-]+"] = "dotenv",
+	},
 })
 
 -- Sets how neovim will display certain whitespace characters in the editor.
@@ -158,7 +155,7 @@ vim.opt.spellfile = config_dir .. "/spell/en.utf-8.add"
 -- Optional: Create the directory if it doesn't exist
 local spell_dir = config_dir .. "/spell"
 if vim.fn.isdirectory(spell_dir) == 0 then
-  vim.fn.mkdir(spell_dir, "p")
+	vim.fn.mkdir(spell_dir, "p")
 end
 
 -- vim: fdm=marker
