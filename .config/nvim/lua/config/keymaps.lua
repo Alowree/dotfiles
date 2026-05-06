@@ -1,6 +1,3 @@
--- ---------------------------------------------------------------------------
--- Global settings
--- ---------------------------------------------------------------------------
 -- In a global plugin <Leader> should be used
 -- in a filetype plugin <LocalLeader>
 -- "mapleader" and "maplocalleader" can be equal
@@ -29,12 +26,20 @@ map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Line Up" })
 map("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move Block Down" })
 map("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move Block Up" })
 
--- Essential Window/Buffer Management
+-- Goto
+map("n", "==", "gg<S-v>G")
+map("n", "gl", "$", { desc = "Go to end of line" })
+map("n", "gh", "^", { desc = "Go to start of line" })
+
+-- Buffer Management
 map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Alternate Buffer" })
 map("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next Buffer" })
 map("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Previous Buffer" })
 
--- 3. Better Visual Indenting
+-- Clear search with <esc>
+map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsearch" })
+
+-- Better Visual Indenting
 map("v", "<", "<gv", opts)
 map("v", ">", ">gv", opts)
 
@@ -60,6 +65,10 @@ map("n", "<leader>tw", "<cmd>set wrap!<CR>", {
 -- Open / Save file
 map("n", "<leader>wk", "<cmd>e ~/OneDrive/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
 map("n", "<leader>ww", "<cmd>write<CR>", { desc = "Write File" })
+
+-- save file
+map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+
 -- Quit
 map("n", "<leader>qq", "<cmd>quit<cr>", { desc = "Quit Window" })
 map("n", "<leader>qa", "<cmd>quitall<cr>", { desc = "Quit All" })
@@ -85,3 +94,24 @@ map("n", "<M-a>", function()
   local lnum = vim.api.nvim_win_get_cursor(0)[1]
   vim.api.nvim_buf_set_lines(bufnr, lnum - 1, lnum - 1, false, { first_commented_line, second_commented_line, "" })
 end, { desc = "Insert file path as comment" })
+
+
+-- auto close pairs
+-- map("i", "'", "''<left>")
+map("i", "`", "``<left>")
+map("i", '"', '""<left>')
+map("i", "(", "()<left>")
+map("i", "[", "[]<left>")
+map("i", "{", "{}<left>")
+-- map("i", "<", "<><left>")
+
+-- vim.pack keymaps  (<leader>p = pack)
+map("n", "<leader>pp", "<cmd>Pack<cr>", { desc = "Pack UI" })
+map("n", "<leader>pu", "<cmd>lua vim.pack.update()<cr>", { desc = "Pack Update All" })
+map("n", "<leader>pd", function()
+  vim.ui.input({ prompt = "Plugin name to delete: " }, function(input)
+    if input and input ~= "" then
+      pcall(vim.pack.del, { input })
+    end
+  end)
+end, { desc = "Pack Delete" })
