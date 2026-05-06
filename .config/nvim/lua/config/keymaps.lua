@@ -1,13 +1,7 @@
--- In a global plugin <Leader> should be used
--- in a filetype plugin <LocalLeader>
--- "mapleader" and "maplocalleader" can be equal
-vim.g.mapleader      = " "
-vim.g.maplocalleader = " "
-
 -- vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
-local map            = vim.keymap.set
-local opts           = { noremap = true, silent = true }
+local map = vim.keymap.set
+local opts = { noremap = true, silent = true }
 
 -- Quick restart
 map("n", "<leader>R", "<cmd>restart<cr>", { desc = "Restart Neovim" })
@@ -94,7 +88,6 @@ map("n", "<M-a>", function()
   local lnum = vim.api.nvim_win_get_cursor(0)[1]
   vim.api.nvim_buf_set_lines(bufnr, lnum - 1, lnum - 1, false, { first_commented_line, second_commented_line, "" })
 end, { desc = "Insert file path as comment" })
-
 
 -- auto close pairs
 -- map("i", "'", "''<left>")

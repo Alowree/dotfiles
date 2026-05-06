@@ -1,5 +1,10 @@
--- See `:help options`
+-- In a global plugin <Leader> should be used
+-- in a filetype plugin <LocalLeader>
+-- "mapleader" and "maplocalleader" can be equal
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
+-- See `:help options`
 local opt = vim.opt
 
 -- General UI
@@ -49,7 +54,7 @@ opt.undolevels = 10000 -- Maximum number of changes that can be undone
 
 local undo_dir = vim.fn.stdpath("state") .. "/undo"
 if vim.fn.isdirectory(undo_dir) == 0 then -- Create the directory if it doesn't exist
-	vim.fn.mkdir(undo_dir, "p")
+  vim.fn.mkdir(undo_dir, "p")
 end
 
 opt.undodir = undo_dir -- Directory for undo files
@@ -132,12 +137,12 @@ opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
 -- Custom Filetypes
 vim.filetype.add({
-	extension = { env = "dotenv" },
-	filename = { [".env"] = "dotenv", ["env"] = "dotenv" },
-	pattern = {
-		["[jt]sconfig.*.json"] = "jsonc",
-		["%.env%.[%w_.-]+"] = "dotenv",
-	},
+  extension = { env = "dotenv" },
+  filename = { [".env"] = "dotenv", ["env"] = "dotenv" },
+  pattern = {
+    ["[jt]sconfig.*.json"] = "jsonc",
+    ["%.env%.[%w_.-]+"] = "dotenv",
+  },
 })
 
 -- Sets how neovim will display certain whitespace characters in the editor.
@@ -156,7 +161,7 @@ vim.opt.spellfile = config_dir .. "/spell/en.utf-8.add"
 -- Optional: Create the directory if it doesn't exist
 local spell_dir = config_dir .. "/spell"
 if vim.fn.isdirectory(spell_dir) == 0 then
-	vim.fn.mkdir(spell_dir, "p")
+  vim.fn.mkdir(spell_dir, "p")
 end
 
 -- vim: fdm=marker
