@@ -21,6 +21,10 @@
       "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
+    "img-clip.nvim": {
+      "rev": "b6ddfb97b5600d99afe3452d707444afda658aca",
+      "src": "https://github.com/HakonHarnes/img-clip.nvim"
+    },
     "lualine.nvim": {
       "rev": "131a558e13f9f28b15cd235557150ccb23f89286",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
@@ -46,6 +50,10 @@
     "nvim-web-devicons": {
       "rev": "4fc505ac7bd7692824a142e96e5f529c133862f8",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
+    "oil.nvim": {
+      "rev": "0fcc83805ad11cf714a949c98c605ed717e0b83e",
+      "src": "https://github.com/stevearc/oil.nvim"
     },
     "pangu.nvim": {
       "rev": "6f4e2d4c413fc934658c056529d7094c47c21326",

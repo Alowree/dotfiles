@@ -10,7 +10,7 @@
 -- })
 
 vim.pack.add({
-	"https://github.com/alowree/pangu.nvim",
+  "https://github.com/alowree/pangu.nvim",
 })
 
 -- high-performance color highlighter
@@ -25,9 +25,9 @@ vim.pack.add({
 -- })
 
 -- File explorer (parent directory navigation)
--- vim.pack.add({
--- 	"https://github.com/stevearc/oil.nvim",
--- })
--- require("oil").setup()
---
--- vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.pack.add({
+  "https://github.com/stevearc/oil.nvim",
+})
+require("oil").setup()
+
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
