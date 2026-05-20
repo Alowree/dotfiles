@@ -27,6 +27,7 @@ opt.shiftround = true -- Round indent to multiple of 'shiftwidth'
 -- Search Settings
 opt.ignorecase = true -- Case insensitive search
 opt.smartcase = true -- Case sensitive if uppercase in string
+opt.inccommand = "split" -- This allows the search incremental command to have a split preview window below
 
 -- Visual & Rendering
 opt.termguicolors = true -- Enable 24-bit RGB colors

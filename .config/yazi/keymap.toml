@@ -1,15 +1,75 @@
+# You can change Yazi's keybindings in your keymap.toml file, which consists of the following 8 layers:
+#
+#     [mgr] - File list.
+#     [tasks] - Task manager.
+#     [spot] - File information spotter.
+#     [pick] - Pick component. e.g. "open with" for files.
+#     [input] - Input component. e.g. create, rename, etc.
+#     [confirm] - Confirmation dialog. e.g. remove, overwrite, etc.
+#     [cmp] - Completion component. e.g. "cd" URL completion.
+#     [help] - Help menu.
+#
+# In each layer, there are two attributes: prepend_keymap and append_keymap. Prepend inserts before the default keybindings, while append inserts after them.
+#
+# Since Yazi selects the first matching key to run, prepend always has a higher priority than default, and append always has a lower priority than default:
+
 [mgr]
 prepend_keymap = [
-  # default keymaps
-  { on = ["g", "h"], run = "cd ~",                        desc = "Go Home" },
-  { on = ["g", "c"], run = "cd ~/.config",                desc = "Go ~/.config" },
-  # custom keymaps
-  { on = ["g", "d"], run = "cd ~/OneDrive/Documents",     desc = "Go ~/OneDrive/Documents" },
-  { on = ["g", "t"], run = "cd ~/Teek",                   desc = "cd to ~/Teek" },
+  # How can I format for each rule to be on the same line?
+  # Just like the format as in 
+  # https://github.com/sxyazi/yazi/blob/shipped/yazi-config/preset/keymap-default.toml
+  # taplo ready (toml) /opt/homebrew/bin/taplo
+  #
+  # Default Goto
+  { on = [
+    "g",
+    "h",
+  ], run = "cd ~", desc = "Go home" },
+  { on = [
+    "g",
+    "c",
+  ], run = "cd ~/.config", desc = "Go ~/.config" },
+  { on = [
+    "g",
+    "d",
+  ], run = "cd ~/Downloads", desc = "Go ~/Downloads" },
+  { on = [
+    "g",
+    "<Space>",
+  ], run = "cd --interactive", desc = "Jump interactively" },
+  { on = [
+    "g",
+    "f",
+  ], run = "follow", desc = "Follow hovered symlink" },
+  # Alowree Custom New Rules
+  { on = [
+    "g",
+    "o",
+  ], run = "cd ~/OneDrive/Documents", desc = "Go ~/OneDrive/Documents" },
+  { on = [
+    "g",
+    "t",
+  ], run = "cd ~/Teek", desc = "cd to ~/Teek" },
 
   # TODO: firstly learn about marks in Vim
-  { on = ["m"],      run = "plugin bookmarks save",       desc = "Save current position as a bookmark" },
-  { on = ["'"],      run = "plugin bookmarks jump",       desc = "Jump to a bookmark" },
-  { on = ["b", "d"], run = "plugin bookmarks delete",     desc = "Delete a bookmark" },
-  { on = ["b", "D"], run = "plugin bookmarks delete_all", desc = "Delete all bookmarks" },
+  { on = [
+    "m",
+  ], run = "plugin bookmarks save", desc = "Save current position as a bookmark" },
+  { on = [
+    "'",
+  ], run = "plugin bookmarks jump", desc = "Jump to a bookmark" },
+  { on = [
+    "b",
+    "d",
+  ], run = "plugin bookmarks delete", desc = "Delete a bookmark" },
+  { on = [
+    "b",
+    "D",
+  ], run = "plugin bookmarks delete_all", desc = "Delete all bookmarks" },
+
+  # For compression, with plugin ouch.yazi
+  # First select files with `v`
+  { on = [
+    "C",
+  ], run = "plugin ouch", desc = "Compress with ouch" },
 ]

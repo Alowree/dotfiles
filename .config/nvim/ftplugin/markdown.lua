@@ -5,7 +5,7 @@ require("config.writing").setup()
 -- 1. General Buffer Options
 -- ===============================================
 vim.opt_local.wrap = true -- Do I still need `wrap` after setting `textwidth`?
-vim.opt_local.textwidth = 80 -- move text to new line at 80 characters
+-- vim.opt_local.textwidth = 80 -- move text to new line at 80 characters
 vim.opt_local.linebreak = true -- Wrap at words, not arbitrary characters
 
 vim.opt_local.softtabstop = 2 -- Use 2 spaces for tab stop (common for lists)

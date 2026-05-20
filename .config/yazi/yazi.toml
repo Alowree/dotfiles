@@ -1,46 +1,59 @@
+# https://github.com/nbaud/nico-yazi-config/blob/main/yazi.toml
+# 2026-05-15
 [mgr]
-ratio = [ 2, 4, 4 ]
+linemode = "size_and_mtime"
+show_header = true
+ratio = [2, 3, 5]
 show_hidden = true
+show_symlink = true
+sort_dir_first = true
+sort_by = "alphabetical"
 
+[preview]
+# Maximum preview width/height for images. 
+# Run `yazi --clear-cache` after changing this for it to take effect.
+max_width = 10000
+max_height = 10000
+
+# Configure available openers that can be used in `[open]`:
 [opener]
-# Currently I only use macOS and Windows
-# I use Neovim as my default text editor on both systems
-# If you use the same editor on all systems,
-# removing the `for` attribute entirely makes it a "universal" rule
+# Define your editor here
 #
-# edit = [
-#   { run = "${EDITOR:-nvim} %s", desc = "$EDITOR", block = true },
-# ]
-edit = [
-  { run = '${EDITOR:-nvim} "$@"', desc = "Neovim", block = true }
-]
+# Option A
+edit = [{ run = '${EDITOR:-nvim} "$@"', desc = "Neovim", block = true }]
+#
+# Option B
+# edit = [{ run = '${EDITOR:-vim} "$@"', desc = "Edit", block = true }]
 
 # Although already in yazi-default.toml
 # we still need to explicitly set this reveal here
 # Otherwise, "Show EXIF" will appear as the last menu item
 # after pressing `O` to open file interactively
 reveal = [
-  { run = 'open -R "$1"',                          desc = "Reveal", for = "macos" },
-  { run = 'explorer /select, "%1"', orphan = true, desc = "Reveal", for = "windows" },
+  { run = 'open -R "$1"', desc = "View with Finder", for = "macos" },
+  { run = 'explorer /select, "%1"', orphan = true, desc = "View with Explorer", for = "windows" },
 ]
-
-# Custom defined opener for text files
-# Need to have `code` in path
-vscode = [
-  { run = 'code "$@"', desc = "VS Code", orphan = true }
+vscode = [{ run = 'code "$@"', desc = "VS Code", orphan = true }]
+typora = [{ run = 'open -a "Typora" "$@"', desc = "Typora", orphan = true }]
+word = [
+  { run = 'open -a "Microsoft Word" "$@"', desc = "Microsoft Word", orphan = true },
 ]
-typora = [
-  # If Typora has a CLI, use it; otherwise, we'll keep the open -a for now
-  { run = 'open -a "Typora" "$@"', desc = "Typora", orphan = true }
+excel = [
+  { run = 'open -a "Microsoft Excel" "$@"', desc = "Microsoft Excel", orphan = true },
 ]
+keynote = [{ run = 'open -a "Keynote" "$@"', desc = "Keynote", orphan = true }]
 
 # Custom defined openers for PDFs
 zathura = [
-  { run = 'zathura "$@"', block = true, desc = "Zathura" }
+  { run = 'zathura "$@"', detach = true, desc = "Open PDF with Zathura" },
 ]
-preview = [
-  { run = 'open -a "Preview" "$@"', orphan = true, desc = "Preview" }
+preview = [{ run = 'open -a "Preview" "$@"', orphan = true, desc = "Preview" }]
+mpv = [{ run = 'mpv "$@"', desc = "mpv", orphan = true }]
+# Extract compressed archive
+extract = [
+  { run = 'ouch d -y "$@"', desc = "Extract here with ouch", for = "unix" },
 ]
+# view-viu = [{ run = 'viu "$@"; echo "Press enter to exit"; read', desc = "View with viu", block = true }]
 
 # The `[open]` block behaves differently depending on which key you use
 # `prepend_rules`: merges your rules to the top of default list
@@ -48,10 +61,90 @@ preview = [
 # `rules`: completely replaces the entire default list
 
 [open]
-prepend_rules = [
-  # 1. Matches first, then stops (append = false)
-  { mime = "text/*", use = [ "edit", "vscode", "typora", "reveal" ], append = false },
-  
-  # 2. Matches first, then stops
-  { mime = "application/pdf", use = [ "zathura", "preview", "reveal" ], append = false },
+# Or, use `rules` to rewrite the entire default rules
+# but wait, where are the default rules?
+rules = [
+  # 0. Markdown files with Typora (prepended to ensure it matches first)
+  { url = "*.{md,MD,markdown}", use = [
+    "edit",
+    "typora",
+    "reveal",
+  ], append = false },
+
+  # 1. PDF opening
+  { mime = "application/pdf", use = [
+    "zathura",
+    "preview",
+    "reveal",
+  ], append = false },
+
+  # 2. Image opening
+  # { mime = "image/*", use = ["preview", "view-viu", "reveal"] },
+  # { url = "*.{jpg,jpeg,png,webp,gif,tif,tiff,TIF,TIFF,JPG,JPEG,PNG,WEBP,GIF}", use = ["preview", "view-viu", "reveal"] },
+
+  # I don't know much about browsing images with viu on macOS
+  # Or, maybe I shoul use Photos app to open/browse image instead?
+
+  # 3. Video opening
+  { mime = "video/*", use = [
+    "mpv",
+    "reveal",
+  ] },
+  { url = "*.{mp4,mkv,avi,mov,wmv,flv,webm}", use = [
+    "mpv",
+    "reveal",
+  ] },
+
+  # 4. Office files
+  { url = "*.{docx,doc}", use = [
+    "word",
+    "reveal",
+  ] },
+  { url = "*.{xlsx,xls}", use = [
+    "excel",
+    "reveal",
+  ] },
+  { url = "*.{csv,tsv}", use = [
+    "edit",
+    "excel",
+    "reveal",
+  ] },
+  { url = "*.{pptx,ppt}", use = [
+    "keynote",
+    "reveal",
+  ] },
+
+  # 5. Archive extraction
+  # Press `o` or `Enter` to open/extract the compressed archive
+  { mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}", use = [
+    "extract",
+    "reveal",
+  ] },
+
+  # 6. Other text files with editor
+  { mime = "text/*", use = [
+    "edit",
+    "vscode",
+    "typora",
+    "reveal",
+  ], append = false },
+  { url = "*.{yml,yaml,toml,lua}", use = [
+    "edit",
+    "reveal",
+  ] },
+]
+
+[plugin]
+prepend_previewers = [
+  { url = "*.{docx,doc,pptx,ppt}", run = "docx-preview" },
+  { url = "*.{xlsx,xls,csv,tsv}", run = "excel-preview" },
+  { url = "*.json", run = "duckdb" },
+  { url = "*.parquet", run = "duckdb" },
+  # { url = "*.txt", run = "duckdb" },
+  { url = "*.db", run = "duckdb" },
+  { url = "*.duckdb", run = "duckdb" },
+  # For archive preview, using plugin ouch.yazi
+  # This provides a tree view of the compressed folder
+  # but not preview of each compressed file.
+  { mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}", run = "ouch" },
 ]

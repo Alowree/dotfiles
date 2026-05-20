@@ -3,6 +3,26 @@ use = "dedukun/bookmarks"
 rev = "9ef1254"
 hash = "92fbb5483657fa7976cdf4e0104e18e0"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:full-border"
+rev = "5d5c480"
+hash = "7b625412411be411153886894d9acaf"
+
+[[plugin.deps]]
+use = "wylie102/duckdb"
+rev = "3f8c863"
+hash = "87b9233a74325e95011670ed20bbd0d4"
+
+[[plugin.deps]]
+use = "linxuan-sys/docx-preview"
+rev = "9448288"
+hash = "ccbbca8053585b2e637858dc416e4044"
+
+[[plugin.deps]]
+use = "ndtoan96/ouch"
+rev = "406ce6c"
+hash = "f5afc904d5106ee368c8aa2ded43bd74"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-macchiato"
 rev = "0670801"
@@ -12,3 +32,8 @@ hash = "67f2240fd9c98f21714527a24cd672f8"
 use = "yazi-rs/flavors:catppuccin-latte"
 rev = "0670801"
 hash = "b8f46853c27707115f25f3423a47bd38"
+
+[[flavor.deps]]
+use = "hankertrix/bluloco-yazi:bluloco-light"
+rev = "1570591"
+hash = "90ad21e654061aee83c24cbf38a6b865"
