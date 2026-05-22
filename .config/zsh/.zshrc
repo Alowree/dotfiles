@@ -135,23 +135,28 @@ zinit light Aloxaf/fzf-tab
 # ====================================================
 # SECTION 6: COMPLETION SYSTEM
 # ====================================================
-# Load completions
 
 # By default, compinit creates a file called .zcompdump
 # in the same directory as your zsh configuration files
 # which is ~/.config/zsh/ in your case.
-# autoload -Uz compinit && compinit
 
-# The solution is to specify the -d flag with compinit
-# to set a custom location for the completion dump file.
-autoload -Uz compinit && compinit -d "${XDG_CACHE_HOME}/zsh/zcompdump"
+# Load completion system
+autoload -Uz compinit 
+
+# Initialize completion with cached metadata file
+compinit -d "${XDG_CACHE_HOME}/zsh/zcompdump"
 
 zinit cdreplay -q
 
 # Completion styling
+# Make completion case-insensitive
+# Example: "doc" can complete to "Documents"
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' menu no
+# Enable interactive completion menu selection
+zstyle ':completion:*' menu select
+# zstyle ':completion:*' menu no
+#
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 

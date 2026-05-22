@@ -46,11 +46,14 @@ export PATH="$USER_BIN:$PATH"
 
 # Set a bus address for `dbus` sessions with the following environment variable:
 # DBus for Zathura
-export DBUS_SESSION_BUS_ADDRESS="unix:path=$HOME/.cache/dbus/session"
 
-# Optional: Start DBus if not running
-if [ ! -S "$HOME/.cache/dbus/session" ]; then
-    mkdir -p ~/.cache/dbus
-    /opt/homebrew/bin/dbus-daemon --session --address=unix:path=$HOME/.cache/dbus/session --nofork --print-address 1>/tmp/dbus-session.log 2>&1 &
-    sleep 1
+# Only run this on macOS, but not on Arch Linux
+if [[ "$(uname)" == "Darwin" ]]; then
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=$HOME/.cache/dbus/session"
+    
+    if [ ! -S "$HOME/.cache/dbus/session" ]; then
+        mkdir -p ~/.cache/dbus
+        /opt/homebrew/bin/dbus-daemon --session --address=unix:path=$HOME/.cache/dbus/session --nofork --print-address 1>/tmp/dbus-session.log 2>&1 &
+        sleep 1
+    fi
 fi

@@ -27,8 +27,8 @@ nvims() {
     local config
     local -a items=(
         "default"
-        "nvim-cap153"
-        "nvim-pack-tduyng"
+        "nvim-lazy"
+        "nvim-tduyng"
     )
 
     config=$(printf "%s\n" "${items[@]}" | \

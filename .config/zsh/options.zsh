@@ -1,6 +1,6 @@
 # History command configuration (stored in cache directory per XDG Base Directory spec)
-HISTSIZE=5000
 HISTFILE="$XDG_CACHE_HOME/zsh/history"
+HISTSIZE=5000
 SAVEHIST=$HISTSIZE
 
 # Ensure history file directory exists (only run in zsh context)

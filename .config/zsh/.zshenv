@@ -60,5 +60,5 @@ if [[ ! -e "$HOME/.zshenv" && -e "$ZDOTDIR/.zshenv" ]]; then
     echo "Created symlink: $HOME/.zshenv -> $ZDOTDIR/.zshenv"
 fi
 
-
+# GPG
 export GPG_TTY=$(tty)
