@@ -192,9 +192,11 @@ eval "$(zoxide init --cmd cd zsh)"
 # `--cmd cd` would replace the `cd` command
 
 # iTerm2 shell integration
-if [[ -f "$ZDOTDIR/.iterm2_shell_integration.zsh" ]]; then
-    source "$ZDOTDIR/.iterm2_shell_integration.zsh"
-fi
+# I stopped using iTerm2 on macOS
+# No more errors on Arch Linux
+# if [[ -f "$ZDOTDIR/.iterm2_shell_integration.zsh" ]]; then
+#     source "$ZDOTDIR/.iterm2_shell_integration.zsh"
+# fi
 
 # ====================================================
 # SECTION 9: LOCAL OVERRIDES
