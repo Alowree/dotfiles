@@ -62,3 +62,6 @@ fi
 
 # GPG
 export GPG_TTY=$(tty)
+
+# Starship
+export STARSHIP_CONFIG="$ZDOTDIR/starship.toml"
