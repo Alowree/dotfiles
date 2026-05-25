@@ -1,0 +1,5 @@
+[formatting]
+array_auto_expand = false
+array_auto_collapse = true
+compact_arrays = true
+column_width = 80

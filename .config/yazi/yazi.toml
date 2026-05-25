@@ -1,7 +1,6 @@
 # https://github.com/nbaud/nico-yazi-config/blob/main/yazi.toml
 # 2026-05-15
 [mgr]
-# linemode = "size_and_mtime"
 show_header = true
 ratio = [2, 3, 5]
 show_hidden = true
@@ -60,30 +59,22 @@ extract = [
 # `append_rules`: merges your rules to the bottom of the default list
 # `rules`: completely replaces the entire default list
 
+# Change [open] rules to prepend_rules so Yazi's default fallbacks catch the rest
 [open]
-# Or, use `rules` to rewrite the entire default rules
-# but wait, where are the default rules?
-rules = [
-  # 0. Markdown files with Typora (prepended to ensure it matches first)
+prepend_rules = [
+  # 0. Markdown files with Typora
   { url = "*.{md,MD,markdown}", use = [
     "edit",
     "typora",
     "reveal",
-  ], append = false },
+  ] },
 
   # 1. PDF opening
   { mime = "application/pdf", use = [
     "zathura",
     "preview",
     "reveal",
-  ], append = false },
-
-  # 2. Image opening
-  # { mime = "image/*", use = ["preview", "view-viu", "reveal"] },
-  # { url = "*.{jpg,jpeg,png,webp,gif,tif,tiff,TIF,TIFF,JPG,JPEG,PNG,WEBP,GIF}", use = ["preview", "view-viu", "reveal"] },
-
-  # I don't know much about browsing images with viu on macOS
-  # Or, maybe I shoul use Photos app to open/browse image instead?
+  ] },
 
   # 3. Video opening
   { mime = "video/*", use = [
