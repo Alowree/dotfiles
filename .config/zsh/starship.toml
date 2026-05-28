@@ -1,10 +1,31 @@
+format = """\
+[╭╴](fg:arrow)\
+$username\
+$os\
+$git_branch\
+(\
+    at \
+    $directory\
+)\
+$cmd_duration\
+(\
+    via \
+    $python\
+    $conda\
+    $nodejs\
+    $c\
+    $rust\
+    $java\
+)
+[╰─](fg:arrow)$character\
+"""
+
 # format = """\
 # [╭╴](fg:arrow)\
 # $username\
 # $os\
 # $git_branch\
 # (\
-#     at \
 #     $directory\
 # )\
 # $cmd_duration\
@@ -20,34 +41,12 @@
 # [╰─](fg:arrow)$character\
 # """
 
-format = """\
-[╭╴](fg:arrow)\
-$username\
-$os\
-$git_branch\
-(\
-    $directory\
-)\
-$cmd_duration\
-(\
-    via \
-    $python\
-    $conda\
-    $nodejs\
-    $c\
-    $rust\
-    $java\
-)
-[╰─](fg:arrow)$character\
-"""
 # Add the modules you need
 
 # Disable the blank line at the start of the prompt
 add_newline = true
 
-
 palette = "normal"
-
 
 [palettes.normal]
 arrow = "#333533"
@@ -76,13 +75,13 @@ text_light = "#26272A"
 style_user = 'bold os'
 style_root = 'bold os_admin'
 format = '[  $user](fg:$style) '
-disabled = true
+disabled = false
 show_always = true
 
 [os]
 format = "on [($name)]($style) "
 style = "bold blue"
-disabled = true
+disabled = false
 
 [os.symbols]
 Alpine = " "
