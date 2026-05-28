@@ -33,15 +33,70 @@ reveal = [
   { run = 'explorer /select, "%1"', orphan = true, desc = "View with Explorer", for = "windows" },
 ]
 vscode = [{ run = 'code "$@"', desc = "VS Code", orphan = true }]
-typora = [{ run = 'open -a "Typora" "$@"', desc = "Typora", orphan = true }]
+# typora = [{ run = 'open -a "Typora" "$@"', desc = "Typora", orphan = true }]
+# Typora opener with platform detection
+# Using run_if to check for macOS vs Linux
+typora = [
+  { 
+    run = 'open -a "Typora" "$@"', 
+    desc = "Typora (macOS)", 
+    orphan = true, 
+    for = "macos" 
+  },
+  { 
+    run = 'typora "$@"', 
+    desc = "Typora (Linux)", 
+    orphan = true, 
+    for = "linux",
+    # Optional: fallback for Arch-specific command if needed
+    # run_if = "command -v typora",  # Uncomment if you want to check if installed
+  },
+]
+# Word opener with platform detection
 word = [
-  { run = 'open -a "Microsoft Word" "$@"', desc = "Microsoft Word", orphan = true },
+  { 
+    run = 'open -a "Microsoft Word" "$@"', 
+    desc = "Microsoft Word (macOS)", 
+    orphan = true, 
+    for = "macos" 
+  },
+  { 
+    run = 'libreoffice --writer "$@"', 
+    desc = "LibreOffice Writer (Linux)", 
+    orphan = true, 
+    for = "linux" 
+  },
 ]
+# Excel opener with platform detection
 excel = [
-  { run = 'open -a "Microsoft Excel" "$@"', desc = "Microsoft Excel", orphan = true },
+  { 
+    run = 'open -a "Microsoft Excel" "$@"', 
+    desc = "Microsoft Excel (macOS)", 
+    orphan = true, 
+    for = "macos" 
+  },
+  { 
+    run = 'libreoffice --calc "$@"', 
+    desc = "LibreOffice Calc (Linux)", 
+    orphan = true, 
+    for = "linux" 
+  },
 ]
-keynote = [{ run = 'open -a "Keynote" "$@"', desc = "Keynote", orphan = true }]
-
+# Keynote opener with platform detection
+keynote = [
+  { 
+    run = 'open -a "Keynote" "$@"', 
+    desc = "Keynote (macOS)", 
+    orphan = true, 
+    for = "macos" 
+  },
+  { 
+    run = 'libreoffice --impress "$@"', 
+    desc = "LibreOffice Impress (Linux)", 
+    orphan = true, 
+    for = "linux" 
+  },
+]
 # Custom defined openers for PDFs
 zathura = [
   { run = 'zathura "$@"', detach = true, desc = "Open PDF with Zathura" },

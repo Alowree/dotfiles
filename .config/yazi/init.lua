@@ -4,3 +4,5 @@
 require("full-border"):setup()
 
 require("duckdb"):setup()
+
+require("recycle-bin"):setup()

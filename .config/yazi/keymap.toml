@@ -7,7 +7,7 @@ prepend_keymap = [
   { on = ["g", "<Space>"], run = "cd --interactive", desc = "Jump interactively" },
   { on = ["g", "f"], run = "follow", desc = "Follow hovered symlink" },
   # Alowree Custom New Rules
-  { on = ["g", "o"], run = "cd ~/OneDrive/Documents", desc = "Go ~/OneDrive/Documents" },
+  { on = ["g", "w"], run = "cd ~/OneDrive/Documents", desc = "Go ~/OneDrive/Documents" },
   { on = ["g", "t"], run = "cd ~/Teek", desc = "cd to ~/Teek" },
 
   # TODO: firstly learn about marks in Vim
@@ -18,5 +18,13 @@ prepend_keymap = [
 
   # For compression, with plugin ouch.yazi
   # First select files with `v`
-  { on = ["C"], run = "plugin ouch", desc = "Compress with ouch" },
+  { on = ["c", "p"], run = "plugin ouch", desc = "Compress with ouch" },
+
+  # macOS:      mkdir -p ~/.Trash
+  # Arch Linux: mkdir -p ~/.local/share/Trash/{files,info}
+  { on = ["R", "o"], run = "plugin recycle-bin -- open", desc = "Open Trash" },
+  { on = ["R", "e"], run = "plugin recycle-bin -- empty", desc = "Empty Trash" },
+  { on = ["R", "D"], run = "plugin recycle-bin -- emptyDays", desc = "Empty by days deleted" },
+  { on = ["R", "d"], run = "plugin recycle-bin -- delete", desc = "Delete from Trash" },
+  { on = ["R", "r"], run = "plugin recycle-bin -- restore", desc = "Restore from Trash" },
 ]
