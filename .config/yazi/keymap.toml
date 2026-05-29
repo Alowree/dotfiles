@@ -20,11 +20,16 @@ prepend_keymap = [
   # First select files with `v`
   { on = ["c", "p"], run = "plugin ouch", desc = "Compress with ouch" },
 
-  # macOS:      mkdir -p ~/.Trash
-  # Arch Linux: mkdir -p ~/.local/share/Trash/{files,info}
-  { on = ["R", "o"], run = "plugin recycle-bin -- open", desc = "Open Trash" },
-  { on = ["R", "e"], run = "plugin recycle-bin -- empty", desc = "Empty Trash" },
-  { on = ["R", "D"], run = "plugin recycle-bin -- emptyDays", desc = "Empty by days deleted" },
-  { on = ["R", "d"], run = "plugin recycle-bin -- delete", desc = "Delete from Trash" },
-  { on = ["R", "r"], run = "plugin recycle-bin -- restore", desc = "Restore from Trash" },
+  # macOS: macos-trash.yazi - Opens a UI browser
+  { on = "R", run = "plugin macos-trash", desc = "Open macOS Trash", for = "macos" },
+  # On macOS, you can also add individual keys if needed
+  # { on = ["R", "r"], run = "plugin macos-trash", desc = "Open Trash Browser", for = "macos" },
+
+  # Linux: recycle-bin.yazi - Individual commands
+  { on = ["R", "m"], run = "plugin recycle-bin -- menu", desc = "Open Trash Menu", for = "linux" },
+  { on = ["R", "o"], run = "plugin recycle-bin -- open", desc = "Open Trash Directory", for = "linux" },
+  { on = ["R", "e"], run = "plugin recycle-bin -- empty", desc = "Empty Trash", for = "linux" },
+  { on = ["R", "D"], run = "plugin recycle-bin -- emptyDays", desc = "Empty by days deleted", for = "linux" },
+  { on = ["R", "d"], run = "plugin recycle-bin -- delete", desc = "Delete from Trash", for = "linux" },
+  { on = ["R", "r"], run = "plugin recycle-bin -- restore", desc = "Restore from Trash", for = "linux" },
 ]

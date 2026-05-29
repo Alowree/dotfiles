@@ -28,6 +28,11 @@ use = "uhs-robert/recycle-bin"
 rev = "fa68711"
 hash = "8714306b5cac6359edbacbf545fbd691"
 
+[[plugin.deps]]
+use = "walavave/macos-trash"
+rev = "671aa4c"
+hash = "aa6144806879c35f5178e98e41c54fae"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-macchiato"
 rev = "0670801"
