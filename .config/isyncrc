@@ -1,0 +1,39 @@
+# twine ========================================================
+# 1. Configure the remote server
+IMAPAccount twine
+Host twineintlcom.securemail.hk
+User alowree@twineintl.com
+# Works on macOS only
+# PassCmd "security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w"
+# Works on both macOS and Arch Linux
+PassCmd "pass alowree@twineintl.com"
+Port 993
+TLSType IMAPS
+AuthMechs PLAIN
+# SystemCertificates no
+# CertificateFile ~/.maildir/certificates/root-certificates.pem
+
+# 2. Configure the remote store
+IMAPStore twine-remote
+Account twine
+
+# 3. Configure the local mail store
+MaildirStore twine-local
+Path ~/.maildir/twine/
+Inbox ~/.maildir/twine/INBOX
+SubFolders Verbatim
+
+# 4. Connect them with a channel
+# Channel connecting <acount-name>-remote to <acount-name>-local
+Channel twine
+Far :twine-remote:
+Near :twine-local:
+Patterns *
+Sync All
+Expunge Both
+Create Near
+Remove Near
+SyncState *
+CopyArrivalDate yes
+ExpireUnread yes
+# ==============================================================
