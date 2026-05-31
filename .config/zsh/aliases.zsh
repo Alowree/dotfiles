@@ -5,8 +5,24 @@
 
 ## SECTION 1: FILE LISTING
 
-# Core ls for macOS (BSD)
-alias ls='ls -G'     # -G enables color on macOS
+# # Core ls for macOS (BSD)
+# alias ls='ls -G'     # -G enables color on macOS
+#
+#
+# # Only run this on macOS, but not on Arch Linux
+# if [[ "$(uname)" == "Darwin" ]]; then
+#   alias ls='ls -G'     # -G enables color on macOS
+# fi
+#
+# # Only run this on Arch Linux, but not on macOS
+# if [[ "$(uname)" == "Linux" ]]; then
+#   alias ls='ls --color=auto'
+# fi
+
+case "$(uname -s)" in
+  Darwin) alias ls='ls -G' ;;
+  Linux)  alias ls='ls --color=auto' ;;
+esac
 
 # Basic daily use (essential 4)
 alias ll='ls -l'     # Long list

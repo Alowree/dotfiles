@@ -44,6 +44,7 @@ USER_BIN="$HOME/.local/bin"
 # Use case: User-installed tools should override system ones
 export PATH="$USER_BIN:$PATH"
 
+# 4. 
 # Set a bus address for `dbus` sessions with the following environment variable:
 # DBus for Zathura
 
