@@ -13,7 +13,10 @@ set real_name       = "Alowree Xu - Twine"
 # ------------------------------------------------------------------------------
 set smtp_url        = "smtps://alowree@twineintl.com@ud.1025.hk:465"
 set smtp_authenticators = "login"
-set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+# Works on macOS only
+# set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+# Same setting for both macOS and Arch Linux
+set smtp_pass       = "`pass alowree@twineintl.com`"
 set imap_user       = $from
 
 # ------------------------------------------------------------------------------
