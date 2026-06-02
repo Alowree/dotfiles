@@ -12,8 +12,11 @@ set smtp_url        = "smtps://alowree@twineintl.com@ud.1025.hk:465"
 set smtp_authenticators = "login"
 
 # Password from macOS keychain
-set imap_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
-set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+# set imap_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+# set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+
+set imap_pass       = `pass Email/twineintl` 
+set smtp_pass       = `pass Email/twineintl`
 
 # ------------------------------------------------------------------------------
 # Mail Storage (Local Maildir)

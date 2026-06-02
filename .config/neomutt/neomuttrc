@@ -12,12 +12,29 @@
 #### ------------------------------------------------------------------------------------------
 #### Account-spesific, and Mailboxes
 #### ------------------------------------------------------------------------------------------
-# Set your default email account
+# Source all account configurations initially
+# source $HOME/.config/neomutt/accounts/biaget
 source $HOME/.config/neomutt/accounts/twine
 
-# Set shortcuts for switching email accounts
-macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/twine<enter><change-folder>!<enter>'
-macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/biaget<enter><change-folder>!<enter>'
+# Account switching macros
+# Example: F2 switches to twine INBOX  
+# macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/twine<enter><change-folder>!<enter>'
+# macro index,pager <F2> '<change-folder>imaps://alowree@twineintl.com@twineintlcom.securemail.hk/INBOX<enter>' "Switch to Twine account"
+# F2: Switch to Twine (local Maildir)
+macro index,pager <F2> '\
+<enter-command>source ~/.config/neomutt/accounts/twine<enter>\
+<change-folder>~/.maildir/twine/INBOX<enter>\
+<enter-command>set folder=~/.maildir/twine<enter>\
+' "Switch to Twine account"
+
+# Example: F3 switches to biaget INBOX
+# macro index,pager <f3> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/biaget<enter><change-folder>!<enter>'
+# macro index,pager <F3> '<change-folder>imaps://alowree@biaget.com@imap.263.net/INBOX<enter>' "Switch to Biaget account"
+macro index,pager <F3> '\
+<enter-command>source ~/.config/neomutt/accounts/biaget<enter>\
+<change-folder>imaps://alowree@biaget.com@imap.263.net/INBOX<enter>\
+' "Switch to Biaget account"
+
 macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/remote-soundfreaq <enter><change-folder>!<enter>'
 
 #### ------------------------------------------------------------------------------------------

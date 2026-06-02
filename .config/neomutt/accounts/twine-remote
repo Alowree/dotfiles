@@ -15,13 +15,15 @@ set real_name       = "Alowree Xu - Twine"
 # ------------------------------------------------------------------------------
 set smtp_url        = "smtps://alowree@twineintl.com@ud.1025.hk:465"
 set smtp_authenticators = "login"
-set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+# set smtp_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+set smtp_pass       = `pass Email/twineintl`
 
 # ------------------------------------------------------------------------------
 # IMAP Authentication
 # ------------------------------------------------------------------------------
 set imap_user       = $from
-set imap_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+# set imap_pass       = `security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`
+set imap_pass       = `pass Email/twineintl`
 
 # ------------------------------------------------------------------------------
 # Mail Storage (Remote IMAP)
@@ -51,6 +53,7 @@ mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
 # Hooks
 # ------------------------------------------------------------------------------
 # Re-fetch password when connecting to this account
-account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
+# account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
+account-hook $folder "set imap_pass=`pass Email/twineintl`"
 
 # vim: set filetype=neomuttrc:

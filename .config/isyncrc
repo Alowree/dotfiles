@@ -5,8 +5,13 @@ Host twineintlcom.securemail.hk
 User alowree@twineintl.com
 # Works on macOS only
 # PassCmd "security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w"
-# Works on both macOS and Arch Linux
-PassCmd "pass alowree@twineintl.com"
+#
+# On macOS, it tries the absolute Homebrew path first. If it exists, it runs.
+#
+# On Arch Linux, the first part fails silently (command not found),
+# and it falls back to just the latter part
+# (which will be in the standard /usr/bin path)
+PassCmd "/opt/homebrew/bin/pass Email/twineintl || pass Email/twineintl"
 Port 993
 TLSType IMAPS
 AuthMechs PLAIN
