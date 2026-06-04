@@ -1,0 +1,32 @@
+#!/bin/bash
+# notify-mail - Cross-platform notification script
+# Usage: notify-mail "Title" "Message"
+
+TITLE="${1:-Mail Notification}"
+MESSAGE="${2:-New email received}"
+
+# macOS notification
+if [[ "$(uname)" == "Darwin" ]]; then
+    if command -v terminal-notifier >/dev/null 2>&1; then
+        terminal-notifier -title "$TITLE" -message "$MESSAGE" -sound default
+    else
+        # Fallback to osascript for native macOS notifications
+        osascript -e "display notification \"$MESSAGE\" with title \"$TITLE\" sound name \"default\""
+    fi
+
+# Linux notification (GNOME/KDE/others)
+elif command -v notify-send >/dev/null 2>&1; then
+    notify-send -t 5000 "$TITLE" "$MESSAGE"
+
+# Linux with dunst or other libnotify
+elif command -v dunstify >/dev/null 2>&1; then
+    dunstify -t 5000 "$TITLE" "$MESSAGE"
+
+# Fallback for headless or terminal
+elif [[ -n "$DISPLAY" ]]; then
+    echo -e "\a"  # Terminal bell as fallback
+    echo "⚠️  $TITLE: $MESSAGE"
+else
+    # No display, just log
+    echo "[$(date)] $TITLE: $MESSAGE" >> /tmp/mail-notifications.log
+fi

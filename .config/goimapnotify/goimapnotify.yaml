@@ -19,21 +19,21 @@ configurations:
       - mailbox: INBOX
         interval: 10
         onNewMail: |
-          # Detect OS and use appropriate script path
+          # Detect OS and use appropriate unified script path
           if [[ "$(uname)" == "Darwin" ]]; then
-            /Users/alowree/.local/bin/mail-sync-twine
+            /Users/alowree/.config/goimapnotify/bin/mail-sync-twine
           else
-            /home/alowree/.local/bin/mail-sync-twine
+            /home/alowree/.config/goimapnotify/bin/mail-sync-twine
           fi
         onChangedMail: |
           if [[ "$(uname)" == "Darwin" ]]; then
-            /Users/alowree/.local/bin/mail-sync-twine
+            /Users/alowree/.config/goimapnotify/bin/mail-sync-twine
           else
-            /home/alowree/.local/bin/mail-sync-twine
+            /home/alowree/.config/goimapnotify/bin/mail-sync-twine
           fi
         onNewMailPost: |
           if [[ "$(uname)" == "Darwin" ]]; then
-            /Users/alowree/.local/bin/notify-mail 'New email received in Twine' 'Twine Mail'
+            /Users/alowree/.config/goimapnotify/bin/notify-mail 'Twine Mail' 'New email received in Twine'
           else
-            /home/alowree/.local/bin/notify-mail 'New email received in Twine' 'Twine Mail'
+            /home/alowree/.config/goimapnotify/bin/notify-mail 'Twine Mail' 'New email received in Twine'
           fi
