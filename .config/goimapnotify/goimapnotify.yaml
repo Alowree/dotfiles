@@ -17,9 +17,30 @@ configurations:
       fi
     boxes:
       - mailbox: INBOX
+        # interval: 10
+        # # Use $HOME for cross-platform compatibility may not work
+        # # Use /Users/alowree for testing first - see if `mbsync twine` now works
+        # onNewMail: "/Users/alowree/.local/bin/mail-sync-twine"
+        # onChangedMail: "/Users/alowree/.local/bin/mail-sync-twine"
+        # onNewMailPost: "/Users/alowree/.local/bin/notify-mail 'New email received in Twine' 'Twine Mail'"
+      - mailbox: INBOX
         interval: 10
-        # Use $HOME for cross-platform compatibility may not work
-        # Use /Users/alowree for testing first - see if `mbsync twine` now works
-        onNewMail: "/Users/alowree/.local/bin/mail-sync-twine"
-        onChangedMail: "/Users/alowree/.local/bin/mail-sync-twine"
-        onNewMailPost: "/Users/alowree/.local/bin/notify-mail 'New email received in Twine' 'Twine Mail'"
+        onNewMail: |
+          # Detect OS and use appropriate script path
+          if [[ "$(uname)" == "Darwin" ]]; then
+            /Users/alowree/.local/bin/mail-sync-twine
+          else
+            /home/alowree/.local/bin/mail-sync-twine
+          fi
+        onChangedMail: |
+          if [[ "$(uname)" == "Darwin" ]]; then
+            /Users/alowree/.local/bin/mail-sync-twine
+          else
+            /home/alowree/.local/bin/mail-sync-twine
+          fi
+        onNewMailPost: |
+          if [[ "$(uname)" == "Darwin" ]]; then
+            /Users/alowree/.local/bin/notify-mail 'New email received in Twine' 'Twine Mail'
+          else
+            /home/alowree/.local/bin/notify-mail 'New email received in Twine' 'Twine Mail'
+          fi

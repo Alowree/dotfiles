@@ -11348,3 +11348,32 @@ time="2026-06-04T10:55:49+08:00" level=info msg="issuing fake IMAP Event for fir
 time="2026-06-04T10:55:49+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 10:55:50 CST (1s in the future)" alias=twineintl mailbox=Drafts
 time="2026-06-04T10:55:54+08:00" level=info msg="stdout: \"\""
 time="2026-06-04T10:55:55+08:00" level=info msg="stdout: \"\""
+time="2026-06-04T11:42:17+08:00" level=info msg="scheduled syncing \"Changed Flag on Email\" for Thursday, 04-Jun-26 11:42:18 CST (1s in the future)" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:42:21+08:00" level=info msg="stdout: \"Channels: 1    Boxes: 7    Far: +0 *0 #0 -0    Near: +0 *1 #0 -0\\nProcessed 1 file in almost no time.\\nNo new mail. Detected 1 file rename.\\n\""
+time="2026-06-04T11:42:43+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 11:42:44 CST (1s in the future)" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:42:49+08:00" level=info msg="stdout: \"Channels: 1    Boxes: 7    Far: +0 *0 #0 -0    Near: +1 *0 #0 -0\\nProcessed 1 file in almost no time.\\nAdded 1 new message to the database.\\n\""
+time="2026-06-04T11:42:49+08:00" level=info msg="stdout: \"\""
+time="2026-06-04T11:46:54+08:00" level=info msg="connection to the server closed" alias=twineintl mailbox=Drafts
+time="2026-06-04T11:46:54+08:00" level=info msg="Restarting watcher for mailbox" alias=twineintl mailbox=Drafts
+time="2026-06-04T11:46:54+08:00" level=info msg="connection to the server closed" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:46:55+08:00" level=info msg="Restarting watcher for mailbox" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:46:55+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=Drafts
+time="2026-06-04T11:46:55+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=Drafts
+time="2026-06-04T11:46:56+08:00" level=info msg="connection to the server closed" alias=twineintl mailbox=Sent
+time="2026-06-04T11:46:56+08:00" level=info msg="Restarting watcher for mailbox" alias=twineintl mailbox=Sent
+time="2026-06-04T11:46:56+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:46:56+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:46:57+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 11:46:58 CST (1s in the future)" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:46:57+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 11:46:58 CST (1s in the future)" alias=twineintl mailbox=Drafts
+time="2026-06-04T11:46:57+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=Sent
+time="2026-06-04T11:46:57+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=Sent
+time="2026-06-04T11:46:57+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 11:46:58 CST (1s in the future)" alias=twineintl mailbox=Sent
+time="2026-06-04T11:47:02+08:00" level=info msg="stdout: \"Channels: 1    Boxes: 7    Far: +0 *0 #0 -0    Near: +0 *0 #0 -0\\nNo new mail.\\n\""
+time="2026-06-04T11:47:02+08:00" level=info msg="stdout: \"\""
+time="2026-06-04T11:47:02+08:00" level=info msg="connection to the server closed" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:47:02+08:00" level=info msg="Restarting watcher for mailbox" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:47:03+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:47:03+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:47:03+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 11:47:04 CST (1s in the future)" alias=twineintl mailbox=INBOX
+time="2026-06-04T11:47:08+08:00" level=info msg="stdout: \"Channels: 1    Boxes: 7    Far: +0 *0 #0 -0    Near: +0 *0 #0 -0\\nNo new mail.\\n\""
+time="2026-06-04T11:47:09+08:00" level=info msg="stdout: \"\""
