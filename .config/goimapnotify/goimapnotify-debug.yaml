@@ -7,19 +7,16 @@ configurations:
       starttls: false
     username: alowree@twineintl.com
     alias: twineintl
-    passwordCmd: |
-      if [[ -x /opt/homebrew/bin/pass ]]; then
-        /opt/homebrew/bin/pass Email/twineintl
-      elif [[ -x /usr/sbin/pass ]]; then
-        /usr/sbin/pass Email/twineintl
-      else
-        pass Email/twineintl
-      fi
+    passwordCmd: "/opt/homebrew/bin/pass Email/twineintl"
     boxes:
       - mailbox: INBOX
         interval: 10
-        # Use $HOME for cross-platform compatibility may not work
-        # Use /Users/alowree for testing first - see if `mbsync twine` now works
         onNewMail: "/Users/alowree/.local/bin/mail-sync-twine"
         onChangedMail: "/Users/alowree/.local/bin/mail-sync-twine"
         onNewMailPost: "/Users/alowree/.local/bin/notify-mail 'New email received in Twine' 'Twine Mail'"
+      - mailbox: Sent
+        interval: 30
+        onChangedMail: "/Users/alowree/.local/bin/mail-sync-twine"
+      - mailbox: Drafts
+        interval: 30
+        onChangedMail: "/Users/alowree/.local/bin/mail-sync-twine"

@@ -11287,3 +11287,64 @@ time="2026-06-02T16:12:15+08:00" level=info msg="ℹ Running commit , tag , bran
 time="2026-06-02T17:33:46+08:00" level=info msg="ℹ Running commit , tag , branch "
 time="2026-06-02T21:26:52+08:00" level=info msg="ℹ Running commit , tag , branch "
 time="2026-06-02T21:31:18+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-03T07:13:34+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-03T07:56:18+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T07:18:38+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T09:22:48+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T09:57:39+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:36:28+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:49:22+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:49:24+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=INBOX
+time="2026-06-04T10:49:24+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=INBOX
+time="2026-06-04T10:49:25+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=Sent
+time="2026-06-04T10:49:25+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=Sent
+time="2026-06-04T10:49:25+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 10:49:26 CST (1s in the future)" alias=twineintl mailbox=Sent
+time="2026-06-04T10:49:25+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 10:49:26 CST (1s in the future)" alias=twineintl mailbox=INBOX
+time="2026-06-04T10:49:25+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=Drafts
+time="2026-06-04T10:49:25+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=Drafts
+time="2026-06-04T10:49:25+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 10:49:26 CST (1s in the future)" alias=twineintl mailbox=Drafts
+time="2026-06-04T10:49:30+08:00" level=info msg="stdout: \"\""
+time="2026-06-04T10:49:30+08:00" level=info msg="stdout: \"\""
+time="2026-06-04T10:53:01+08:00" level=info msg="waiting other goroutines to stop..."
+time="2026-06-04T10:53:01+08:00" level=warning msg="stopping client watching mailbox" alias=twineintl mailbox=Sent
+time="2026-06-04T10:53:01+08:00" level=warning msg="stopping client watching mailbox" alias=twineintl mailbox=Drafts
+time="2026-06-04T10:53:01+08:00" level=warning msg="stopping client watching mailbox" alias=twineintl mailbox=INBOX
+           *****************************************************
+           ✨ If you like this project, consider making a donation 
+           to the author at https://ko-fi.com/K3K1XEZCQ :D ✨
+           *****************************************************
+time="2026-06-04T10:53:01+08:00" level=info msg=bye
+time="2026-06-04T10:53:50+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:53:51+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:53:59+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:54:00+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:54:10+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:54:11+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:54:21+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:54:21+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:54:31+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:54:32+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:54:42+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:54:43+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:54:53+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:54:54+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:55:04+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:55:04+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:55:14+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:55:15+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:55:25+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:55:26+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:55:36+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:55:36+08:00" level=fatal msg="cannot retrieve password from command" error="exit status 2"
+time="2026-06-04T10:55:46+08:00" level=info msg="ℹ Running commit , tag , branch "
+time="2026-06-04T10:55:47+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=INBOX
+time="2026-06-04T10:55:47+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=INBOX
+time="2026-06-04T10:55:48+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=Sent
+time="2026-06-04T10:55:48+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=Sent
+time="2026-06-04T10:55:49+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 10:55:50 CST (1s in the future)" alias=twineintl mailbox=Sent
+time="2026-06-04T10:55:49+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 10:55:50 CST (1s in the future)" alias=twineintl mailbox=INBOX
+time="2026-06-04T10:55:49+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=Drafts
+time="2026-06-04T10:55:49+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=Drafts
+time="2026-06-04T10:55:49+08:00" level=info msg="scheduled syncing \"New Email\" for Thursday, 04-Jun-26 10:55:50 CST (1s in the future)" alias=twineintl mailbox=Drafts
+time="2026-06-04T10:55:54+08:00" level=info msg="stdout: \"\""
+time="2026-06-04T10:55:55+08:00" level=info msg="stdout: \"\""
