@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-SUBJECT="$1"
-BODY="$2"
-if [[ "$(uname)" == "Darwin" ]]; then
-  osascript -e "display notification \"$BODY\" with title \"$SUBJECT\""
-else
-  notify-send "$SUBJECT" "$BODY"
-fi

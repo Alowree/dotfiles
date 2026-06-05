@@ -25,15 +25,3 @@ configurations:
           else
             /home/alowree/.config/goimapnotify/bin/mail-sync-twine
           fi
-        onChangedMail: |
-          if [[ "$(uname)" == "Darwin" ]]; then
-            /Users/alowree/.config/goimapnotify/bin/mail-sync-twine
-          else
-            /home/alowree/.config/goimapnotify/bin/mail-sync-twine
-          fi
-        onNewMailPost: |
-          if [[ "$(uname)" == "Darwin" ]]; then
-            /Users/alowree/.config/goimapnotify/bin/notify-mail 'Twine Mail' 'New email received in Twine'
-          else
-            /home/alowree/.config/goimapnotify/bin/notify-mail 'Twine Mail' 'New email received in Twine'
-          fi
