@@ -167,9 +167,11 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/sbin/goimapnotify -conf %h/.config/goimapnotify/goimapnotify.yaml
+ExecStart=/usr/sbin/goimapnotify -conf /home/alowree/.config/goimapnotify/goimapnotify.yaml -log-level info
 Restart=always
 RestartSec=10
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=default.target
@@ -193,6 +195,9 @@ On macOS:
 tail -f ~/.config/goimapnotify/stdout.log
 tail -f ~/.config/goimapnotify/stderr.log
 ```
+
+On Arch Linux:
+
 
 ### How do I know if the notification daemon is currently running?
 
@@ -221,5 +226,44 @@ On Linux, notifications require a running daemon (like `dunst`, `mako`, or the o
    If the command hangs or returns an error like "Basename: notify-send: command not found" or "GDBus.Error...NameHasNoOwner", no daemon is listening.
 
 ---
+
+```
+╭╴  alowree on Arch Linux at ~ took  7s
+╰─❯ systemctl --user status goimapnotify-twine.service
+● goimapnotify-twine.service - goimapnotify for Twine account
+     Loaded: loaded (/home/alowree/.config/systemd/user/goimapnotify-twine.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Sat 2026-06-06 16:02:08 HKT; 8s ago
+ Invocation: 4b74ebd1b0fb40c4b9079c0c432b1fc6
+    Process: 1464 ExecStart=/usr/sbin/goimapnotify -conf /home/alowree/.config/goimapnotify/goimapnotify.yaml -log-level info (code=exited, status=1/FAILURE)
+   Main PID: 1464 (code=exited, status=1/FAILURE)
+   Mem peak: 11.9M
+        CPU: 43ms
+
+╭╴  alowree on Arch Linux at ~
+╰─❯ nm
+
+╭╴  alowree on Arch Linux at ~ took  14s
+╰─❯ systemctl --user status goimapnotify-twine.service
+● goimapnotify-twine.service - goimapnotify for Twine account
+     Loaded: loaded (/home/alowree/.config/systemd/user/goimapnotify-twine.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-06-06 16:02:29 HKT; 14s ago
+ Invocation: 36b22b6611d6478cb74db1d2e2504f30
+   Main PID: 1870 (goimapnotify)
+      Tasks: 11 (limit: 16317)
+     Memory: 13.5M (peak: 15.8M)
+        CPU: 175ms
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/goimapnotify-twine.service
+             ├─1870 /usr/sbin/goimapnotify -conf /home/alowree/.config/goimapnotify/goimapnotify.yaml -log-level info
+             ├─2028 sh -c "# Detect OS and use appropriate unified script path\nif [[ \"\$(uname)\" == \"Darwin\" ]]; then\n  /Users/alowree/.config/goimapnotify/bin/mail-sync-twine\nelse\n  /home/alowree/.config/goimapnotify/bin/mail-sync-twine\nfi\n"
+             ├─2030 /bin/bash /home/alowree/.config/goimapnotify/bin/mail-sync-twine
+             └─2043 /usr/sbin/mbsync twine
+
+Jun 06 16:02:29 alowree-arch-pro16 systemd[641]: goimapnotify-twine.service: Scheduled restart job, restart counter is at 4.
+Jun 06 16:02:29 alowree-arch-pro16 systemd[641]: Started goimapnotify for Twine account.
+Jun 06 16:02:29 alowree-arch-pro16 goimapnotify[1870]: time="2026-06-06T16:02:29+08:00" level=info msg="ℹ Running commit , tag , branch "
+Jun 06 16:02:36 alowree-arch-pro16 goimapnotify[1870]: time="2026-06-06T16:02:36+08:00" level=info msg="issuing fake IMAP Event for first time sync" alias=twineintl mailbox=INBOX
+Jun 06 16:02:36 alowree-arch-pro16 goimapnotify[1870]: time="2026-06-06T16:02:36+08:00" level=info msg="Watching mailbox" alias=twineintl mailbox=INBOX
+Jun 06 16:02:36 alowree-arch-pro16 goimapnotify[1870]: time="2026-06-06T16:02:36+08:00" level=info msg="scheduled syncing \"New Email\" for Saturday, 06-Jun-26 16:02:37 HKT (1s in the future)" alias=twineintl mailbox=INBOX
+```
 
 _Generated based on local configuration files on 2026-06-05._
