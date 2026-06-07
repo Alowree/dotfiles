@@ -198,7 +198,6 @@ tail -f ~/.config/goimapnotify/stderr.log
 
 On Arch Linux:
 
-
 ### How do I know if the notification daemon is currently running?
 
 On Linux, notifications require a running daemon (like `dunst`, `mako`, or the one built into GNOME/KDE). To check if one is active:
@@ -225,7 +224,9 @@ On Linux, notifications require a running daemon (like `dunst`, `mako`, or the o
 
    If the command hangs or returns an error like "Basename: notify-send: command not found" or "GDBus.Error...NameHasNoOwner", no daemon is listening.
 
----
+## Passphrase
+
+On each restart of the computer and the terminal, `goimapnotify` is unable to connect to the twine email server, this is due to the command behind field `passwordCmd` is not properly executed. But after you run `neomutt` and key in the passphrase in the pop up terminal, the entire pipe is then fully connected. See below interactions with the shell:
 
 ```
 ╭╴  alowree on Arch Linux at ~ took  7s
@@ -240,7 +241,7 @@ On Linux, notifications require a running daemon (like `dunst`, `mako`, or the o
         CPU: 43ms
 
 ╭╴  alowree on Arch Linux at ~
-╰─❯ nm
+╰─❯ nm  # key in passphrase
 
 ╭╴  alowree on Arch Linux at ~ took  14s
 ╰─❯ systemctl --user status goimapnotify-twine.service
@@ -266,4 +267,70 @@ Jun 06 16:02:36 alowree-arch-pro16 goimapnotify[1870]: time="2026-06-06T16:02:36
 Jun 06 16:02:36 alowree-arch-pro16 goimapnotify[1870]: time="2026-06-06T16:02:36+08:00" level=info msg="scheduled syncing \"New Email\" for Saturday, 06-Jun-26 16:02:37 HKT (1s in the future)" alias=twineintl mailbox=INBOX
 ```
 
-_Generated based on local configuration files on 2026-06-05._
+Now that `pass` is able to view all your passwords inside the `.password-store` already, why `neomutt` does not login automatically but pops up a terminal asking for passphrase? Is there an option that I can possibly skip the pop up terminal and key-in of passphrase?
+
+You have identified the core issue correctly: `pass` works in the terminal, but `goimapnotify` and `neomutt` are failing to access it automatically.
+
+The problem isn't that `pass` is broken, but rather that **`pass` uses GnuPG (gpg) to decrypt your passwords, and GnuPG requires access to a `pinentry` program to get the passphrase for your GPG key**.
+
+Here is what is happening step-by-step:
+
+1. **On system startup**: `goimapnotify` tries to run your `passwordCmd` (likely something like `pass show Email/twineintl`). This command fires up `gpg` to decrypt the password file.
+2. **GPG looks for `pinentry`**: `gpg` sees that your private GPG key is encrypted and needs a passphrase to unlock it. By default, it tries to launch a graphical `pinentry` program (like `pinentry-gnome3`, `pinentry-qt`, etc.).
+3. **`pinentry` Fails**: Because this is happening from a systemd service or a headless context (no graphical session available or the necessary environment variables like `DISPLAY`, `DBUS_SESSION_BUS_ADDRESS` are not set correctly), the `pinentry` program fails to launch. `gpg` then returns an error, and `goimapnotify` fails to get the password.
+4. **You run `neomutt`**: When you type `nm`, your terminal session has the correct environment variables. `neomutt` (or more likely, a command within it) calls `pass` or `gpg`, which this time successfully launches a `pinentry` dialog _inside your terminal_ (using `pinentry-curses` or `pinentry-tty`).
+5. **The "pipe" is connected**: Once you successfully unlock your GPG key in the terminal, `gpg-agent` caches the passphrase for a certain time. Now, when `goimapnotify`'s auto-restart kicks in and runs the `passwordCmd` again, the `gpg` command finds the already-unlocked key in the agent and succeeds, providing the password without any prompt.
+
+### The Solution: Force `gpg` to Use a Terminal `pinentry` at the System Level
+
+The fix is to configure GnuPG globally to use a `pinentry` program that works from anywhere, not just in a full desktop session. The best option is `pinentry-curses` or `pinentry-tty`, which work in any terminal environment.
+
+However, since `goimapnotify` is running as a systemd **user** service, it might still lack a terminal. A more robust method is to use the `loopback` mode, which allows `gpg` to get the passphrase directly from the calling program's standard input. But because `passwordCmd` doesn't allow passing arguments, that's not directly possible.
+
+Thus, the most practical solution is to **preseed the GPG key cache** on boot.
+
+**Here is the recommended workflow to fix your issue for good:**
+
+1. **Set `pinentry-program` to a terminal-based version** in `~/.gnupg/gpg-agent.conf`:
+
+   ```bash
+   # ~/.gnupg/gpg-agent.conf
+   pinentry-program /usr/bin/pinentry-curses
+   ```
+
+   Then restart the agent with `gpg-connect-agent reloadagent /bye`.
+
+2. **Unlock your key on login** by adding a simple command to your shell's startup file (e.g., `~/.bashrc`, `~/.zshrc`):
+
+   ```bash
+   # At the end of your ~/.zshrc or ~/.bashrc
+   pass show Email/twineintl > /dev/null 2>&1 &
+   ```
+
+   This runs `pass` in the background on every new terminal you open. It will trigger the `pinentry` prompt once, and afterward, your key is cached for the session's duration. Since you run `nm` in a terminal anyway, this step effectively makes the requirement explicit rather than implicit.
+
+3. **Increase the cache timeout** (optional) in `~/.gnupg/gpg-agent.conf`:
+
+   ```
+   default-cache-ttl 28800
+   max-cache-ttl 86400
+   ```
+
+   This keeps the passphrase cached for a longer period (8 hours and 24 hours respectively), so you won't be prompted again on every `goimapnotify` restart.
+
+### Alternative: Configure NeoMutt to Use `pass` Directly
+
+You mentioned that NeoMutt pops up a prompt. You can configure NeoMutt to use your `pass` credentials automatically, which might bypass the issue.
+
+In your `neomuttrc`, you can set the IMAP password directly from the `pass` command using backticks:
+
+```bash
+# In your .neomuttrc or account-specific config file
+set imap_pass=`pass show Email/twineintl`
+```
+
+This method may still trigger the `pinentry` prompt when NeoMutt first needs the password, but it will happen in a terminal context (which works) rather than a systemd service context (which fails). This could be a simpler solution than modifying `goimapnotify`, as NeoMutt is already being launched from your terminal where the environment is correct.
+
+### Key Takeaway
+
+You are dealing with two separate contexts: the **systemd service context** (where `goimapnotify` runs) and your **user terminal context** (where `neomutt` runs). The systemd service lacks the graphical environment to show a password prompt, causing it to fail. Running `neomutt` from your terminal unlocks the GPG key in an environment that _can_ show the prompt, and that unlocked key is then available to the systemd service when it restarts. The solution is to ensure your GPG key gets unlocked in a user context that persists, either by using terminal-based `pinentry` programs or by unlocking it automatically at shell startup.

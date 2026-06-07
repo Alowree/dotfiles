@@ -8,6 +8,7 @@ prepend_keymap = [
   { on = ["g", "f"], run = "follow", desc = "Follow hovered symlink" },
   # Alowree Custom New Rules
   { on = ["g", "w"], run = "cd ~/OneDrive/Documents", desc = "Go ~/OneDrive/Documents" },
+  { on = ["g", "y"], run = "cd ~/OneDrive/50.marketing_communications/08.YouTube", desc = "Go YouTube" },
   { on = ["g", "t"], run = "cd ~/Teek", desc = "cd to ~/Teek" },
 
   # TODO: firstly learn about marks in Vim

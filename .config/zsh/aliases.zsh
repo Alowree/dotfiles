@@ -2,22 +2,9 @@
 # ~/.config/zsh/aliases.zsh
 
 # Description: Clean, focused Zsh aliases for macOS
+# 2026-05-31: Maintain the same set of configuration for macOS and Arch Linux
 
 ## SECTION 1: FILE LISTING
-
-# # Core ls for macOS (BSD)
-# alias ls='ls -G'     # -G enables color on macOS
-#
-#
-# # Only run this on macOS, but not on Arch Linux
-# if [[ "$(uname)" == "Darwin" ]]; then
-#   alias ls='ls -G'     # -G enables color on macOS
-# fi
-#
-# # Only run this on Arch Linux, but not on macOS
-# if [[ "$(uname)" == "Linux" ]]; then
-#   alias ls='ls --color=auto'
-# fi
 
 case "$(uname -s)" in
   Darwin) alias ls='ls -G' ;;
@@ -151,7 +138,8 @@ alias nv='nvim'         # Short alias for Neovim
 alias edit='nvim'       # Primary editor command
 
 # Conditional aliases (only define if commands exist)
-(( $+commands[yt-dlp.exe] )) && alias yt='yt-dlp.exe'
+# (( $+commands[yt-dlp.exe] )) && alias yt='yt-dlp.exe'
+(( $+commands[yt-dlp] )) && alias yt='yt-dlp'
 (( $+commands[neomutt] )) && alias nm='neomutt'
 
 
