@@ -2,3 +2,4 @@ dotfiles
 
 # Local secrets
 .zshrc.local
+.password-store/
