@@ -1,25 +1,62 @@
 [mgr]
 prepend_keymap = [
   # Default Goto
-  { on = ["g", "h"], run = "cd ~", desc = "Go home" },
-  { on = ["g", "c"], run = "cd ~/.config", desc = "Go ~/.config" },
-  { on = ["g", "d"], run = "cd ~/Downloads", desc = "Go ~/Downloads" },
-  { on = ["g", "<Space>"], run = "cd --interactive", desc = "Jump interactively" },
-  { on = ["g", "f"], run = "follow", desc = "Follow hovered symlink" },
+  { on = [
+    "g",
+    "h",
+  ], run = "cd ~", desc = "Go home" },
+  { on = [
+    "g",
+    "c",
+  ], run = "cd ~/.config", desc = "Go ~/.config" },
+  { on = [
+    "g",
+    "d",
+  ], run = "cd ~/Downloads", desc = "Go ~/Downloads" },
+  { on = [
+    "g",
+    "<Space>",
+  ], run = "cd --interactive", desc = "Jump interactively" },
+  { on = [
+    "g",
+    "f",
+  ], run = "follow", desc = "Follow hovered symlink" },
   # Alowree Custom New Rules
-  { on = ["g", "w"], run = "cd ~/OneDrive/Documents", desc = "Go ~/OneDrive/Documents" },
-  { on = ["g", "y"], run = "cd ~/OneDrive/50.marketing_communications/08.YouTube", desc = "Go YouTube" },
-  { on = ["g", "t"], run = "cd ~/Teek", desc = "cd to ~/Teek" },
+  { on = [
+    "g",
+    "w",
+  ], run = "cd ~/OneDrive/Documents", desc = "Go ~/OneDrive/Documents" },
+  { on = [
+    "g",
+    "y",
+  ], run = "cd ~/OneDrive/50.marketing_communications/08.YouTube", desc = "Go YouTube" },
+  { on = [
+    "g",
+    "m",
+  ], run = "cd ~/OneDrive/marapython", desc = "cd to marapython" },
 
   # TODO: firstly learn about marks in Vim
-  { on = ["m"], run = "plugin bookmarks save", desc = "Save current position as a bookmark" },
-  { on = ["'"], run = "plugin bookmarks jump", desc = "Jump to a bookmark" },
-  { on = ["b", "d"], run = "plugin bookmarks delete", desc = "Delete a bookmark" },
-  { on = ["b", "D"], run = "plugin bookmarks delete_all", desc = "Delete all bookmarks" },
+  { on = [
+    "m",
+  ], run = "plugin bookmarks save", desc = "Save current position as a bookmark" },
+  { on = [
+    "'",
+  ], run = "plugin bookmarks jump", desc = "Jump to a bookmark" },
+  { on = [
+    "b",
+    "d",
+  ], run = "plugin bookmarks delete", desc = "Delete a bookmark" },
+  { on = [
+    "b",
+    "D",
+  ], run = "plugin bookmarks delete_all", desc = "Delete all bookmarks" },
 
   # For compression, with plugin ouch.yazi
   # First select files with `v`
-  { on = ["c", "p"], run = "plugin ouch", desc = "Compress with ouch" },
+  { on = [
+    "c",
+    "p",
+  ], run = "plugin ouch", desc = "Compress with ouch" },
 
   # macOS: macos-trash.yazi - Opens a UI browser
   { on = "R", run = "plugin macos-trash", desc = "Open macOS Trash", for = "macos" },
@@ -27,10 +64,28 @@ prepend_keymap = [
   # { on = ["R", "r"], run = "plugin macos-trash", desc = "Open Trash Browser", for = "macos" },
 
   # Linux: recycle-bin.yazi - Individual commands
-  { on = ["R", "m"], run = "plugin recycle-bin -- menu", desc = "Open Trash Menu", for = "linux" },
-  { on = ["R", "o"], run = "plugin recycle-bin -- open", desc = "Open Trash Directory", for = "linux" },
-  { on = ["R", "e"], run = "plugin recycle-bin -- empty", desc = "Empty Trash", for = "linux" },
-  { on = ["R", "D"], run = "plugin recycle-bin -- emptyDays", desc = "Empty by days deleted", for = "linux" },
-  { on = ["R", "d"], run = "plugin recycle-bin -- delete", desc = "Delete from Trash", for = "linux" },
-  { on = ["R", "r"], run = "plugin recycle-bin -- restore", desc = "Restore from Trash", for = "linux" },
+  { on = [
+    "R",
+    "m",
+  ], run = "plugin recycle-bin -- menu", desc = "Open Trash Menu", for = "linux" },
+  { on = [
+    "R",
+    "o",
+  ], run = "plugin recycle-bin -- open", desc = "Open Trash Directory", for = "linux" },
+  { on = [
+    "R",
+    "e",
+  ], run = "plugin recycle-bin -- empty", desc = "Empty Trash", for = "linux" },
+  { on = [
+    "R",
+    "D",
+  ], run = "plugin recycle-bin -- emptyDays", desc = "Empty by days deleted", for = "linux" },
+  { on = [
+    "R",
+    "d",
+  ], run = "plugin recycle-bin -- delete", desc = "Delete from Trash", for = "linux" },
+  { on = [
+    "R",
+    "r",
+  ], run = "plugin recycle-bin -- restore", desc = "Restore from Trash", for = "linux" },
 ]
