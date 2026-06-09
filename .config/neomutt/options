@@ -164,8 +164,8 @@ auto_view text/html text/enriched text/x-vcard application/x-pkcs7-signature
 ###############################################################################
 # CACHING
 ###############################################################################
-set header_cache = "~/.cache/neomutt"
-set message_cache_dir = "~/.cache/neomutt"    # Message cache location
+set header_cache = "~/.cache/neomutt/headers"
+set message_cache_dir = "~/.cache/neomutt/messages"    # Message cache location
 
 ###############################################################################
 # NETWORK AND MAIL CHECKING

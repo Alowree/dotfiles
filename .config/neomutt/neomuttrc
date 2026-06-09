@@ -35,7 +35,10 @@ macro index,pager <F3> '\
 <change-folder>imaps://alowree@biaget.com@imap.263.net/INBOX<enter>\
 ' "Switch to Biaget account"
 
-macro index,pager <f4> '<sync-mailbox><enter-command>source ~/.config/neomutt/accounts/remote-soundfreaq <enter><change-folder>!<enter>'
+macro index,pager <F4> '\
+<enter-command>source ~/.config/neomutt/accounts/remote-soundfreaq<enter>\
+<change-folder>imaps://alowree@soundfreaq.com@imap.gmail.com/INBOX<enter>\
+' "Switch to Soundfreaq account"
 
 #### ------------------------------------------------------------------------------------------
 #### General Settings

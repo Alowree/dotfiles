@@ -9,10 +9,8 @@ set real_name = "Alowree Xu - Soundfreaq"
 
 # Basic Account Setup
 set imap_user = $from
-# set imap_authenticators = 'oauthbearer:xoauth2'
-set imap_authenticators = 'oauthbearer'
-# set smtp_authenticators = 'oauthbearer:xoauth2'
-set smtp_authenticators = 'oauthbearer'
+set imap_authenticators = "oauthbearer:xoauth2"
+set smtp_authenticators = "oauthbearer:xoauth2"
 
 # Token Retrieval Command
 # This tells NeoMutt: "Don't ask for a password, run this script instead"
