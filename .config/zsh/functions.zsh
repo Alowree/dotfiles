@@ -138,7 +138,8 @@ bing() {
         [[ -f "$brave_path" ]] && "$brave_path" "$url" || start "$url"
     else
         # Linux Fallback
-        brave-browser "$url" 2>/dev/null || xdg-open "$url"
+        # This opens up the default browser Zen
+        nohup xdg-open "$url" &>/dev/null &
     fi
 }
 
