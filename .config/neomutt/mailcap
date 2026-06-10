@@ -75,11 +75,16 @@ audio/*; mpv --loop --audio-display=no %s;
 # SPREADSHEETS (Excel) Option B: GUI
 # ============================================================================
 # Let macOS handle the file association (will open Excel for .xlsx/.xls)
-application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; open %s
-application/vnd.ms-excel; open %s
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; open %s; test=[ "$(uname)" = "Darwin" ]
+application/vnd.ms-excel; open %s; test=[ "$(uname)" = "Darwin" ]
+
+# Linux: Use LibreOffice
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; libreoffice %s; test=[ "$(uname)" = "Linux" ]
+application/vnd.ms-excel; libreoffice %s; test=[ "$(uname)" = "Linux" ]
 
 # Fallback for misidentified Excel files
-application/octet-stream; open %s; test=echo %s | grep -qiE '\.(xlsx|xls)$'
+application/octet-stream; open %s; test=[ "$(uname)" = "Darwin" ] && echo %s | grep -qiE '\.(xlsx|xls)$'
+application/octet-stream; libreoffice %s; test=[ "$(uname)" = "Linux" ] && echo %s | grep -qiE '\.(xlsx|xls)$'
 
 # ============================================================================
 # WORD PROCESSING DOCUMENTS
