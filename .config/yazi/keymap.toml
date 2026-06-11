@@ -32,8 +32,8 @@ prepend_keymap = [
   ], run = "cd ~/OneDrive/50.marketing_communications/08.YouTube", desc = "Go YouTube" },
   { on = [
     "g",
-    "m",
-  ], run = "cd ~/OneDrive/marapython", desc = "cd to marapython" },
+    "t",
+  ], run = "cd ~/Teek", desc = "cd to Teek" },
 
   # TODO: firstly learn about marks in Vim
   { on = [
