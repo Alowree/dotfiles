@@ -19,17 +19,24 @@ function M:peek(job)
 			:stdout(Command.PIPED)
 			:stderr(Command.PIPED)
 			:output()
-	elseif ext == "xls" then
-		-- Use ssconvert for legacy .xls files
-		output, err = Command("ssconvert")
-			:arg({ "--export-type=Gnumeric_stf:stf_csv", file_path, "fd://1" })
-			:stdout(Command.PIPED)
-			:stderr(Command.PIPED)
-			:output()
-	else
-		-- Use pandoc for .xlsx files
-		output, err = Command("pandoc")
-			:arg({ "-f", "xlsx", "-t", "plain", "--wrap=none", file_path })
+	elseif ext == "xls" or ext == "xlsx" then
+		-- Use LibreOffice (soffice) as a universal converter for .xls and .xlsx
+		-- Convert to CSV in a temporary directory and read it
+		output, err = Command("sh")
+			:arg({
+				"-c",
+				[[
+					tmpdir=$(mktemp -d)
+					soffice --headless --convert-to csv --outdir "$tmpdir" "$1" > /dev/null 2>&1
+					csv_file="$tmpdir/$(basename "${1%.*}").csv"
+					if [ -f "$csv_file" ]; then
+						head -n 100 "$csv_file" | column -s, -t
+					fi
+					rm -rf "$tmpdir"
+				]],
+				"X",
+				file_path,
+			})
 			:stdout(Command.PIPED)
 			:stderr(Command.PIPED)
 			:output()
