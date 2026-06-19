@@ -1,0 +1,12 @@
+# Save all downloaded videos under the YouTube directory on your OneDrive
+-o ~/OneDrive/50.marketing_communications/08.YouTube/%(title)s.%(ext)s
+
+# Prefer 1080p mp4
+-f 'bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'
+
+# Include subtitles
+--write-sub
+--sub-lang en
+
+# Use a specific output template
+# -o '%(uploader)s/%(title)s-%(id)s.%(ext)s'
