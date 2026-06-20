@@ -37,7 +37,7 @@ hl.bind(secondMod .. " + Space", hl.dsp.exec_cmd(runner))
 
 -- apps
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(fileManager))
 
 -- Layout specific (scrolling layout)

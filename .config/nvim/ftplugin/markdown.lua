@@ -60,3 +60,85 @@ pcall(function()
   vim.keymap.del("n", "]c", { buffer = true })
 end)
 set_keymaps()
+
+-- ===============================================
+-- 5. Using Typst in Neovim 2026-06-17
+-- ===============================================
+
+-- 5.1: Asynchronous Markdown to PDF via Pandoc + Typst Pipe
+vim.keymap.set("n", "<Leader>mp", function()
+  if vim.bo.filetype ~= "markdown" then
+    vim.notify("Not a markdown file", vim.log.levels.WARN)
+    return
+  end
+
+  local source = vim.fn.expand("%")
+  local target = vim.fn.expand("%:r") .. ".pdf"
+
+  vim.notify("Compiling PDF via Pandoc & Typst...", vim.log.levels.INFO)
+
+  -- Pipe pandoc output directly into typst compiler
+  local cmd = string.format("pandoc '%s' --to=typst | typst compile - '%s'", source, target)
+
+  vim.fn.jobstart({ "sh", "-c", cmd }, {
+    on_exit = function(_, exit_code)
+      if exit_code == 0 then
+        vim.notify("PDF generated: " .. target, vim.log.levels.INFO)
+      else
+        vim.notify("Compilation failed! Check syntax or document structures.", vim.log.levels.ERROR)
+      end
+    end,
+  })
+end, { desc = "[M]arkdown to [P]DF" })
+
+-- 5.2: Live Watch Toggle (Re-compiles your PDF automatically whenever you save)
+local watch_autocmd_id = nil
+vim.keymap.set("n", "<Leader>mw", function()
+  if vim.bo.filetype ~= "markdown" then
+    return
+  end
+
+  if watch_autocmd_id then
+    vim.api.nvim_del_autocmd(watch_autocmd_id)
+    watch_autocmd_id = nil
+    vim.notify("Typst live watch stopped.", vim.log.levels.INFO)
+  else
+    local bufnr = vim.api.nvim_get_current_buf()
+    watch_autocmd_id = vim.api.nvim_create_autocmd("BufWritePost", {
+      buffer = bufnr,
+      callback = function()
+        local source = vim.fn.expand("%")
+        local target = vim.fn.expand("%:r") .. ".pdf"
+        local cmd = string.format("pandoc '%s' --to=typst | typst compile - '%s'", source, target)
+        vim.fn.jobstart({ "sh", "-c", cmd })
+      end,
+    })
+    vim.notify("Typst live watching... Saving updates the PDF instantly.", vim.log.levels.INFO)
+  end
+end, { desc = "[M]arkdown live [W]atch toggle" })
+
+-- 5.3 Open Generated PDF
+-- Open the generated PDF file using the system default viewer
+vim.keymap.set("n", "<Leader>mo", function()
+  local pdf_file = vim.fn.expand("%:r") .. ".pdf"
+
+  if vim.fn.filereadable(pdf_file) == 1 then
+    -- Run xdg-open in the background securely detached from Neovim
+    vim.fn.jobstart({ "xdg-open", pdf_file }, { detach = true })
+  else
+    vim.notify("No matching PDF found. Export it first!", vim.log.levels.WARN)
+  end
+end, { desc = "[M]arkdown [O]pen PDF" })
+
+-- 5.4 Custom Styling Header Injection
+-- Inject standard Typst styling configurations to the top of the file
+vim.keymap.set("n", "<Leader>ms", function()
+  local lines = {
+    '#show: doc => doc with paper: "a4", margins: 2.5cm',
+    '#set text(font: "Liberation Sans", size: 11pt, lang: "en")',
+    "#set par(justify: true)",
+    "",
+  }
+  vim.api.nvim_buf_set_lines(0, 0, 0, false, lines)
+  vim.notify("Typst styling rules injected at top.", vim.log.levels.INFO)
+end, { desc = "[M]arkdown inject Typst [S]tyles" })

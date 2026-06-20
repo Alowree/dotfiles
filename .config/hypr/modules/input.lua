@@ -15,14 +15,14 @@ hl.config({
 
 		follow_mouse = 1,
 
-		sensitivity = 0, -- from -1.0 - 1.0; 0 is default
+		sensitivity = 0.8, -- from -1.0 - 1.0; 0 is default
 
 		touchpad = {
 			natural_scroll = false, -- Invert scroll direction
 			disable_while_typing = true, -- Prevent accidental clicks
 			tap_to_click = true,
 			drag_lock = false,
-			scroll_factor = 1.0, -- Adjust scrolling speed
+			scroll_factor = 0.5, -- Adjust scrolling speed
 		},
 	},
 })

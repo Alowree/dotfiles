@@ -39,6 +39,13 @@ hl.window_rule({ name = "float-pavucontrol", match = { class = "pavucontrol" }, 
 hl.window_rule({ name = "float-pavucontrol-qt", match = { class = "org.pulseaudio.pavucontrol" }, float = true })
 hl.window_rule({ name = "float-nm-editor", match = { class = "nm-connection-editor" }, float = true })
 hl.window_rule({ name = "float-blueman", match = { class = "blueman-manager" }, float = true })
+-- Force Loupe image viewer to open in floating mode
+hl.window_rule({
+	match = { class = "org.gnome.Loupe" },
+	float = true,
+	size = { 1080, 720 }, -- Sets a comfortable default width and height
+	center = true, -- Centers the floating window on launch
+})
 
 -- Rofi styling
 hl.window_rule({

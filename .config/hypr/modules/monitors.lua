@@ -39,7 +39,7 @@ hl.monitor({
 	output = "desc:Dell Inc. DELL U2723QE H5BJ834",
 	mode = "preferred",
 	position = "auto-right", -- Automatically places it to the right of your laptop
-	scale = 2,
+	scale = 1.5,
 	-- mirror = "eDP-1", -- This forces the Dell monitor to replicate eDP-1
 })
 
