@@ -14,8 +14,8 @@ set smtp_authenticators = "oauthbearer:xoauth2"
 
 # Token Retrieval Command
 # This tells NeoMutt: "Don't ask for a password, run this script instead"
-set imap_oauth_refresh_command = "$HOME/.local/bin/mutt_oauth2.py ~/.config/secrets/soundfreaq.tokens"
-set smtp_oauth_refresh_command = "$HOME/.local/bin/mutt_oauth2.py ~/.config/secrets/soundfreaq.tokens"
+set imap_oauth_refresh_command = "$HOME/.local/bin/mutt_oauth2.py ~/.password-store/Token/soundfreaq.tokens.gpg"
+set smtp_oauth_refresh_command = "$HOME/.local/bin/mutt_oauth2.py ~/.password-store/Token/soundfreaq.tokens.gpg"
 
 set folder = "imaps://imap.gmail.com:993"
 set spool_file = "+INBOX"
@@ -26,8 +26,6 @@ set postponed = "+Drafts"
 set trash = "+Trash"
 set record = "+Sent"
 
-
-
 # Account 1: mailboxes and folder hook (remote server only)
 # Local maildir polling removed to avoid showing local sync results.
 # The remote IMAP mailboxes are exposed below for use with the IMAP folder.
@@ -35,10 +33,8 @@ set record = "+Sent"
 # mailboxes in the sidebar
 mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
 
-
 ## Hook -- IMPORTANT!
 # account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
-
 
 # 设置签名文件的位置
 # set signature = "~/.config/neomutt/accounts/twine-signature"
