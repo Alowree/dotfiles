@@ -143,8 +143,11 @@ bind attach                     <space> view-mailcap
 # ============================================================================
 # EXTERNAL INTEGRATIONS & MACROS
 # ============================================================================
-# FZF Attachment (Compose Mode)
-macro compose \Ca ":source ~/.config/neomutt/bin/attach_browser_fzf.sh|<enter>"
+# Add Attachment (Compose Mode)
+# option A: yazi
+macro compose \Ca ":source ~/.config/neomutt/bin/attach_browser_yazi.sh|<enter>"
+# option B: fzf
+# macro compose \Ca ":source ~/.config/neomutt/bin/attach_browser_fzf.sh|<enter>"
 
 # Khard Address Book Integration
 macro index,pager A "<pipe-message>khard add-email --headers=from,cc --skip-already-added<return>"
