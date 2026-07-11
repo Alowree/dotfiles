@@ -16,16 +16,11 @@ source "$ZDOTDIR/prompt.zsh"
 # ====================================================
 # SECTION 6: COMPLETION SYSTEM
 # ====================================================
-
-# Load completion system
-autoload -Uz compinit 
-
-# By default, compinit creates a file called .zcompdump
-# in the same directory as your zsh configuration files
-# which is ~/.config/zsh/ in your case.
-
-# Initialize completion with cached metadata file
-compinit -d "${XDG_CACHE_HOME}/zsh/zcompdump"
+# Bread on Penguis 2026-06-27
+zmodload zsh/complist
+autoload -U compinit && compinit
+autoload -U colors && colors
+autoload -U tetris
 
 # Make completion case-insensitive
 # Example: "doc" can complete to "Documents"

@@ -25,9 +25,7 @@ fi
 # Prepend so they can override Homebrew if needed
 # For use of goimapnotify, which is compiled by Go. 2026-01-29
 export PATH="$HOME/go/bin:$PATH"                       # Go
-
-# I dont use Rust yet
-# export PATH="$HOME/.cargo/bin:$PATH"                   # Rust
+export PATH="$HOME/.cargo/bin:$PATH"                   # Rust
 
 # Will Neovim handle this automatically?
 # export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"  # Neovim LSP
@@ -58,3 +56,17 @@ if [[ "$(uname)" == "Darwin" ]]; then
         sleep 1
     fi
 fi
+
+# Antigravity CLI 2026-06-22 on Arch Linux
+# 1. Export your true active session address
+# if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+#     export $(dbus-launch --exit-with-session)
+# fi
+
+# 2. Manually unlock and start the Keyring Daemon
+# export $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+#
+# Turns out we don't need any of these codes
+# Antigravity CLI uses complete deiffernt API end points
+# daily-cloudcode-pa.googleapis.com
+#	Simply change the loging site to North America - United States

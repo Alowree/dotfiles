@@ -27,15 +27,15 @@ nvims() {
     local config
     local -a items=(
         "default"
-        "nvim-lazy"
+        "nvim-scratch"
         "nvim-tduyng"
     )
 
     config=$(printf "%s\n" "${items[@]}" | \
             fzf --prompt=" Neovim Config ✨ " \
-            --height=50% \
-            --layout=reverse \
-        --border)
+                --height=50% \
+                --layout=reverse \
+                --border)
 
     if [[ -z "$config" ]]; then
         echo "Nothing selected"
