@@ -6,8 +6,8 @@ This directory contains my zsh configuration organized according to XDG Base Dir
 
 According to the official zsh documentation [The Z Shell Manual - Files](https://zsh.sourceforge.io/Doc/Release/Files.html#Files), zsh reads several startup files to initialize the shell environment:
 
-- [ ] `/etc/zshenv` - System-wide initialization
-- [x] `~/.zshenv` - User-specific initialization
+- [x] `/etc/zsh/zshenv` on Arch Linux and `/etc/zshenv` on macOS - System-wide symlink pointing to `$ZDOTDIR/.zshenv`
+- [ ] `~/.zshenv` - Not used (replaced by system-wide symlink)
 - [ ] `/etc/zprofile` - System-wide login shell initialization
 - [x] `~/.zprofile` - User-specific login shell initialization
 - [ ] `/etc/zshrc` - System-wide interactive shell initialization
@@ -17,17 +17,21 @@ According to the official zsh documentation [The Z Shell Manual - Files](https:/
 
 I used to have one single `~/.zshrc` to start as a beginner, and then over time, I gradually migrated from the all-in-one configuration file to several separate modules for ease of maintenance. Later on, the original one configuration file `~/.zshrc` gets split into three separate files: `~/.zshenv`, `~/.zprofile`, and `~/.zshrc`, as checked above.
 
-To avoid a cluttered home folder, I've moved them all to the `ZDOTDIR` directory, and created a symlink in the home instead.
+To avoid a cluttered home folder, I've moved them all to the `ZDOTDIR` directory, and created a symlink from the system-wide location instead:
 
 ```bash
-ln -s ~/.config/zsh/.zshenv ~/.zshenv
+# Arch Linux
+sudo ln -sf "$HOME/.config/zsh/.zshenv" "/etc/zsh/zshenv"
+
+# macOS and others
+sudo ln -sf "$HOME/.config/zsh/.zshenv" "/etc/zshenv"
 ```
 
-This way, I have my configuration files under the single `ZDOTDIR` folder, and the symlink `~/.zshenv` as the very starting point, so that all the configurations files are correctly sourced at each restart of shell.
+This way, I have my configuration files under the single `ZDOTDIR` folder, and the system-wide symlink as the very starting point, so that all the configurations files are correctly sourced at each restart of shell.
 
 ## How ZDOTDIR Works
 
-Upon each restart, ZSH will automatically load the `~/.zshenv` file (now a symlink, resolving to `~/.config/zsh/.zshenv`), which contains these critical lines:
+Upon each restart, ZSH will automatically load the system-wide zshenv file (now a symlink, resolving to `~/.config/zsh/.zshenv`), which contains these critical lines:
 
 ```bash
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
@@ -44,7 +48,7 @@ for dir in "${xdg_base_dirs[@]}"; do
 done
 
 # Set ZDOTDIR here. All other Zsh related configuration happens there.
-export ZDOTDIR=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}
+export ZDOTDIR=$XDG_CONFIG_HOME/zsh
 ```
 
 These lines work together to redirect ZSH's configuration directory:
@@ -54,52 +58,79 @@ These lines work together to redirect ZSH's configuration directory:
 3. This means ZSH will source `~/.config/zsh/.zprofile` and `~/.config/zsh/.zshrc` instead of `~/.zprofile` and `~/.zshrc`
 4. This approach follows the XDG Base Directory specification, organizing configuration files in `~/.config/` and cache files in `~/.cache/`
 
+**Note:** `ZDOTDIR` is always set explicitly (not using `${ZDOTDIR:-...}`) to prevent terminal integrations like Ghostty from overriding it with their own paths.
+
 This allows for a cleaner organization where all ZSH configuration files are contained within the `~/.config/zsh/` directory.
 
 ## Configuration Structure and Loading Sequence
-
-In the home folder, a symlink pointing to the same file under the `ZDOTDIR` folder:
-
-```zsh
-~
-.
-├── .zshenv
-```
 
 In the `ZDOTDIR` folder:
 
 ```zsh
 ~/.config/zsh
 .
-├── .iterm2_shell_integration.zsh
-├── .p10k.zsh
-├── .zshenv
 ├── .zprofile
+├── .zshenv
 ├── .zshrc
 ├── aliases.zsh
-├── completions/
-├── functions/
+├── bindings.zsh
+├── fzf.zsh
 ├── functions.zsh
 ├── options.zsh
+├── plugins.zsh
+├── plugins/
+│   ├── fast-syntax-highlighting/
+│   ├── zsh-autosuggestions/
+│   ├── zsh-history-substring-search/
+│   └── zsh-vi-mode/
+├── prompt.zsh
+├── starship.toml
 └── README.md
 ```
 
 With `ZDOTDIR` set to `~/.config/zsh`, the files are loaded in this sequence:
 
-1. `~/.zshenv` (symlink) → `~/.config/zsh/.zshenv` - Sets up environment variables including `ZDOTDIR` and XDG base directories (loaded for ALL shell sessions)
-2. `~/.config/zsh/.zprofile` - Login shell configuration, PATH extensions and environment setup (loaded for LOGIN shells only)
-3. `~/.config/zsh/.zshrc` - Main configuration file with plugin management, completion setup, and tool integrations (loaded for INTERACTIVE shells only)
+1. **System-wide zshenv** (symlink) → `~/.config/zsh/.zshenv` - Sets up environment variables including `ZDOTDIR`, XDG base directories, default editor, and system-wide symlink management (loaded for ALL shell sessions)
+2. `~/.config/zsh/.zprofile` - Login shell configuration, PATH extensions (Homebrew, Go, Rust, user scripts), and environment setup (loaded for LOGIN shells only)
+3. `~/.config/zsh/.zshrc` - Main configuration file that sources all module files, sets up completion system, fzf integration, zoxide, and local overrides (loaded for INTERACTIVE shells only)
 4. `~/.config/zsh/options.zsh` - Zsh options and settings for history, completion, and shell behavior
-5. `~/.config/zsh/aliases.zsh` - Aliases and global aliases for common commands and workflows
-6. `~/.config/zsh/functions.zsh` - Custom functions for enhanced productivity
-7. `~/.config/zsh/.p10k.zsh` - Powerlevel10k prompt configuration (loaded conditionally)
+5. `~/.config/zsh/bindings.zsh` - Keybindings and vi-mode cursor configuration via zsh-vi-mode
+6. `~/.config/zsh/aliases.zsh` - Aliases and global aliases for common commands and workflows
+7. `~/.config/zsh/functions.zsh` - Custom functions for enhanced productivity
+8. `~/.config/zsh/plugins.zsh` - Plugin management with auto-installation and update function
+9. `~/.config/zsh/prompt.zsh` - Starship prompt initialization
+10. `~/.config/zsh/fzf.zsh` - Fuzzy finder UI customization and preview settings
+
+## Plugin Management
+
+Plugins are managed manually via a lightweight custom loader defined in `plugins.zsh`. The `_zplugin_load` function handles:
+
+- Auto-cloning missing plugins from GitHub (with `--depth=1` for fast installs)
+- Sourcing the plugin's `.plugin.zsh` file
+- A `zplugin-update` function to pull all installed plugins
+
+Currently installed plugins:
+
+| Plugin                         | Purpose                                          |
+| ------------------------------ | ------------------------------------------------ |
+| `zsh-autosuggestions`          | Fish-like auto-suggestions based on history      |
+| `zsh-history-substring-search` | History search by substring with arrow keys      |
+| `zsh-vi-mode`                  | Vi-mode integration with cursor shape indicators |
+| `fast-syntax-highlighting`     | Command syntax highlighting                      |
+
+## Prompt
+
+The prompt is powered by [Starship](https://starship.rs/) with a custom configuration in `starship.toml`. It displays:
+
+- Username and OS indicator
+- Git branch (when in a repository)
+- Command duration (for commands taking >500ms)
+- Language runtime versions (Python, Node.js, Conda) when detected
 
 ## Additional Files
 
 - `~/.config/secrets/api_keys` - Local API keys not in version control (for machine-specific settings)
-- `~/.config/zsh/completions/` - Custom completion scripts (currently empty)
-- `~/.config/zsh/functions/` - Additional function files (currently empty)
-- `~/.config/zsh/.iterm2_shell_integration.zsh` - iTerm2 shell integration script (if using iTerm2)
+- `~/.config/zsh/README_FZF.md` - Documentation for fzf configuration
 
 ## Cache Directory Structure
 
@@ -115,8 +146,6 @@ The current cache directory structure includes:
 - `~/.cache/zsh/zcompdump` - Auto-generated completion cache file
 - `~/.cache/zsh/history` - Zsh command history file (primary location per XDG spec)
 - `~/.cache/zsh/sessions/` - Zsh session information files
-- `~/.cache/p10k-instant-prompt-*` - Powerlevel10k instant prompt cache files
-- `~/.cache/p10k-*` - Powerlevel10k configuration cache files
 
 Note:
 
@@ -125,16 +154,18 @@ Note:
 
 ## Features
 
-- Plugin management via Zinit
-- Powerlevel10k prompt with instant prompt
+- Plugin management via custom loader with auto-installation
+- Starship prompt with custom theme
+- Vi-mode integration with zsh-vi-mode
 - Syntax highlighting and autosuggestions
-- Fuzzy finder (fzf) integration with fzf-tab
+- Fuzzy finder (fzf) integration with custom preview and keybindings
 - Smart directory navigation with zoxide
 - Comprehensive alias system with global and suffix aliases
 - Custom functions for common tasks
 - XDG Base Directory specification compliance
-- Homebrew integration
-- iTerm2 shell integration
+- Cross-platform support (macOS, Arch Linux, Ubuntu)
+- Homebrew integration (macOS)
+- Ghostty terminal integration (system-wide symlink)
 
 ## Security
 
@@ -142,11 +173,23 @@ API keys and sensitive information are stored in `~/.config/secrets/api_keys` an
 
 ## Use on New Machines
 
-On new installations, simply clone the entire `ZDOTDIR` folder, and this symlink is automatically created by the configuration itself when you first launch zsh, ensuring that all configuration files are correctly sourced at each restart of the shell.
+On new installations, clone the entire `ZDOTDIR` folder and create the system-wide symlink:
+
+```bash
+# Arch Linux
+sudo ln -sf "$HOME/.config/zsh/.zshenv" "/etc/zsh/zshenv"
+
+# macOS and others
+sudo ln -sf "$HOME/.config/zsh/.zshenv" "/etc/zshenv"
+```
+
+The `.zshenv` file will also attempt to create this symlink automatically (with sudo if available) or prompt you to do so.
 
 ## Maintenance
 
 To clean zsh cache, use the `zsh_clean_cache` function defined in `functions.zsh`. This will clean all cache files including completion cache, history, and session files. Don't do this unless you are experiencing issues.
+
+To update all plugins, run `zplugin-update` in your shell. This will pull the latest changes for all installed plugins.
 
 ## Summary
 

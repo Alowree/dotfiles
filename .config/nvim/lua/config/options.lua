@@ -4,7 +4,10 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- See `:help options`
+-- See `:help options` for Vim style settings
+-- But where is the guide for Nvim style settings?
+-- What are the default options? Any of current settings redundant?
+-- 2026-07-10
 local opt = vim.opt
 
 -- General UI
@@ -12,8 +15,8 @@ opt.number = true -- Show absolute line number
 opt.relativenumber = true -- Show relative line numbers for easier jumping
 opt.cursorline = true -- Highlight the text line of the cursor
 opt.wrap = true -- Enable line wrapping (break long lines)
-opt.scrolloff = 10 -- Vertical scroll offset (keep 10 lines visible)
-opt.sidescrolloff = 8 -- Horizontal scroll offset (keep 8 columns visible)
+opt.scrolloff = 5 -- Vertical scroll offset (keep 10 lines visible)
+opt.sidescrolloff = 5 -- Horizontal scroll offset (keep 8 columns visible)
 
 -- Indentation
 opt.tabstop = 2 -- Number of spaces a <Tab> counts for

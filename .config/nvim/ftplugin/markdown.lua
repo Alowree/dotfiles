@@ -39,6 +39,28 @@ local function MarkdownCodeBlock(outside)
   end
 end
 
+-- Toggle blockquote prefix on a line range
+local function toggle_blockquote_lines(start_line, end_line)
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+  local all_quoted = true
+  for _, line in ipairs(lines) do
+    if line ~= "" and not line:match("^> ") then
+      all_quoted = false
+      break
+    end
+  end
+
+  for i, line in ipairs(lines) do
+    if all_quoted then
+      lines[i] = line:gsub("^> ", "", 1)
+    else
+      lines[i] = "> " .. line
+    end
+  end
+
+  vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, lines)
+end
+
 -- Set keymaps
 local function set_keymaps()
   local map = function(mode, lhs, rhs, desc)
@@ -54,6 +76,31 @@ local function set_keymaps()
       MarkdownCodeBlock(false)
     end, "Inside markdown code block")
   end
+
+  -- Blockquote toggle: visual selection
+  map("v", "<Leader>mb", function()
+    local s = vim.fn.line("v")
+    local e = vim.fn.line(".")
+    if s > e then
+      s, e = e, s
+    end
+    toggle_blockquote_lines(s, e)
+    vim.cmd(string.format("normal! %dGV%dG", s, e))
+  end, "[M]arkdown toggle [B]lockquote")
+
+  -- Blockquote toggle: current paragraph
+  local function current_paragraph_range()
+    local blank_above = vim.fn.search("^\\s*$", "bnW")
+    local blank_below = vim.fn.search("^\\s*$", "nW")
+    local start_line = blank_above + 1
+    local end_line = blank_below == 0 and vim.fn.line("$") or blank_below - 1
+    return start_line, end_line
+  end
+
+  map("n", "<Leader>mb", function()
+    local s, e = current_paragraph_range()
+    toggle_blockquote_lines(s, e)
+  end, "[M]arkdown toggle [B]lockquote (paragraph)")
 end
 
 pcall(function()
@@ -62,23 +109,34 @@ end)
 set_keymaps()
 
 -- ===============================================
--- 5. Using Typst in Neovim 2026-06-17
+-- 5. PDF Export via Pandoc + WeasyPrint
 -- ===============================================
 
--- 5.1: Asynchronous Markdown to PDF via Pandoc + Typst Pipe
+local css_path = vim.fn.stdpath("config") .. "/utils/weekly.css"
+
+-- Helper: build the compile command for current file
+local function build_pdf_cmd()
+  local source = vim.fn.expand("%")
+  local dir = vim.fn.expand("%:p:h")
+  local stem = vim.fn.expand("%:t:r")
+  local date_suffix = os.date("%Y%m%d")
+  local target = dir .. "/" .. stem .. "_" .. date_suffix .. ".pdf"
+  local html_tmp = "/tmp/weekly_out.html"
+  return string.format(
+    "pandoc '%s' --standalone --embed-resources --css='%s' -o '%s' && weasyprint '%s' '%s'",
+    source, css_path, html_tmp, html_tmp, target
+  ), target
+end
+
+-- 5.1: Asynchronous Markdown to PDF via Pandoc + WeasyPrint
 vim.keymap.set("n", "<Leader>mp", function()
   if vim.bo.filetype ~= "markdown" then
     vim.notify("Not a markdown file", vim.log.levels.WARN)
     return
   end
 
-  local source = vim.fn.expand("%")
-  local target = vim.fn.expand("%:r") .. ".pdf"
-
-  vim.notify("Compiling PDF via Pandoc & Typst...", vim.log.levels.INFO)
-
-  -- Pipe pandoc output directly into typst compiler
-  local cmd = string.format("pandoc '%s' --to=typst | typst compile - '%s'", source, target)
+  local cmd, target = build_pdf_cmd()
+  vim.notify("Compiling PDF via Pandoc & WeasyPrint...", vim.log.levels.INFO)
 
   vim.fn.jobstart({ "sh", "-c", cmd }, {
     on_exit = function(_, exit_code)
@@ -91,7 +149,7 @@ vim.keymap.set("n", "<Leader>mp", function()
   })
 end, { desc = "[M]arkdown to [P]DF" })
 
--- 5.2: Live Watch Toggle (Re-compiles your PDF automatically whenever you save)
+-- 5.2: Live Watch Toggle (Re-compiles PDF on save)
 local watch_autocmd_id = nil
 vim.keymap.set("n", "<Leader>mw", function()
   if vim.bo.filetype ~= "markdown" then
@@ -101,44 +159,30 @@ vim.keymap.set("n", "<Leader>mw", function()
   if watch_autocmd_id then
     vim.api.nvim_del_autocmd(watch_autocmd_id)
     watch_autocmd_id = nil
-    vim.notify("Typst live watch stopped.", vim.log.levels.INFO)
+    vim.notify("Live watch stopped.", vim.log.levels.INFO)
   else
     local bufnr = vim.api.nvim_get_current_buf()
     watch_autocmd_id = vim.api.nvim_create_autocmd("BufWritePost", {
       buffer = bufnr,
       callback = function()
-        local source = vim.fn.expand("%")
-        local target = vim.fn.expand("%:r") .. ".pdf"
-        local cmd = string.format("pandoc '%s' --to=typst | typst compile - '%s'", source, target)
+        local cmd = build_pdf_cmd()
         vim.fn.jobstart({ "sh", "-c", cmd })
       end,
     })
-    vim.notify("Typst live watching... Saving updates the PDF instantly.", vim.log.levels.INFO)
+    vim.notify("Live watching... Saving updates the PDF instantly.", vim.log.levels.INFO)
   end
 end, { desc = "[M]arkdown live [W]atch toggle" })
 
--- 5.3 Open Generated PDF
--- Open the generated PDF file using the system default viewer
+-- 5.3: Open Generated PDF
 vim.keymap.set("n", "<Leader>mo", function()
-  local pdf_file = vim.fn.expand("%:r") .. ".pdf"
+  local dir = vim.fn.expand("%:p:h")
+  local stem = vim.fn.expand("%:t:r")
+  local date_suffix = os.date("%Y%m%d")
+  local pdf_file = dir .. "/" .. stem .. "_" .. date_suffix .. ".pdf"
 
   if vim.fn.filereadable(pdf_file) == 1 then
-    -- Run xdg-open in the background securely detached from Neovim
     vim.fn.jobstart({ "xdg-open", pdf_file }, { detach = true })
   else
     vim.notify("No matching PDF found. Export it first!", vim.log.levels.WARN)
   end
 end, { desc = "[M]arkdown [O]pen PDF" })
-
--- 5.4 Custom Styling Header Injection
--- Inject standard Typst styling configurations to the top of the file
-vim.keymap.set("n", "<Leader>ms", function()
-  local lines = {
-    '#show: doc => doc with paper: "a4", margins: 2.5cm',
-    '#set text(font: "Liberation Sans", size: 11pt, lang: "en")',
-    "#set par(justify: true)",
-    "",
-  }
-  vim.api.nvim_buf_set_lines(0, 0, 0, false, lines)
-  vim.notify("Typst styling rules injected at top.", vim.log.levels.INFO)
-end, { desc = "[M]arkdown inject Typst [S]tyles" })

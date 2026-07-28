@@ -89,15 +89,6 @@ map("n", "<M-a>", function()
   vim.api.nvim_buf_set_lines(bufnr, lnum - 1, lnum - 1, false, { first_commented_line, second_commented_line, "" })
 end, { desc = "Insert file path as comment" })
 
--- auto close pairs
--- map("i", "'", "''<left>")
-map("i", "`", "``<left>")
-map("i", '"', '""<left>')
-map("i", "(", "()<left>")
-map("i", "[", "[]<left>")
-map("i", "{", "{}<left>")
--- map("i", "<", "<><left>")
-
 -- vim.pack keymaps  (<leader>p = pack)
 map("n", "<leader>pp", "<cmd>Pack<cr>", { desc = "Pack UI" })
 map("n", "<leader>pu", "<cmd>lua vim.pack.update()<cr>", { desc = "Pack Update All" })

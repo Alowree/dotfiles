@@ -2,31 +2,69 @@
 # ~/.config/zsh/.zshrc
 
 # ====================================================
-# SECTION 3: ZSH CORE CONFIGURATION
-# ====================================================
-
-# Source configuration files
-source "$ZDOTDIR/options.zsh"
-source "$ZDOTDIR/bindings.zsh"
-source "$ZDOTDIR/aliases.zsh"
-source "$ZDOTDIR/functions.zsh"
-source "$ZDOTDIR/plugins.zsh"
-source "$ZDOTDIR/prompt.zsh"
-
-# ====================================================
 # SECTION 6: COMPLETION SYSTEM
 # ====================================================
 # Bread on Penguis 2026-06-27
-zmodload zsh/complist
-autoload -U compinit && compinit
-autoload -U colors && colors
-autoload -U tetris
+# zmodload zsh/complist
+# autoload -U compinit && compinit
+# autoload -U colors && colors
+# autoload -U tetris
+
+# =========================================================
+# History
+# =========================================================
+
+HISTFILE="$XDG_STATE_HOME/zsh/history"
+HISTSIZE=100000
+SAVEHIST=100000
+
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt EXTENDED_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_FIND_NO_DUPS
+
+alias history='fc -l -D "%Y-%m-%d %H:%M:%S" 1'
+
+# =========================================================
+# Shell behaviour
+# =========================================================
+
+setopt AUTOCD
+setopt NOBEEP
+setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
+
+
+# Initialize zoxide
+eval "$(zoxide init --cmd cd zsh)"
+
+# Changes the prefix of the `z` and `zi` commands
+# `--cmd j`  would change the commands to `j`, `ji`
+# `--cmd cd` would replace the `cd` command
+
+# =========================================================
+# Completion
+# =========================================================
+
+# Load completion system
+autoload -Uz compinit
+
+# initialize completion with cached metadata file
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
+
+# Enable interactive completion menu selection
+zstyle ':completion:*' menu select
 
 # Make completion case-insensitive
 # Example: "doc" can complete to "Documents"
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-# Enable interactive completion menu selection
-zstyle ':completion:*' menu select
+
+# ====================================================
+# SECTION 3: ZSH CORE CONFIGURATION
+# ====================================================
+
 
 # ====================================================
 # SECTION 8: TOOL INTEGRATIONS
@@ -61,31 +99,13 @@ if [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
   source /usr/share/doc/fzf/examples/completion.zsh
 fi
 
-# Your custom fzf configuration (overrides UI and preview settings)
+# =========================================================
+# Modular Config Files
+# =========================================================
+
 source "$ZDOTDIR/fzf.zsh"
-
-# Note: Your fzf.zsh already sets FZF_CTRL_T_COMMAND and FZF_CTRL_T_OPTS,
-# so the official key-bindings.zsh will use your enhanced settings automatically.
-
-eval "$(zoxide init --cmd cd zsh)"
-# Changes the prefix of the `z` and `zi` commands
-# `--cmd j`  would change the commands to `j`, `ji`
-# `--cmd cd` would replace the `cd` command
-
-# ====================================================
-# SECTION 9: LOCAL OVERRIDES
-# ====================================================
-# Load machine-specific settings (not in version control)
-# Move API keys there and source securely
-if [[ -f ~/.config/secrets/api_keys ]]; then
-    source ~/.config/secrets/api_keys
-fi
-
-# ====================================================
-# SECTION 10: FINAL CLEANUP
-# ====================================================
-
-# # Remove duplicate PATH entries (Zsh specific)
-# if [[ -n "$ZSH_VERSION" ]]; then
-#     typeset -U path
-# fi
+source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/bindings.zsh"
+source "$ZDOTDIR/functions.zsh"
+source "$ZDOTDIR/plugins.zsh"
+source "$ZDOTDIR/prompt.zsh"

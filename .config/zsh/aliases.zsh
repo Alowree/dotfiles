@@ -6,25 +6,50 @@
 
 ## SECTION 1: FILE LISTING
 
-case "$(uname -s)" in
-  Darwin) alias ls='ls -G' ;;
-  Linux)  alias ls='ls --color=auto' ;;
-esac
+# case "$(uname -s)" in
+#   Darwin) alias ls='ls -G' ;;
+#   Linux)  alias ls='ls --color=auto' ;;
+# esac
+#
+# # Basic daily use (essential 4)
+# alias ll='ls -l'     # Long list
+# alias la='ls -la'    # Long list, all files (including hidden)
+# alias lh='ls -lh'    # Long list, human readable sizes
+# alias lhD='ls -lh -D "%Y-%m-%d %H:%M"'    # Long list, human readable sizes, YYYY-mm-dd
+# alias l1='ls -1'     # One file per line (Great for piping)
 
-# Basic daily use (essential 4)
-alias ll='ls -l'     # Long list
-alias la='ls -la'    # Long list, all files (including hidden)
-alias lh='ls -lh'    # Long list, human readable sizes
-alias lhD='ls -lh -D "%Y-%m-%d %H:%M"'    # Long list, human readable sizes, YYYY-mm-dd
-alias l1='ls -1'     # One file per line (Great for piping)
+# Better ls
+alias ls='eza --icons'
 
-# Combined utilities
-alias pls='pwd && ls'    # Show path then list contents
+# Detailed listing
+alias ll='eza -lh --icons --git'
 
-# Directory tree views
-alias tc="tree -C"   # Colored tree view
-alias t2="tree -L2"  # Tree view, level 2
-alias t3="tree -L3"  # Tree view, level 3
+# Detailed listing including hidden files
+alias la='eza -lah --icons --git'
+
+# Tree view
+alias tree='eza --tree --icons'
+
+# Reuse ls completions fro eza (avoids defining a separate completion function)
+compdef eza=ls
+
+# Better cat (bat on Arch)
+if command -v bat >/dev/null 2>&1; then
+  alias cat='bat'
+elif command -v batcat >/dev/null 2>&1; then
+  alias bat='batcat'
+  alias cat='batcat'
+fi
+
+# ==========================================================
+# Core utilities
+# ==========================================================
+
+alias grep='rg --color=auto'
+alias diff='diff --color=auto'
+alias df='df -h'
+
+alias -- -='cd -' # -- prevents - being parsed as a flag; cd - jumps to previous directory
 
 ## SECTION 2: HELP SYSTEM ENHANCEMENTS
 
@@ -35,16 +60,16 @@ alias t3="tree -L3"  # Tree view, level 3
 # which-command=whence
 
 # Replace Zsh's default run-help alias with enhanced function system
-if [[ "$(whence -w run-help 2>/dev/null)" = *alias* ]]; then
-    unalias run-help
-fi
-
-# Load enhanced help system with Git-specific support
-autoload -Uz run-help
-autoload -Uz run-help-git
-
-# Create convenient alias for run-help
-alias help=run-help
+# if [[ "$(whence -w run-help 2>/dev/null)" = *alias* ]]; then
+#     unalias run-help
+# fi
+#
+# # Load enhanced help system with Git-specific support
+# autoload -Uz run-help
+# autoload -Uz run-help-git
+#
+# # Create convenient alias for run-help
+# alias help=run-help
 
 # Zsh configuration management
 alias zshrc='$EDITOR "${ZDOTDIR:-$HOME}/.zshrc"'    # Edit Zsh config
@@ -173,11 +198,5 @@ mcd() {
     mkdir -pv "$1"
     cd "$1" || exit
 }
-
-# Prefer `bat` over `cat` when installed
-[[ "$(command -v bat)" ]] \
-    && alias cat="bat"
-
-
 
 # vim:set expandtab shiftwidth=2 tabstop=2 foldmethod=marker:
