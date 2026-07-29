@@ -1,6 +1,5 @@
 require("config.options")
 require("config.keymaps")
-require("config.session")
 require("config.diagnostics")
 require("config.pairs")
 require("config.autocmds")
