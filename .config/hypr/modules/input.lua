@@ -10,12 +10,12 @@ hl.config({
 		kb_options = "caps:swapescape", -- Switch Caps Lock and Esc on your keyboard
 		kb_rules = "",
 
-		repeat_rate = 25,
-		repeat_delay = 300,
+		repeat_rate = 35,
+		repeat_delay = 200,
 
 		follow_mouse = 1,
 
-		sensitivity = 0.8, -- from -1.0 - 1.0; 0 is default
+		sensitivity = 0.5, -- from -1.0 - 1.0; 0 is default
 
 		touchpad = {
 			natural_scroll = false, -- Invert scroll direction

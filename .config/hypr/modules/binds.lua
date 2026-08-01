@@ -16,29 +16,41 @@ local shotactivewindow = "hyprshot -m window"
 local shotselectedregion = "hyprshot -m region"
 
 -- rofi
-local launcher = "rofi -show drun -show-icons"
-local runner = "rofi -show run"
+-- local launcher = "rofi -show drun -show-icons"
+-- local runner = "rofi -show run"
 
 ---------------------
 ---- KEYBINDINGS ----
 ---------------------
+
+-- `super` key on Arch Linux 2026-06-20
+-- `Windows` key on Lenovo Windows laptop orignal keyboard
+-- `System` key on external SKN 4.0 keyboard
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 local secondMod = "SUPER + SHIFT" -- Sets "Windows" + "Shift" key as second modifier
 local thirdMod = "SUPER + CTRL + SHIFT" -- Sets "Windows" + "Ctrl" + "Shift" key as third modifier
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
-hl.bind(mainMod .. " + Q", hl.dsp.window.close())
+-- hl.bind(mainMod .. " + Q", hl.dsp.window.close())
+hl.bind(mainMod .. " + BACKSPACE", hl.dsp.window.close())
 
 -- rofi menus
-hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(launcher))
-hl.bind(secondMod .. " + Space", hl.dsp.exec_cmd(runner))
--- hl.bind(secondMod .. " + C", hl.dsp.exec_cmd(clipboardHistory))
+-- hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(launcher))
+hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("qs ipc call applauncher toggle"))
+-- hl.bind(secondMod .. " + Space", hl.dsp.exec_cmd(runner))
 
 -- apps
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
+hl.bind(secondMod .. " + B", hl.dsp.exec_cmd("blueman-manager"))
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(fileManager))
+
+-- quickshell: Theme Toggle
+hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("qs ipc call theme toggle"))
+
+-- quickshell: Power Menu
+hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd("qs ipc call powermenu toggle"))
 
 -- Layout specific (scrolling layout)
 -- hl.bind(mainMod .. " + V", hl.dsp.layout("togglesplit")) -- dwindle only, disabled for scrolling
@@ -68,6 +80,7 @@ hl.bind(thirdMod .. " + j", hl.dsp.window.resize({ x = 0, y = 20, relative = tru
 
 -- Toggle window maximization
 hl.bind(secondMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized" }))
+-- hl.bind(secondMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 -- toggle floating
 hl.bind(secondMod .. " + T", hl.dsp.window.float({ action = "toggle" }))
 
@@ -80,23 +93,49 @@ for i = 1, 10 do
 end
 
 -- Switch to letter-named workspaces (AeroSpace style)
+hl.bind(mainMod .. " + A", hl.dsp.focus({ workspace = "name:A" })) -- AI/Antigravity/Amazon
+-- hl.bind(mainMod .. " + B", hl.dsp.focus({ workspace = "name:B" })) -- Occuppied by Browser
 hl.bind(mainMod .. " + C", hl.dsp.focus({ workspace = "name:C" })) -- Config/Code
 hl.bind(mainMod .. " + D", hl.dsp.focus({ workspace = "name:D" })) -- Design/Figma
 hl.bind(mainMod .. " + E", hl.dsp.focus({ workspace = "name:E" })) -- Email/NeoMutt/Excel
-hl.bind(mainMod .. " + G", hl.dsp.focus({ workspace = "name:G" })) -- Gemini/Chromium
+-- hl.bind(mainMod .. " + F", hl.dsp.focus({ workspace = "name:F" })) -- Occuppied by File Manager
+hl.bind(mainMod .. " + G", hl.dsp.focus({ workspace = "name:G" })) -- Chromium/Gmail
+hl.bind(mainMod .. " + I", hl.dsp.focus({ workspace = "name:I" })) --
 hl.bind(mainMod .. " + M", hl.dsp.focus({ workspace = "name:M" })) -- MaraPython
+hl.bind(mainMod .. " + N", hl.dsp.focus({ workspace = "name:N" })) -- MaraPython
+hl.bind(mainMod .. " + O", hl.dsp.focus({ workspace = "name:O" })) -- MaraPython
+-- hl.bind(mainMod .. " + P", hl.dsp.focus({ workspace = "name:P" })) -- Occuppied by screenshots
+hl.bind(mainMod .. " + R", hl.dsp.focus({ workspace = "name:R" })) -- MaraPython
 hl.bind(mainMod .. " + S", hl.dsp.focus({ workspace = "name:S" })) -- Safari/Brave for Amazon
+-- hl.bind(mainMod .. " + T", hl.dsp.focus({ workspace = "name:T" })) -- Theme Toogle by quichshell
+hl.bind(mainMod .. " + U", hl.dsp.focus({ workspace = "name:U" })) --
+hl.bind(mainMod .. " + V", hl.dsp.focus({ workspace = "name:V" })) --
 hl.bind(mainMod .. " + W", hl.dsp.focus({ workspace = "name:W" })) -- WeChat/WhatsApp
+hl.bind(mainMod .. " + X", hl.dsp.focus({ workspace = "name:X" })) --
+hl.bind(mainMod .. " + Y", hl.dsp.focus({ workspace = "name:Y" })) --
 hl.bind(mainMod .. " + Z", hl.dsp.focus({ workspace = "name:Z" })) -- Zen
 
 -- Move windows to letter-named workspaces
+hl.bind(secondMod .. " + A", hl.dsp.window.move({ workspace = "name:A" }))
+-- hl.bind(secondMod .. " + B", hl.dsp.window.move({ workspace = "name:B" })) -- Not defined
 hl.bind(secondMod .. " + C", hl.dsp.window.move({ workspace = "name:C" }))
 hl.bind(secondMod .. " + D", hl.dsp.window.move({ workspace = "name:D" }))
 hl.bind(secondMod .. " + E", hl.dsp.window.move({ workspace = "name:E" }))
+-- hl.bind(secondMod .. " + F", hl.dsp.window.move({ workspace = "name:F" })) -- Occupped by Fullscreen
 hl.bind(secondMod .. " + G", hl.dsp.window.move({ workspace = "name:G" }))
+hl.bind(secondMod .. " + I", hl.dsp.window.move({ workspace = "name:I" }))
 hl.bind(secondMod .. " + M", hl.dsp.window.move({ workspace = "name:M" }))
+hl.bind(secondMod .. " + N", hl.dsp.window.move({ workspace = "name:N" }))
+hl.bind(secondMod .. " + O", hl.dsp.window.move({ workspace = "name:O" }))
+-- hl.bind(secondMod .. " + P", hl.dsp.window.move({ workspace = "name:P" })) -- Occuppied by screenshots
+hl.bind(secondMod .. " + R", hl.dsp.window.move({ workspace = "name:R" }))
 hl.bind(secondMod .. " + S", hl.dsp.window.move({ workspace = "name:S" }))
+-- hl.bind(secondMod .. " + T", hl.dsp.window.move({ workspace = "name:T" })) -- Occuppied by Toogle Float
+hl.bind(secondMod .. " + U", hl.dsp.window.move({ workspace = "name:U" }))
+hl.bind(secondMod .. " + V", hl.dsp.window.move({ workspace = "name:V" }))
 hl.bind(secondMod .. " + W", hl.dsp.window.move({ workspace = "name:W" }))
+hl.bind(secondMod .. " + X", hl.dsp.window.move({ workspace = "name:X" }))
+hl.bind(secondMod .. " + Y", hl.dsp.window.move({ workspace = "name:Y" }))
 hl.bind(secondMod .. " + Z", hl.dsp.window.move({ workspace = "name:Z" }))
 
 -- Example special workspace (scratchpad)

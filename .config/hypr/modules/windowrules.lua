@@ -56,9 +56,10 @@ hl.window_rule({
 })
 
 -- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
-
 -- What this does? Auto move the external monitor to workspace 2?
-hl.workspace_rule({
-	workspace = "2",
-	layout = "scrolling",
-})
+-- hl.workspace_rule({
+-- 	workspace = "2",
+-- 	layout = "scrolling",
+-- })
+--
+-- 2026-07-31 comment it out to test

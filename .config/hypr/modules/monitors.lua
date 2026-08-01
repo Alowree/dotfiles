@@ -39,7 +39,7 @@ hl.monitor({
 	output = "desc:Dell Inc. DELL U2723QE H5BJ834",
 	mode = "preferred",
 	position = "auto-right", -- Automatically places it to the right of your laptop
-	scale = 1.5,
+	scale = 1,
 	-- mirror = "eDP-1", -- This forces the Dell monitor to replicate eDP-1
 })
 
@@ -48,6 +48,6 @@ hl.monitor({
 	output = "desc:Xiaomi Corporation Mi Monitor 5877500057838",
 	mode = "3840x2160@60",
 	position = "auto-right", -- Automatically aligns it to the right of your laptop
-	scale = 2, -- Set to 1.5 or 2 for comfortable UI scaling at 4K resolution
+	scale = 1, -- Set to 1.5 or 2 for comfortable UI scaling at 4K resolution
 	-- mirror = "eDP-1", -- This forces the Xiaomi monitor to replicate eDP-1
 })
