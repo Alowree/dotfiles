@@ -37,7 +37,7 @@ mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
 # account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"
 
 # 设置签名文件的位置
-# set signature = "~/.config/neomutt/accounts/twine-signature"
+set signature = "~/.config/neomutt/accounts/signature-soundfreaq"
 
 # Ensure this account will be sourced automatically when changing to its folder
 # Keep the hook here so account-specific hooks live inside the account file

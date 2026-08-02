@@ -5,28 +5,58 @@ local function get_file_path(file)
 	return tostring(file.path or file.cache or file.url.path or file.url)
 end
 
+-- Extract plain text from .pptx/.ppt files using python3
+-- (pptx is a ZIP of XML slides; pandoc doesn't support pptx input)
+local function extract_pptx_text(file_path)
+	local script = [[
+import zipfile, re, sys
+with zipfile.ZipFile(sys.argv[1]) as z:
+    for name in sorted(z.namelist()):
+        if re.match(r'ppt/slides/slide\d+\.xml$', name):
+            content = z.read(name).decode('utf-8')
+            text = re.sub(r'<[^>]+>', ' ', content)
+            text = re.sub(r'\s+', ' ', text).strip()
+            if text:
+                print(text)
+                print()
+]]
+	local output, err = Command("python3")
+		:arg({ "-c", script, file_path })
+		:stdout(Command.PIPED)
+		:stderr(Command.PIPED)
+		:output()
+	return output, err
+end
+
 function M:peek(job)
 	local file_path = get_file_path(job.file)
 	local ext = file_path:match("^.+%.([a-zA-Z0-9]+)$")
 	if ext then ext = ext:lower() end
 
-	local cmd, args
+	local output, err
+	local is_pptx = ext == "pptx" or ext == "ppt"
+
 	if ext == "doc" then
 		-- Use antiword for legacy .doc files
-		cmd = "antiword"
-		args = { file_path }
+		output, err = Command("antiword")
+			:arg({ file_path })
+			:stdout(Command.PIPED)
+			:stderr(Command.PIPED)
+			:output()
+	elseif is_pptx then
+		-- Extract text from .pptx/.ppt via python3 (pandoc doesn't support pptx)
+		output, err = extract_pptx_text(file_path)
 	else
 		-- Use pandoc for .docx files
-		cmd = "pandoc"
-		args = { "-t", "plain", "--wrap=auto", "--columns=100", file_path }
+		output, err = Command("pandoc")
+			:arg({ "-t", "plain", "--wrap=auto", "--columns=100", file_path })
+			:stdout(Command.PIPED)
+			:stderr(Command.PIPED)
+			:output()
 	end
 
-	local output, err = Command(cmd)
-		:arg(args)
-		:stdout(Command.PIPED)
-		:stderr(Command.PIPED)
-		:output()
-	
+	local cmd = is_pptx and "python3-pptx-extract" or (ext == "doc" and "antiword" or "pandoc")
+
 	if err then
 		ya.preview_widget(
 			job,

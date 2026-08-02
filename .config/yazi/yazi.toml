@@ -2,7 +2,7 @@
 # 2026-05-15
 [mgr]
 show_header = true
-ratio = [2, 3, 5]
+ratio = [1, 4, 5]
 show_hidden = true
 show_symlink = true
 sort_dir_first = true
@@ -33,7 +33,11 @@ reveal = [
   { run = 'open -R "$1"', desc = "View with Finder", for = "macos" },
   { run = 'explorer /select, "%1"', orphan = true, desc = "View with Explorer", for = "windows" },
 ]
-vscode = [{ run = 'code "$@"', desc = "VS Code", orphan = true }]
+vscode = [
+  { run = 'code "$@"', desc = "VS Code", orphan = true, for = "macos" },
+  { run = 'code "$@"', desc = "VS Code", orphan = true, for = "linux" },
+  { run = 'codium "$@"', desc = "VSCodium", orphan = true, for = "linux" },
+]
 # typora = [{ run = 'open -a "Typora" "$@"', desc = "Typora", orphan = true }]
 # Typora opener with platform detection
 # Using run_if to check for macOS vs Linux
@@ -98,6 +102,16 @@ keynote = [
     for = "linux" 
   },
 ]
+# Image viewers
+gimp = [
+  { run = 'gimp "$@"', desc = "GIMP", orphan = true },
+]
+imv = [
+  { run = 'imv "$@"', desc = "imv", orphan = true },
+]
+loupe = [
+  { run = 'loupe "$@"', desc = "Loupe", orphan = true },
+]
 # Custom defined openers for PDFs
 zathura = [
   { run = 'zathura "$@"', detach = true, desc = "Open PDF with Zathura" },
@@ -107,6 +121,11 @@ mpv = [{ run = 'mpv "$@"', desc = "mpv", orphan = true }]
 # Extract compressed archive
 extract = [
   { run = 'ouch d -y "$@"', desc = "Extract here with ouch", for = "unix" },
+]
+# Open with default browser
+browser = [
+  { run = 'open "$@"', desc = "Default Browser", orphan = true, for = "macos" },
+  { run = 'xdg-open "$@"', desc = "Default Browser", orphan = true, for = "linux" },
 ]
 # view-viu = [{ run = 'viu "$@"; echo "Press enter to exit"; read', desc = "View with viu", block = true }]
 
@@ -168,6 +187,23 @@ prepend_rules = [
     "reveal",
   ] },
 
+  # 5b. Image files
+  { mime = "image/*", use = [
+    "gimp",
+    "imv",
+    "loupe",
+    "reveal",
+  ] },
+
+  # 5c. HTML files
+  { url = "*.{html,htm}", use = [
+    "edit",
+    "vscode",
+    "typora",
+    "reveal",
+    "browser",
+  ] },
+
   # 6. Other text files with editor
   # but `o` or `Enter` will not open an empty prompt.zsh file
   { mime = "text/*", use = [
@@ -186,7 +222,6 @@ prepend_rules = [
 prepend_previewers = [
   { url = "*.{docx,doc,pptx,ppt}", run = "docx-preview" },
   { url = "*.{xlsx,xls,csv,tsv}", run = "excel-preview" },
-  { url = "*.json", run = "duckdb" },
   { url = "*.parquet", run = "duckdb" },
   # { url = "*.txt", run = "duckdb" },
   { url = "*.db", run = "duckdb" },

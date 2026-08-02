@@ -11,8 +11,8 @@ vim.g.maplocalleader = " "
 local opt = vim.opt
 
 -- General UI
--- opt.number = true -- Show absolute line number
--- opt.relativenumber = true -- Show relative line numbers for easier jumping
+opt.number = true -- Show absolute line number
+opt.relativenumber = true -- Show relative line numbers for easier jumping
 opt.cursorline = true -- Highlight the text line of the cursor
 opt.wrap = true -- Enable line wrapping (break long lines)
 opt.scrolloff = 5 -- Vertical scroll offset (keep 10 lines visible)

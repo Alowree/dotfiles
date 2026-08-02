@@ -72,19 +72,23 @@ audio/*; mpv --loop --audio-display=no %s;
 # application/octet-stream; vd %s; test=echo %s | grep -qiE '\.(xlsx|xls)$'
 
 # ============================================================================
-# SPREADSHEETS (Excel) Option B: GUI
+# SPREADSHEETS (Excel, ODS) Option B: GUI
 # ============================================================================
 # Let macOS handle the file association (will open Excel for .xlsx/.xls)
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; open %s; test=[ "$(uname)" = "Darwin" ]
 application/vnd.ms-excel; open %s; test=[ "$(uname)" = "Darwin" ]
 
-# Linux: Use LibreOffice
-application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; libreoffice %s; test=[ "$(uname)" = "Linux" ]
-application/vnd.ms-excel; libreoffice %s; test=[ "$(uname)" = "Linux" ]
+# Linux: Use LibreOffice Calc
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; libreoffice --calc %s; test=[ "$(uname)" = "Linux" ]
+application/vnd.ms-excel; libreoffice --calc %s; test=[ "$(uname)" = "Linux" ]
+
+# OpenDocument Spreadsheet (.ods)
+application/vnd.oasis.opendocument.spreadsheet; open -a "Microsoft Excel" %s; test=[ "$(uname)" = "Darwin" ]
+application/vnd.oasis.opendocument.spreadsheet; libreoffice --calc %s; test=[ "$(uname)" = "Linux" ]
 
 # Fallback for misidentified Excel files
 application/octet-stream; open %s; test=[ "$(uname)" = "Darwin" ] && echo %s | grep -qiE '\.(xlsx|xls)$'
-application/octet-stream; libreoffice %s; test=[ "$(uname)" = "Linux" ] && echo %s | grep -qiE '\.(xlsx|xls)$'
+application/octet-stream; libreoffice --calc %s; test=[ "$(uname)" = "Linux" ] && echo %s | grep -qiE '\.(xlsx|xls)$'
 
 # ============================================================================
 # WORD PROCESSING DOCUMENTS
@@ -129,3 +133,12 @@ text/x-python; highlight -O ansi %s; copiousoutput; needsterminal
 
 # Markdown with pandoc
 text/markdown; pandoc -t plain %s; copiousoutput
+
+
+# ============================================================================
+# There is this calendar tool called calcurse. I have it setup in my mailcap 
+# file so whenever I receive a meeting invitation I can automatically add it 
+# to my calendar: 2026-07-08
+# ============================================================================
+application/ics; /usr/sbin/calcurse -i %s && notify-send "Entry added to calendar 📅"
+text/calendar; /usr/sbin/calcurse -i %s && notify-send "Entry added to calendar 📅"

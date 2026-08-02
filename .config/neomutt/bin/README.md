@@ -1,11 +1,11 @@
-# Neomutt Attachment Browser Scripts
+# NeoMutt Attachment Browser Scripts
 
-This directory contains helper scripts for Neomutt, specifically for attaching files in `compose` mode. There are two primary scripts configured to work seamlessly across macOS and Arch Linux:
+This directory contains helper scripts for NeoMutt, specifically for attaching files in `compose` mode. There are two primary scripts configured to work seamlessly across macOS and Arch Linux:
 
 - `attach_browser_yazi.sh`: Uses [Yazi](https://github.com/sxyazi/yazi) as the file browser.
 - `attach_browser_fzf.sh`: Uses [fzf](https://github.com/junegunn/fzf) as the file browser.
 
-Both scripts can be integrated into Neomutt's compose mode via a macro in your `mappings` configuration:
+Both scripts can be integrated into NeoMutt's compose mode via a macro in your `mappings` configuration:
 
 ```neomuttrc
 macro compose \Ca ":source ~/.config/neomutt/bin/<script_name>.sh|<enter>"
@@ -35,23 +35,26 @@ else
   YAZI_BIN="yazi"
 fi
 
-
+# The additional  || [[ -n "$attachment" ]]  check ensures that
+# if a line is read but has no trailing newline (making `read` return `false` ),
+# the loop body will still run one last time to process the content populated in $attachment
 $YAZI_BIN --chooser-file /dev/stdout | \
-    while IFS=$'\n' read -r attachment; do
+    while IFS=$'\n' read -r attachment || [[ -n "$attachment" ]]; do
         echo "push 'a$attachment<enter>'"
     done
-
 ```
 
 Yazi is a fast, terminal-based file manager written in Rust.
 
-- **Will Yazi work as intended (support preview for attachment files)?**
-  **Yes, perfectly.** Yazi comes with built-in, out-of-the-box support for image previews. It natively detects and utilizes terminal graphic protocols (like Kitty, iTerm2, Sixel, and Ueberzug++ for X11/Wayland). As long as your terminal supports one of these protocols, Yazi will render high-quality previews for attachments seamlessly. Yazi also supports preview of many other file types.
+**Will Yazi work as intended, i.e., support file preview for attachment files browsing and selection process?**
 
-- **Does it support selecting multiple files?**
-  **Yes.** By passing the `--chooser-file /dev/stdout` flag to Yazi, you can select multiple files (using `Space` or `v` to highlight, then `Enter` to confirm). The script reads all selected files line-by-line and pushes them to Neomutt natively.
+**Yes, perfectly.** Yazi comes with built-in, out-of-the-box support for image previews. It natively detects and utilizes terminal graphic protocols (like Kitty, iTerm2, Sixel, and Ueberzug++ for X11/Wayland). As long as your terminal supports one of these protocols, Yazi will render high-quality previews for attachments seamlessly. Yazi also supports preview of many other file types, such as `.docx`, `.xslx`, `.pdf`, and so on.
 
-- **Navigation:** Yazi provides full directory tree navigation, making it easy to browse up and down your filesystem organically.
+**Does it support selecting multiple files?**
+
+**Yes.** By passing the `--chooser-file /dev/stdout` flag to Yazi, you can select multiple files (using `Space` or `v` to highlight, `Tab` to jump select, then `Enter` to confirm). The script reads all selected files line-by-line and pushes them to NeoMutt natively.
+
+**Navigation:** Yazi provides full directory tree navigation, making it easy to browse up and down your filesystem organically.
 
 Let's break down each part of your script.
 
@@ -64,7 +67,7 @@ cd "$HOME" || exit
 ```
 
 - `cd "$HOME"` attempts to change the current working directory to your home folder (`~`).
-- `||` means "if the previous command fails, run the next command."
+- `||` means "if the previous command fails (very unlikely though), run the next command."
 - `exit` terminates the entire script immediately with a non-zero (error) status.
 
 **Is it necessary?**
@@ -77,18 +80,18 @@ cd "$HOME" || exit
 
 **What if without it?**
 
-- The script would attempt to `cd "$HOME"`, but if that fails, the script would keep running from the current working directory where it was invoked (likely where Neomutt launched it). This might be anywhere (e.g., `/tmp`, `/var/mail`, etc.), and Yazi would show the wrong folder, confusing the user.
+- The script would attempt to `cd "$HOME"`, but if that fails, the script would keep running from the current working directory where it was invoked (likely where NeoMutt launched it). This might be anywhere (e.g., `/tmp`, `/var/mail`, etc.), and Yazi would show the wrong folder, confusing the user.
 
 ### Breakdown of the last code block
 
 ```bash
 $YAZI_BIN --chooser-file /dev/stdout | \
-    while IFS=$'\n' read -r attachment; do
+    while IFS=$'\n' read -r attachment || [[ -n "$attachment" ]]; do
         echo "push 'a$attachment<enter>'"
     done
 ```
 
-Let's go piece by piece:
+This is the heart of the script, so let's go piece by piece:
 
 - `$YAZI_BIN`: Expands to the path to the Yazi binary (set earlier in the script). This launches the Yazi file manager.
 - `--chooser-file /dev/stdout`: Yazi's `--chooser-file` option tells it to write the selected file path(s) to a specified file instead of its usual terminal output. By setting it to `/dev/stdout`, Yazi writes the chosen file path directly to the standard output (`stdout`) of the script. This allows the pipeline to capture the selection.
@@ -97,19 +100,38 @@ Let's go piece by piece:
     - `IFS=$'\n'` sets the Internal Field Separator to only newline, so that spaces or tabs in filenames are not treated as separators.
     - `read -r` reads a line literally (backslashes are not interpreted as escape characters).
     - `attachment` stores each line (i.e., each selected file path).
-  - `echo "push 'a$attachment<enter>'"`: For each selected file, this prints a string like `push 'a/path/to/file<enter>'`. This is a Neomutt macro command:
-    - `push` tells Neomutt to simulate keystrokes.
-    - `a` is the keybinding for `attach-file` command ("attach files to this message") in Neomutt's compose view.
+  - `echo "push 'a$attachment<enter>'"`: For each selected file, this prints a string like `push 'a/path/to/file<enter>'`. This is a NeoMutt macro command:
+    - `push` tells NeoMutt to simulate keystrokes.
+    - `a` is the keybinding for `attach-file` command ("attach files to this message") in NeoMutt's compose view.
     - `$attachment` is the file path chosen in Yazi.
     - `<enter>` simulates pressing the Enter key, which confirms the save operation.
-    - **Result:** These printed lines become commands that Neomutt will execute to add the selected attachments to the chosen paths.
+    - **Result:** These printed lines become commands that NeoMutt will execute to add the selected attachments to the chosen paths.
+
+### The Critical Question: What is `attachment`?
+
+**`attachment` is a plain bash variable** that gets assigned whatever `read` captures from stdin. In this context:
+
+- Each line yazi outputs (a file path) gets stored in `attachment`
+- The loop processes one file path per iteration
+- The name "attachment" is descriptive—it refers to a file being "attached" to your email inside NeoMutt
+
+Run `tldr read` or `man read` inside your shell for more information.
+
+### The `|| [[ -n "$attachment" ]]` Condition
+
+This is a clever trick to handle the file (the **single** file selection or the **last** selection of multiple file selections) without trailing newlines:
+
+- Normally, `read` returns `0` (success) when it reads a line, and `1` (failure) at EOF
+- If the last line doesn't end with a newline, `read` returns `1` (failure) but still populates the variable
+- The `|| [[ -n "$attachment" ]]` means: "if `read` fails, check if `attachment` is non-empty"
+- If it's non-empty, the loop body still executes one more time, processing the only file path
 
 ### What happens overall
 
 1. Yazi opens (in your home folder) and lets you select one or more files.
 2. Each selected file path is written to `stdout`, one per line.
-3. The `while` loop reads each path and builds a Neomutt `push` command that simulates pressing `a` (add attachment), the file path, and Enter.
-4. These commands are printed to `stdout`, which Neomutt captures and executes as if you typed them manually — effectively automating the "add attachment" process with a visual file picker.
+3. The `while` loop reads each path and builds a NeoMutt `push` command that simulates pressing `a` (add attachment), the file path, and Enter.
+4. These commands are printed to `stdout`, which NeoMutt captures and executes as if you typed them manually — effectively automating the "add attachment" process with a visual file picker.
 
 ### Nesting relationship
 
@@ -181,7 +203,7 @@ The following block diagram illustrates the nesting relationship among the shell
 
   The `push`ed command is **processed entirely within NeoMutt's own keystroke interpreter** — it is not passed back to the shell or to Yazi. This allows Yazi's graphical file selection to be translated into automated keystrokes that NeoMutt understands natively, effectively making Yazi a visual attachment picker for NeoMutt.
 
-**Key insight:** The script generates keystroke commands that Neomutt interprets, allowing Yazi to act as a graphical file picker for adding email attachments. The nesting relationship forms a chain: **Zsh → NeoMutt → Script → Yazi → Script → NeoMutt**, where the script acts as a bridge between Yazi's output and NeoMutt's input.
+**Key insight:** The script generates keystroke commands that NeoMutt interprets, allowing Yazi to act as a graphical file picker for adding email attachments. The nesting relationship forms a chain: **Zsh → NeoMutt → Script → Yazi → Script → NeoMutt**, where the script acts as a bridge between Yazi's output and NeoMutt's input.
 
 The `push` command in NeoMutt is a powerful tool for automation. It tells NeoMutt to simulate a sequence of keystrokes as if they were typed by the user. Its primary and most effective use is for **automating complex or repetitive workflows** in contexts where a simple keybinding is not flexible enough.
 
@@ -212,10 +234,12 @@ In your Yazi script example, the `echo`ed `push` commands are the final step. Th
 
 `fzf` is a general-purpose command-line fuzzy finder. In this setup, it filters a predefined list of files generated by `fd`.
 
-- **Will the `fzf.sh` version be improved by fzf + ueberzug++ for supporting image preview?**
-  **Technically yes, but practically it is very cumbersome.** Using `fzf` with `ueberzug++` requires a complex wrapper script (often using FIFOs) to start a background server, calculate coordinate layouts dynamically, send JSON commands for image rendering, and handle cleanup upon exit. It is extremely fragile compared to Yazi's native integration. While modern `fzf` can use `chafa` for terminal previews, it still lacks native PDF and archive preview rendering out of the box.
+**Will the `fzf.sh` version be improved by fzf + ueberzug++ for supporting image preview?**
 
-- **Why is `export FZF_DEFAULT_COMMAND` necessary if the variable is never explicitly called in the script?**
-  `fzf` is a generic text filter. When no text is piped into it, it automatically falls back to a standard `find` command to populate its list. However, `fzf` is hardcoded to read the `FZF_DEFAULT_COMMAND` environment variable under the hood. By `export`ing this variable, `fzf` inherits it when executed and magically replaces the default `find` with your custom `fd` command. Without `export`, the variable would not reach `fzf`'s environment, and it would display every single file in your home directory instead of filtering for specific attachment types.
+**Technically yes, but practically it is very cumbersome.** Using `fzf` with `ueberzug++` requires a complex wrapper script (often using FIFOs) to start a background server, calculate coordinate layouts dynamically, send JSON commands for image rendering, and handle cleanup upon exit. It is extremely fragile compared to Yazi's native integration. While modern `fzf` can use `chafa` for terminal previews, it still lacks native PDF and archive preview rendering out of the box.
 
-- **Navigation:** `fzf` flattens the output of `fd` into a single, searchable list. While fast, it lacks natural directory traversal if you aren't exactly sure what you're looking for.
+**Why is `export FZF_DEFAULT_COMMAND` necessary if the variable is never explicitly called in the script?**
+
+`fzf` is a generic text filter. When no text is piped into it, it automatically falls back to a standard `find` command to populate its list. However, `fzf` is hardcoded to read the `FZF_DEFAULT_COMMAND` environment variable under the hood. By `export`ing this variable, `fzf` inherits it when executed and magically replaces the default `find` with your custom `fd` command. Without `export`, the variable would not reach `fzf`'s environment, and it would display every single file in your home directory instead of filtering for specific attachment types.
+
+**Navigation:** `fzf` flattens the output of `fd` into a single, searchable list. While fast, it lacks natural directory traversal if you aren't exactly sure what you're looking for.

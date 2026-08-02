@@ -144,6 +144,7 @@ sync_mail() {
             log "INFO" "mbsync completed successfully"
         else
             log "ERROR" "mbsync failed with exit code: $mbsync_exit"
+            return 1
         fi
     else
         log "ERROR" "mbsync not found"

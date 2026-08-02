@@ -4,3 +4,16 @@ dark = "catppuccin-macchiato"
 
 # General, Browser, Status Bar, Search, and Progress Bar are handled by flavors.
 # Only add overrides here if you want to deviate from the flavor's design.
+
+[icon]
+# Yazi's built-in theme gives special icons to a few exact file names, and
+# these are checked BEFORE the ".md" extension rule. That made e.g. README.md
+# show a book icon while other Markdown files showed the generic "M" glyph.
+# The rules below (file-name matches are case-insensitive) override all of the
+# built-in ".md" special cases to the standard Markdown icon U+F48A
+# (nf-md-language_markdown, `\uf48a`), so every Markdown file renders identically.
+#
+# Note: `#dddddd` matches the built-in "md" icon color of the DARK theme
+# (catppuccin-macchiato). If you also use light mode (bluloco-light), change
+# it to `#4a4a4a` to match that theme instead.
+prepend_files = [{ name = "code_of_conduct.md", text = "\uf48a", fg = "#dddddd" }, { name = "license.md", text = "\uf48a", fg = "#dddddd" }, { name = "readme.md", text = "\uf48a", fg = "#dddddd" }, { name = "security.md", text = "\uf48a", fg = "#dddddd" }]

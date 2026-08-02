@@ -15,8 +15,10 @@ else
   YAZI_BIN="yazi"
 fi
 
-
+# The additional  || [[ -n "$attachment" ]]  check ensures that 
+# if a line is read but has no trailing newline (making `read` return `false` ), 
+# the loop body will still run one last time to process the content populated in $attachment
 $YAZI_BIN --chooser-file /dev/stdout | \
-    while IFS=$'\n' read -r attachment; do
+    while IFS=$'\n' read -r attachment || [[ -n "$attachment" ]]; do
         echo "push 'a$attachment<enter>'"
     done
