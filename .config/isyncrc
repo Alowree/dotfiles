@@ -11,7 +11,7 @@ User alowree@twineintl.com
 # On Arch Linux, the first part fails silently (command not found),
 # and it falls back to just the latter part
 # (which will be in the standard /usr/bin path)
-PassCmd "/opt/homebrew/bin/pass Email/twineintl || pass Email/twineintl"
+PassCmd "pass Email/twineintl"
 Port 993
 TLSType IMAPS
 AuthMechs PLAIN
@@ -33,7 +33,7 @@ SubFolders Verbatim
 Channel twine
 Far :twine-remote:
 Near :twine-local:
-Patterns *
+Patterns * !Junk !Junk/*
 Sync All
 Expunge Both
 Create Near
