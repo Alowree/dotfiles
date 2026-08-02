@@ -38,6 +38,9 @@ for dir in "${xdg_base_dirs[@]}"; do
     fi
 done
 
+# Ensure the zsh state dir exists so HISTFILE can actually be created
+mkdir -p "$XDG_STATE_HOME/zsh"
+
 # Set ZDOTDIR here. All other Zsh related configuration happens there.
 # ------------------------------------------------------------------------------
 # export ZDOTDIR=${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}

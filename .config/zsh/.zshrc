@@ -26,7 +26,7 @@ setopt HIST_IGNORE_SPACE
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_FIND_NO_DUPS
 
-alias history='fc -l -D "%Y-%m-%d %H:%M:%S" 1'
+alias history='fc -l -d -t "%Y-%m-%d %H:%M:%S" 1'
 
 # =========================================================
 # Shell behaviour
@@ -35,6 +35,9 @@ alias history='fc -l -D "%Y-%m-%d %H:%M:%S" 1'
 setopt AUTOCD
 setopt NOBEEP
 setopt NUMERIC_GLOB_SORT  # sort file10 after file9, not after file1
+
+# Terminal apps launched from the Dock/Finder start in "/"; cd home instead
+[[ "$PWD" == "/" ]] && cd "$HOME"
 
 
 # Initialize zoxide
