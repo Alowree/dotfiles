@@ -48,6 +48,10 @@ mouse-scroll-multiplier        = 2
 
 # Other Configurations
 macos-option-as-alt            = true
+working-directory              = ~
+
+# Close windows/tabs without the "Close Window?" confirmation dialog
+confirm-close-surface          = false
 
 # --- Keybinds ---
 #
@@ -55,7 +59,20 @@ macos-option-as-alt            = true
 # `option`), and `super` (alias: `cmd`, `command`). You may use the modifier
 # or the alias. When debugging keybinds, the non-aliased modifier will always
 # be used in output.
+#
+# `super` key on macOS: `cmd` or `command`
+# `super` key on Arch Linux: 
+# - `Windows` key on Lenovo Windows laptop orignal keyboard
+# - `System` key on external SKN 4.0 keyboard
 
+# I use AeroSpace on macOS, and Hyprland on Arch Linux as the window manager
+# keybinds defined inside Ghostty and AeroSpace sometimes conflict with each other 
+# keybinds defined inside Ghostty and Hyprland sometimes conflict with each other 
+# 
+# Because windown manager is sitting at the outer layer of the terminal Ghostty
+# if you have the same set of keybinds defined for AeroSpace or Hyprland
+# they will take precedance at the window manager level
+#
 # These are all default keybinds
 # Pasted here for remembering them
 # --- A: Core keybinds ---
