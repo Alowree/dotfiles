@@ -93,7 +93,11 @@ fi
 SOURCE_FILE="$ZDOTDIR/.zshenv"
 
 # Check if symlink already exists and is correct
-if [[ -L "$SYS_ZSENV" ]] && [[ "$(readlink "$SYS_ZSENV" 2>/dev/null)" == "$SOURCE_FILE" ]]; then
+# Skip entirely as root/sudo: $HOME points to /var/root there, which would bake
+# a wrong path like /var/root/.config/zsh/.zshenv into the link
+if (( EUID == 0 )); then
+    :
+elif [[ -L "$SYS_ZSENV" ]] && [[ "$(readlink "$SYS_ZSENV" 2>/dev/null)" == "$SOURCE_FILE" ]]; then
     # Symlink is already correctly set up - do nothing
     :
 else
@@ -106,7 +110,7 @@ else
     else
         # Need password - print instruction
         echo "⚠️  To enable system-wide zshenv, run this command once:"
-        echo "   sudo ln -sf \"$SOURCE_FILE\" \"$SYS_ZSENV\""
+        echo "   sudo ln -sf '${SOURCE_FILE}' '$SYS_ZSENV'"
         echo "   (Your current shell will still work, but new shells may not see ZDOTDIR)"
     fi
 fi
