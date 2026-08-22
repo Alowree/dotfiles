@@ -1,10 +1,10 @@
+-- Filename: ~/.config/nvim/lua/config/keymaps.lua
+-- ~/.config/nvim/lua/config/keymaps.lua
+
 -- vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
-
--- Quick restart
-map("n", "<leader>R", "<cmd>restart<cr>", { desc = "Restart Neovim" })
 
 -- Resize window using Ctrl + arrow keys
 map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Increase Window Height" })
@@ -37,30 +37,26 @@ map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and Clear hlsea
 map("v", "<", "<gv", opts)
 map("v", ">", ">gv", opts)
 
--- Commenting
-map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
-map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
-
 -- Window navigation mappings
 map("n", "<C-h>", "<C-w>h", { desc = "Move focus to the left window" })
 map("n", "<C-j>", "<C-w>j", { desc = "Move focus to the lower window" })
 map("n", "<C-k>", "<C-w>k", { desc = "Move focus to the upper window" })
 map("n", "<C-l>", "<C-w>l", { desc = "Move focus to the right window" })
 
--- Toggle spell
-map("n", "<leader>ts", "<cmd>set spell!<CR>", { desc = "Toggle Spell On/Off" })
-
 -- Toggle wrap
 map("n", "<leader>tw", "<cmd>set wrap!<CR>", {
   desc = "Toggle Wrap",
   silent = true,
 })
+-- Toggle spell
+map("n", "<leader>ts", "<cmd>set spell!<CR>", { desc = "Toggle Spell On/Off" })
 
--- Open / Save file
-map("n", "<leader>wk", "<cmd>e ~/OneDrive/Documents/Weekly.md<CR>", { desc = "Open Weekly Report" })
-map("n", "<leader>ww", "<cmd>write<CR>", { desc = "Write File" })
+-- Open files: new or weekly
+--
+map("n", "<leader>wk", "<cmd>e ~/OneDrive/Documents/Weekly.md<CR>", { desc = "Weekly Report" })
+map("n", "<leader>ww", "<cmd>write<CR>", { desc = "Save File" })
 
--- save file
+-- Save file
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 -- Quit

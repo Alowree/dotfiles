@@ -16,4 +16,4 @@ dark = "catppuccin-macchiato"
 # Note: `#dddddd` matches the built-in "md" icon color of the DARK theme
 # (catppuccin-macchiato). If you also use light mode (bluloco-light), change
 # it to `#4a4a4a` to match that theme instead.
-prepend_files = [{ name = "code_of_conduct.md", text = "\uf48a", fg = "#dddddd" }, { name = "license.md", text = "\uf48a", fg = "#dddddd" }, { name = "readme.md", text = "\uf48a", fg = "#dddddd" }, { name = "security.md", text = "\uf48a", fg = "#dddddd" }]
+# prepend_files = [{ name = "code_of_conduct.md", text = "\uf48a", fg = "#dddddd" }, { name = "license.md", text = "\uf48a", fg = "#dddddd" }, { name = "readme.md", text = "\uf48a", fg = "#dddddd" }, { name = "security.md", text = "\uf48a", fg = "#dddddd" }]

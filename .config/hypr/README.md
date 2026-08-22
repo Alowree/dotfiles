@@ -37,7 +37,7 @@ Per-location monitor profiles keyed by EDID description:
 | Monitor                         | Profile                       |
 | ------------------------------- | ----------------------------- |
 | eDP-1 (built-in, 2560x1600@120) | Primary, anchored at `0x0`    |
-| Sony TV                         | Mirrors eDP-1 (meeting room)  |
+| Sony TV                         | Mirrors eDP-1 (meeting room); disabled by default — toggle via `SUPER+CTRL+SHIFT+M` (`scripts/tv-toggle.sh`, switches eDP-1 to 16:9 for bars-free mirroring) |
 | Dell U2723QE                    | Extended, auto-right (home)   |
 | Xiaomi Mi Monitor 4K            | Extended, auto-right (office) |
 
@@ -66,6 +66,7 @@ Modifiers: `SUPER` (primary), `SUPER+SHIFT` (secondary), `SUPER+CTRL+SHIFT` (ter
 | `XF86Audio*`                  | Volume / mute / media via `wpctl` + `playerctl`                       |
 | `XF86MonBrightness*`          | Brightness via `brightnessctl`                                        |
 | `SUPER/SHIFT/CTRL+SHIFT + P`  | Screenshot: output / window / region (`hyprshot`)                     |
+| `SUPER+CTRL+SHIFT + M`        | Meeting-room TV mirror toggle (16:9, bars-free)                       |
 
 ### Autostart (`modules/autostart.lua`)
 

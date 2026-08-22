@@ -63,3 +63,23 @@ hl.window_rule({
 -- })
 --
 -- 2026-07-31 comment it out to test
+
+-- WeChat (Linux) parentless QFileDialogs: WeChat opens them without a parent,
+-- so Qt places them at (0,0) on the primary screen (eDP-1) while the app lives
+-- on the focused monitor. This made the dialog invisible -> the modal blocked
+-- the main window -> app appeared hung. Force them onto the active monitor +
+-- center.
+hl.window_rule({
+	name = "wechat-file-dialog-on-active-monitor",
+	match = { class = "^wechat$", title = "^Open$" },
+	float = true,
+	workspace = "current",
+	center = true,
+})
+hl.window_rule({
+	name = "wechat-save-dialog-on-active-monitor",
+	match = { class = "^wechat$", title = "^Save$" },
+	float = true,
+	workspace = "current",
+	center = true,
+})

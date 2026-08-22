@@ -19,8 +19,8 @@ function M:peek(job)
 			:stdout(Command.PIPED)
 			:stderr(Command.PIPED)
 			:output()
-	elseif ext == "xls" or ext == "xlsx" then
-		-- Use LibreOffice (soffice) as a universal converter for .xls and .xlsx
+	elseif ext == "xls" or ext == "xlsx" or ext == "ods" then
+		-- Use LibreOffice (soffice) as a universal converter for .xls, .xlsx, and .ods
 		-- Convert to CSV in a temporary directory and read it
 		output, err = Command("sh")
 			:arg({

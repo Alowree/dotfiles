@@ -42,8 +42,8 @@ return {
 	},
 	root_dir = function(bufnr, on_dir)
 		local fname = vim.api.nvim_buf_get_name(bufnr)
-		-- Stop at $HOME to prevent detecting oxlint configs outside the project
-		local stop = vim.fs.dirname(vim.fn.expand("$HOME"))
+		-- Stop before $HOME so global dotfiles (~/.oxlintrc.json) are never treated as project config
+		local stop = vim.fn.expand("$HOME")
 		local marker = vim.fs.find({
 			".oxlintrc.json",
 			".oxlintrc.jsonc",

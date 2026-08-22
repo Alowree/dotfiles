@@ -23,13 +23,16 @@ hl.monitor({
 })
 
 -- 3. Sony TV (Meeting Room) - Configured to mirror your laptop
--- Note: Mirroring uses the resolution of the source. Aspect ratio stretching may occur.
+-- Disabled by default: hotplug auto-mirroring causes flicker on the TV.
+-- Toggle with SUPER+CTRL+SHIFT+M (scripts/tv-toggle.sh): it switches eDP-1 to
+-- 16:9 (2560x1440@120) first so the mirror fills the TV without black bars,
+-- and restores eDP-1 when toggled off.
 hl.monitor({
 	-- output = "DP-2",
 	output = "desc:Sony SONY TV  *02 0x01010101",
 	mode = "1920x1080@60",
 	position = "auto",
-	scale = 2,
+	-- disabled = true,
 	mirror = "eDP-1", -- This forces the TV to replicate eDP-1
 })
 

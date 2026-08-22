@@ -23,7 +23,7 @@ local shotselectedregion = "hyprshot -m region"
 ---- KEYBINDINGS ----
 ---------------------
 
--- `super` key on Arch Linux 2026-06-20
+-- `SUPER` key defition as on Arch Linux 2026-06-20
 -- `Windows` key on Lenovo Windows laptop orignal keyboard
 -- `System` key on external SKN 4.0 keyboard
 
@@ -51,6 +51,9 @@ hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("qs ipc call theme toggle"))
 
 -- quickshell: Power Menu
 hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd("qs ipc call powermenu toggle"))
+
+-- Meeting-room TV mirror toggle (Sony TV, scripts/tv-toggle.sh)
+hl.bind(thirdMod .. " + M", hl.dsp.exec_cmd("/home/alowree/.config/hypr/scripts/tv-toggle.sh"))
 
 -- Layout specific (scrolling layout)
 -- hl.bind(mainMod .. " + V", hl.dsp.layout("togglesplit")) -- dwindle only, disabled for scrolling

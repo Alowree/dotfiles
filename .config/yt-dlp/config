@@ -3,7 +3,6 @@
 
 # Prefer 1080p mp4
 -f 'bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'
-
 # Include subtitles
 --write-sub
 --sub-lang en

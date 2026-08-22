@@ -201,9 +201,12 @@ vim.api.nvim_create_autocmd("FileType", {
       return
     end
 
-    -- Only set expr folds when treesitter successfully started
-    vim.wo[0].foldmethod = "expr"
-    vim.wo[0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    -- Only set expr folds when treesitter successfully started,
+    -- except markdown, which keeps the global 'marker' folding
+    if ft ~= "markdown" then
+      vim.wo[0].foldmethod = "expr"
+      vim.wo[0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end
   end,
 })
 

@@ -21,6 +21,9 @@ remember_window_size  yes
 initial_window_width  960
 initial_window_height 600
 
+# Close OS windows (e.g. via AeroSpace `close`) without a confirmation dialog
+confirm_os_window_close 0
+
 # Color scheme
 # background_image ~/.config/wallpapers/cold_rain.jpg
 background_image_layout cscaled

@@ -22,16 +22,16 @@ set spool_file = "+INBOX"
 set smtp_url = "smtps://alowree@soundfreaq.com@smtp.gmail.com:465/"
 
 # initial mailboxes
-set postponed = "+Drafts"
-set trash = "+Trash"
-set record = "+Sent"
+set postponed = "+[Gmail]/Drafts"
+set trash = "+[Gmail]/Trash"
+set record = "+[Gmail]/Sent Mail"
 
 # Account 1: mailboxes and folder hook (remote server only)
 # Local maildir polling removed to avoid showing local sync results.
 # The remote IMAP mailboxes are exposed below for use with the IMAP folder.
 
 # mailboxes in the sidebar
-mailboxes "+INBOX" "+Sent" "+Drafts" "+Trash"
+mailboxes "+INBOX" "+[Gmail]/Sent Mail" "+[Gmail]/Drafts" "+[Gmail]/Trash"
 
 ## Hook -- IMPORTANT!
 # account-hook $folder "set imap_pass=`security find-generic-password -a 'alowree@twineintl.com' -s 'neomutt-twine' -w`"

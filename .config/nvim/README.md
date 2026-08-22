@@ -8,22 +8,26 @@ A modern, fast Neovim configuration optimized for version 0.13 nightly, powered 
 ~/.config/nvim/
 ├── init.lua                     # Entry point (loads config and plugins)
 ├── nvim-pack-lock.json          # Lockfile for plugin versions
+├── stylua.toml                  # Stylua formatting rules for this config
 ├── lua/
 │   ├── config/                  # Core editor configuration
+│   │   ├── init.lua             # Loads the config modules below
 │   │   ├── options.lua          # Global Neovim settings (Leader key, options)
-│   │   ├── keymaps.lua          # Global keybindings
-│   │   ├── autocmds.lua         # Event-driven automation (IME, yank, etc.)
+│   │   ├── keymaps.lua          # Global keybindings + fold logic
 │   │   ├── diagnostics.lua      # LSP diagnostic UI & behavior
-│   │   ├── lsp.lua              # LSP server configurations
-│   │   ├── session.lua          # Session management
+│   │   ├── pairs.lua            # Auto-pairs & bracket handling
+│   │   ├── autocmds.lua         # Event-driven automation (IME, yank, etc.)
+│   │   ├── lsp.lua              # LSP server enablement & keymaps
 │   │   ├── packui.lua           # Custom UI for vim.pack
 │   │   ├── ui2.lua              # Native UI redesign (0.12+)
 │   │   └── writing.lua          # Shared prose utilities (abbreviations)
-│   └── plugins/                 # Plugin configurations
+│   └── plugins/                 # Auto-sourced plugin configs
+│       ├── init.lua             # Loads the plugin modules below
 │       ├── blink.lua            # Blink.cmp completion engine
 │       ├── conform.lua          # Auto-formatting (conform.nvim)
+│       ├── img-clip.lua         # Paste image from clipboard
 │       ├── lualine.lua          # Statusline configuration
-│       ├── misc.lua             # Pangu, plenary, etc.
+│       ├── misc.lua             # Pangu, oil.nvim, etc.
 │       ├── nvim-lint.lua        # Asynchronous linting
 │       ├── nvim-surround.lua    # Surround operations (ys, ds, cs)
 │       ├── nvim-treesitter.lua  # Syntax highlighting & textobjects
@@ -33,14 +37,12 @@ A modern, fast Neovim configuration optimized for version 0.13 nightly, powered 
 ├── ftplugin/                    # Filetype-specific overrides
 │   ├── mail.lua                 # Mail buffer settings
 │   └── markdown.lua             # Markdown productivity tools
-├── lsp/                         # LSP server-specific configurations
-│   ├── vtsls.lua                # TypeScript/JavaScript configuration
-│   ├── gopls.lua                # Go configuration
-│   └── ...                      # Other server configs
 ├── spell/                       # Custom dictionaries
 │   └── en.utf-8.add             # User-added spellings
-└── utils/                       # External tool configs
-    └── .markdownlint-cli2.yaml  # Markdown linter rules
+├── utils/                       # External tool configs
+│   └── .markdownlint-cli2.yaml  # Markdown linter rules
+└── z-bin/                       # Platform helper binaries
+    └── im-select.exe            # IME switcher (Windows)
 ```
 
 ## ⌨️ Comprehensive Keymaps
@@ -63,35 +65,35 @@ A modern, fast Neovim configuration optimized for version 0.13 nightly, powered 
 
 ### Snacks (Picker, Explorer, Dashboard, etc.)
 
-| Key               | Action                            | Description           |
-| ----------------- | --------------------------------- | --------------------- |
-| `<leader>e`       | `Snacks.explorer()`               | Toggle File Explorer  |
-| `<leader>bd`      | `Snacks.bufdelete()`              | Delete Buffer         |
-| `<leader><space>` | `Snacks.picker.smart()`           | Smart Find Files      |
-| `<leader>,`       | `Snacks.picker.buffers()`         | List Open Buffers     |
-| `<leader>/`       | `Snacks.picker.grep()`            | Grep Search in Files  |
-| `<leader>ff`      | `Snacks.picker.files()`           | Find Files            |
-| `<leader>fr`      | `Snacks.picker.recent()`          | Recent Files          |
-| `<leader>fc`      | `Snacks.picker.files({config})`   | Find Config File      |
-| `<leader>gs`      | `Snacks.picker.git_status()`      | Git Status            |
-| `<leader>gl`      | `Snacks.picker.git_log()`         | Git Log               |
-| `<leader>su`      | `Snacks.picker.undo()`            | Undo History          |
-| `<leader>z`       | `Snacks.zen()`                    | Toggle Zen Mode       |
-| `<leader>Z`       | `Snacks.zen.zoom()`               | Toggle Zoom           |
-| `<leader>lg`      | `Snacks.lazygit()`                | Open Lazygit          |
+| Key               | Action                          | Description          |
+| ----------------- | ------------------------------- | -------------------- |
+| `<leader>e`       | `Snacks.explorer()`             | Toggle File Explorer |
+| `<leader>bd`      | `Snacks.bufdelete()`            | Delete Buffer        |
+| `<leader><space>` | `Snacks.picker.smart()`         | Smart Find Files     |
+| `<leader>,`       | `Snacks.picker.buffers()`       | List Open Buffers    |
+| `<leader>/`       | `Snacks.picker.grep()`          | Grep Search in Files |
+| `<leader>ff`      | `Snacks.picker.files()`         | Find Files           |
+| `<leader>fr`      | `Snacks.picker.recent()`        | Recent Files         |
+| `<leader>fc`      | `Snacks.picker.files({config})` | Find Config File     |
+| `<leader>gs`      | `Snacks.picker.git_status()`    | Git Status           |
+| `<leader>gl`      | `Snacks.picker.git_log()`       | Git Log              |
+| `<leader>su`      | `Snacks.picker.undo()`          | Undo History         |
+| `<leader>z`       | `Snacks.zen()`                  | Toggle Zen Mode      |
+| `<leader>Z`       | `Snacks.zen.zoom()`             | Toggle Zoom          |
+| `<leader>lg`      | `Snacks.lazygit()`              | Open Lazygit         |
 
 ### LSP & Diagnostics
 
-| Key          | Action                           | Description                   |
-| ------------ | -------------------------------- | ----------------------------- |
-| `gd`         | `vim.lsp.buf.definition()`      | Go to Definition              |
-| `grt`        | `vim.lsp.buf.type_definition()` | Go to Type Definition         |
-| `<leader>cr` | `vim.lsp.buf.rename()`          | Rename Symbol                 |
-| `<leader>ca` | `vim.lsp.buf.code_action()`     | Code Action                   |
-| `<leader>cl` |                                  | LSP Fix All (Oxlint/Eslint)   |
-| `K`          | `vim.lsp.buf.hover()`           | Hover Documentation           |
-| `<leader>cw` |                                  | Workspace Diagnostics         |
-| `<leader>lt` | `lint.try_lint()`               | Trigger manual Linting        |
+| Key          | Action                          | Description                 |
+| ------------ | ------------------------------- | --------------------------- |
+| `gd`         | `vim.lsp.buf.definition()`      | Go to Definition            |
+| `grt`        | `vim.lsp.buf.type_definition()` | Go to Type Definition       |
+| `<leader>cr` | `vim.lsp.buf.rename()`          | Rename Symbol               |
+| `<leader>ca` | `vim.lsp.buf.code_action()`     | Code Action                 |
+| `<leader>cl` |                                 | LSP Fix All (Oxlint/Eslint) |
+| `K`          | `vim.lsp.buf.hover()`           | Hover Documentation         |
+| `<leader>cw` |                                 | Workspace Diagnostics       |
+| `<leader>lt` | `lint.try_lint()`               | Trigger manual Linting      |
 
 ### Editing & Formatting
 

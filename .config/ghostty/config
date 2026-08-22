@@ -21,9 +21,12 @@ window-padding-x               = 5
 window-padding-y               = 5
 window-padding-balance         = true
 
-# Option A: choose a font that has combined EN and CN
-# The same font as used in iTerm2, not working in Kitty though
-font-family = JetBrains Maple Mono
+# Same fonts as used in Kitty
+# Primary (Latin): IosevkaTerm Nerd Font Mono
+# Fallback (CJK): LXGW WenKai Mono (extra font-family lines act as fallbacks)
+font-family = IosevkaTerm Nerd Font Mono
+font-family = LXGW WenKai Mono
+font-size = 16
 
 # The cursor-style=block is already the default setting,
 # so reset it explicitly here does not give you the block,

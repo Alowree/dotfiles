@@ -13,29 +13,31 @@ The configuration is modular:
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
 | `kitty.conf`             | Main config: fonts, theme, window/cursor settings, includes                                                            |
 | `mappings.conf`          | All keybindings (tabs, windows, layout, hints, scrolling, clipboard)                                                   |
-| `fonts/*.conf`           | Swap-in font presets: `default` (JetBrainsMono NF), `jetbrains` (JetBrains Mono Light), `maplemono` (Maple Mono NF CN) |
+| `fonts/en-*.conf`        | Latin font modules: `en-iosevka` (IosevkaTerm NFM), `en-jetbrains` (JetBrainsMono NFM Light), `en-ubuntu` (Ubuntu Mono derivative Powerline) |
+| `fonts/cn-*.conf`        | Chinese font modules (via `symbol_map`): `cn-lxgw` (LXGW WenKai Mono), `cn-neoxihei` (NeoXiHei Code), `cn-jetbrains-maple` (JetBrains Maple Mono) |
 | `themes/*.conf`          | Color schemes: tokyonight_night (base), Catppuccin-Mocha, Dracula, Kanagawa                                            |
 | `current-theme.conf`     | Theme applied via kitty's theme switcher (Adwaita dark)                                                                |
 | `theme-colors.conf`      | Hand-tuned warm/gold palette (kept as a spare, not included)                                                           |
 | `make_default_config.sh` | Regenerates a stock `kitty.conf`                                                                                       |
 
-> The trailing `BEGIN_KITTY_FONTS` and `BEGIN_KITTY_THEME` blocks in
-> `kitty.conf` are managed by the kitty/theme tooling and take precedence over
-> the `include` lines above them.
+> The trailing `BEGIN_KITTY_THEME` block in `kitty.conf` is managed by the
+> kitty/theme tooling and takes precedence over the `include` lines above it.
+> Fonts are fully owned by the `fonts/en-*.conf` / `fonts/cn-*.conf` modules.
 
 ## Included features
 
 ### Typography
 
-- Primary font: **IosevkaTerm Nerd Font Mono** — fixed 1-cell advance for
-  Latin, punctuation, and arrows.
+- Latin font comes from one of the `fonts/en-*.conf` modules
+  (**IosevkaTerm Nerd Font Mono** by default — fixed 1-cell advance for
+  Latin, punctuation, and arrows). Toggle it by editing the `include` lines
+  in `kitty.conf`.
 - Chinese glyphs are mapped via
-  `symbol_map U+3400-U+4DBF, U+4E00-U+9FFF → NeoXiHei Code`, so CJK text
-  renders full-width (2 cells), matching VSCodium.
+  `symbol_map U+3400-U+4DBF, U+4E00-U+9FFF → <cn font>` from the
+  `fonts/cn-*.conf` modules (**LXGW WenKai Mono** by default; alternatives
+  are NeoXiHei Code and JetBrains Maple Mono), so CJK text renders
+  full-width (2 cells), matching VSCodium.
 - `adjust_line_height 110%` adds breathing room between lines.
-- Font presets (`fonts/`) are toggled by editing the `include` lines in
-  `kitty.conf`; the active preset (`fonts/jetbrains.conf`) is overridden by the
-  `BEGIN_KITTY_FONTS` block.
 
 ### Color scheme
 

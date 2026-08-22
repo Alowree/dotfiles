@@ -12,8 +12,8 @@ linemode = "size_and_mtime"
 [preview]
 # Maximum preview width/height for images. 
 # Run `yazi --clear-cache` after changing this for it to take effect.
-max_width = 10000
-max_height = 10000
+max_width = 2560
+max_height = 2560
 
 # Configure available openers that can be used in `[open]`:
 [opener]
@@ -166,7 +166,7 @@ prepend_rules = [
     "word",
     "reveal",
   ] },
-  { url = "*.{xlsx,xls}", use = [
+  { url = "*.{xlsx,xls,ods}", use = [
     "excel",
     "reveal",
   ] },
@@ -221,7 +221,7 @@ prepend_rules = [
 [plugin]
 prepend_previewers = [
   { url = "*.{docx,doc,pptx,ppt}", run = "docx-preview" },
-  { url = "*.{xlsx,xls,csv,tsv}", run = "excel-preview" },
+  { url = "*.{xlsx,xls,csv,tsv,ods}", run = "excel-preview" },
   { url = "*.parquet", run = "duckdb" },
   # { url = "*.txt", run = "duckdb" },
   { url = "*.db", run = "duckdb" },
