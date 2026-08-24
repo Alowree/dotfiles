@@ -1,0 +1,31 @@
+# Zathura configuration file
+# See `man zathurarc`
+# See `help zathura`
+
+# https://pwmt.org/projects/zathura/documentation/
+# https://github.com/homebrew-zathura/homebrew-zathura
+# https://ejmastnak.com/tutorials/vim-latex/pdf-reader/#zathura-macos
+
+# ╭───────────────────────────────────────────────────────────╮
+# │                        Appearance                         │
+# ╰───────────────────────────────────────────────────────────╯
+
+# best-fit | width
+set adjust-open width
+
+# One page per row by default
+set pages-per-row 1
+
+# Copy text to the system clipboard
+# primary | clipboard
+set selection-clipboard clipboard
+
+# Input
+set incremental-search true
+
+
+# ╭───────────────────────────────────────────────────────────╮
+# │                        Keybindings                        │
+# ╰───────────────────────────────────────────────────────────╯
+
+map p print
