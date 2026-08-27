@@ -20,36 +20,35 @@ max_height = 2560
 # Define your editor here
 #
 # Option A
-edit = [{ run = '${EDITOR:-nvim} "$@"', desc = "Neovim", block = true }]
+edit = [{ run = '$EDITOR %s', desc = "Neovim", block = true }]
 #
 # Option B
-# edit = [{ run = '${EDITOR:-vim} "$@"', desc = "Edit", block = true }]
+# edit = [{ run = '$EDITOR %s', desc = "Edit", block = true }]
 
 # Although already in yazi-default.toml
 # we still need to explicitly set this reveal here
 # Otherwise, "Show EXIF" will appear as the last menu item
 # after pressing `O` to open file interactively
 reveal = [
-  { run = 'open -R "$1"', desc = "View with Finder", for = "macos" },
-  { run = 'explorer /select, "%1"', orphan = true, desc = "View with Explorer", for = "windows" },
+  { run = 'open -R %s1', desc = "View with Finder", for = "macos" },
+  { run = 'explorer /select, %s1', orphan = true, desc = "View with Explorer", for = "windows" },
 ]
 vscode = [
-  { run = 'code "$@"', desc = "VS Code", orphan = true, for = "macos" },
-  { run = 'code "$@"', desc = "VS Code", orphan = true, for = "linux" },
-  { run = 'codium "$@"', desc = "VSCodium", orphan = true, for = "linux" },
+  { run = 'code %s', desc = "VS Code", orphan = true, for = "macos" },
+  { run = 'code %s', desc = "VS Code", orphan = true, for = "linux" },
+  { run = 'codium %s', desc = "VSCodium", orphan = true, for = "linux" },
 ]
-# typora = [{ run = 'open -a "Typora" "$@"', desc = "Typora", orphan = true }]
 # Typora opener with platform detection
 # Using run_if to check for macOS vs Linux
 typora = [
   { 
-    run = 'open -a "Typora" "$@"', 
+    run = 'open -a "Typora" %s', 
     desc = "Typora (macOS)", 
     orphan = true, 
     for = "macos" 
   },
   { 
-    run = 'typora "$@"', 
+    run = 'typora %s', 
     desc = "Typora (Linux)", 
     orphan = true, 
     for = "linux",
@@ -60,13 +59,13 @@ typora = [
 # Word opener with platform detection
 word = [
   { 
-    run = 'open -a "Microsoft Word" "$@"', 
+    run = 'open -a "Microsoft Word" %s', 
     desc = "Microsoft Word (macOS)", 
     orphan = true, 
     for = "macos" 
   },
   { 
-    run = 'libreoffice --writer "$@"', 
+    run = 'libreoffice --writer %s', 
     desc = "LibreOffice Writer (Linux)", 
     orphan = true, 
     for = "linux" 
@@ -75,13 +74,13 @@ word = [
 # Excel opener with platform detection
 excel = [
   { 
-    run = 'open -a "Microsoft Excel" "$@"', 
+    run = 'open -a "Microsoft Excel" %s', 
     desc = "Microsoft Excel (macOS)", 
     orphan = true, 
     for = "macos" 
   },
   { 
-    run = 'libreoffice --calc "$@"', 
+    run = 'libreoffice --calc %s', 
     desc = "LibreOffice Calc (Linux)", 
     orphan = true, 
     for = "linux" 
@@ -90,13 +89,13 @@ excel = [
 # Keynote opener with platform detection
 keynote = [
   { 
-    run = 'open -a "Keynote" "$@"', 
+    run = 'open -a "Keynote" %s', 
     desc = "Keynote (macOS)", 
     orphan = true, 
     for = "macos" 
   },
   { 
-    run = 'libreoffice --impress "$@"', 
+    run = 'libreoffice --impress %s', 
     desc = "LibreOffice Impress (Linux)", 
     orphan = true, 
     for = "linux" 
@@ -104,28 +103,28 @@ keynote = [
 ]
 # Image viewers
 gimp = [
-  { run = 'gimp "$@"', desc = "GIMP", orphan = true },
+  { run = 'gimp %s', desc = "GIMP", orphan = true },
 ]
 imv = [
-  { run = 'imv "$@"', desc = "imv", orphan = true },
+  { run = 'imv %s', desc = "imv", orphan = true },
 ]
 loupe = [
-  { run = 'loupe "$@"', desc = "Loupe", orphan = true },
+  { run = 'loupe %s', desc = "Loupe", orphan = true },
 ]
 # Custom defined openers for PDFs
 zathura = [
-  { run = 'zathura "$@"', detach = true, desc = "Open PDF with Zathura" },
+  { run = 'zathura %s', detach = true, desc = "Open PDF with Zathura" },
 ]
-preview = [{ run = 'open -a "Preview" "$@"', orphan = true, desc = "Preview" }]
-mpv = [{ run = 'mpv "$@"', desc = "mpv", orphan = true }]
+preview = [{ run = 'open -a "Preview" %s', orphan = true, desc = "Preview" }]
+mpv = [{ run = 'mpv %s', desc = "mpv", orphan = true }]
 # Extract compressed archive
 extract = [
-  { run = 'ouch d -y "$@"', desc = "Extract here with ouch", for = "unix" },
+  { run = 'ouch d -y %s', desc = "Extract here with ouch", for = "unix" },
 ]
 # Open with default browser
 browser = [
-  { run = 'open "$@"', desc = "Default Browser", orphan = true, for = "macos" },
-  { run = 'xdg-open "$@"', desc = "Default Browser", orphan = true, for = "linux" },
+  { run = 'open %s', desc = "Default Browser", orphan = true, for = "macos" },
+  { run = 'xdg-open %s', desc = "Default Browser", orphan = true, for = "linux" },
 ]
 # view-viu = [{ run = 'viu "$@"; echo "Press enter to exit"; read', desc = "View with viu", block = true }]
 
