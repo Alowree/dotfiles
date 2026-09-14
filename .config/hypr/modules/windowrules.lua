@@ -55,31 +55,22 @@ hl.window_rule({
 	stay_focused = true,
 })
 
--- and https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
--- What this does? Auto move the external monitor to workspace 2?
--- hl.workspace_rule({
--- 	workspace = "2",
--- 	layout = "scrolling",
--- })
---
--- 2026-07-31 comment it out to test
+-- WeChat (Linux) parentless QFileDialogs: Qt hardcodes position to (0,0) on
+-- the primary screen. Float the dialog so Hyprland places it on the active
+-- monitor instead.
+local function float_wechat_dialog(w)
+	if w == nil then
+		return
+	end
+	if w.class ~= "wechat" then
+		return
+	end
+	if not w.title:match("^Open") and not w.title:match("^Save") then
+		return
+	end
 
--- WeChat (Linux) parentless QFileDialogs: WeChat opens them without a parent,
--- so Qt places them at (0,0) on the primary screen (eDP-1) while the app lives
--- on the focused monitor. This made the dialog invisible -> the modal blocked
--- the main window -> app appeared hung. Force them onto the active monitor +
--- center.
-hl.window_rule({
-	name = "wechat-file-dialog-on-active-monitor",
-	match = { class = "^wechat$", title = "^Open$" },
-	float = true,
-	workspace = "current",
-	center = true,
-})
-hl.window_rule({
-	name = "wechat-save-dialog-on-active-monitor",
-	match = { class = "^wechat$", title = "^Save$" },
-	float = true,
-	workspace = "current",
-	center = true,
-})
+	hl.dispatch(hl.dsp.window.float({ action = "set", window = w }))
+end
+
+hl.on("window.open", float_wechat_dialog)
+hl.on("window.title", float_wechat_dialog)

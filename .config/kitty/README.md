@@ -4,8 +4,8 @@
 
 Personal [kitty](https://sw.kovidgoyal.net/kitty/) terminal configuration, kept
 in `~/.config/kitty/`. It wires up a curated typeface setup (Latin + Chinese),
-a dark color scheme, window and cursor polish, and a fully remapped keyboard
-scheme.
+a dynamically-switching color scheme (driven by Quickshell), window and cursor
+polish, and a fully remapped keyboard scheme.
 
 The configuration is modular:
 
@@ -17,7 +17,7 @@ The configuration is modular:
 | `fonts/cn-*.conf`        | Chinese font modules (via `symbol_map`): `cn-lxgw` (LXGW WenKai Mono), `cn-neoxihei` (NeoXiHei Code), `cn-jetbrains-maple` (JetBrains Maple Mono) |
 | `themes/*.conf`          | Color schemes: tokyonight_night (base), Catppuccin-Mocha, Dracula, Kanagawa                                            |
 | `current-theme.conf`     | Theme applied via kitty's theme switcher (Adwaita dark)                                                                |
-| `theme-colors.conf`      | Hand-tuned warm/gold palette (kept as a spare, not included)                                                           |
+| `theme-colors.conf`      | Dynamic palette written by Quickshell's `ThemeState.qml` (last theme include, overrides all above) |
 | `make_default_config.sh` | Regenerates a stock `kitty.conf`                                                                                       |
 
 > The trailing `BEGIN_KITTY_THEME` block in `kitty.conf` is managed by the
@@ -41,11 +41,17 @@ The configuration is modular:
 
 ### Color scheme
 
-- Base theme: **Tokyo Night** (`themes/tokyonight_night.conf`).
-- The kitty theme picker can override it; `current-theme.conf` (**Adwaita
-  dark**) is currently applied.
-- Alternatives shipped: Catppuccin Mocha, Dracula, Kanagawa.
-- `theme-colors.conf` holds a spare warm/gold palette.
+- **Dynamic switching**: Quickshell's `ThemeState.qml` writes the active
+  palette to `theme-colors.conf` and pushes it live via `kitty @ set-colors`.
+  The file is included last in `kitty.conf`, so it overrides all other theme
+  includes on startup and reload.
+- Quickshell applies the same palette to **Ghostty** by writing
+  `~/.config/ghostty/themes/dynamic.conf` (referenced via `config-file`) and
+  signalling a `SIGUSR2` reload — so both terminals stay in sync on every
+  `SUPER+T` theme switch.
+- Static fallbacks shipped: Tokyo Night, Catppuccin Mocha, Dracula, Kanagawa,
+  Adwaita dark (`current-theme.conf`). These are overridden by
+  `theme-colors.conf` when Quickshell is running.
 
 ### Window & cursor
 

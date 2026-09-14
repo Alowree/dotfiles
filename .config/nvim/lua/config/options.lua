@@ -25,34 +25,37 @@ opt.softtabstop = 2 -- Number of spaces a <Tab> counts for while editing
 opt.expandtab = true -- Convert all tabs to spaces
 opt.smartindent = true -- Insert indents automatically in C-like languages
 opt.autoindent = true -- Copy indent from current line when starting a new one
-opt.shiftround = true -- Round indent to multiple of 'shiftwidth'
 
--- Search Settings
+-- Search settings
 opt.ignorecase = true -- Case insensitive search
-opt.smartcase = true -- Case sensitive if uppercase in string
-opt.inccommand = "split" -- This allows the search incremental command to have a split preview window below
+opt.smartcase = true -- Case sensitive if uppercase in search
+opt.hlsearch = false -- Don't highlight search results
+opt.incsearch = true -- Show matches as you type
 
--- Visual & Rendering
-opt.termguicolors = true -- Enable 24-bit RGB colors
-opt.signcolumn = "auto" -- Show signcolumn only if needed (for git/diagnostics)
-opt.showmatch = true -- Briefly jump to matching bracket when inserted
-opt.matchtime = 2 -- Tenths of a second to show the matching paren
-opt.cmdheight = 1 -- Number of screen lines for the command-line
-opt.showmode = false -- Mode is shown by Lualine, so hide it in cmdline
-opt.pumheight = 10 -- Maximum number of items to show in popup menu
-opt.pumblend = 10 -- Pseudo-transparency for the popup menu
-opt.winblend = 0 -- Pseudo-transparency for floating windows
+-- Visual settings
+opt.termguicolors = true -- Enable 24-bit colors
+opt.signcolumn = "yes" -- Always show sign column
+opt.showmatch = true -- Highlight matching brackets
+opt.matchtime = 2 -- How long to show matching bracket
+opt.cmdheight = 0 -- Auto-expand when there's output
+opt.showmode = false -- Don't show mode in command line
+opt.pumheight = 10 -- Popup menu height
+opt.pumblend = 10 -- Popup menu transparency
+opt.pummaxwidth = 60 -- cap completion popup width
+opt.winblend = 0 -- Floating window transparency
+opt.completeopt = "menu,menuone,noselect,popup" -- popup shows completionItem/resolve preview
+opt.conceallevel = 0 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
-opt.concealcursor = "" -- Do not hide markup on the current cursor line
-opt.synmaxcol = 300 -- Don't syntax highlight long lines (performance)
-opt.virtualedit = "block" -- Allow cursor to move past end of line in Visual Block
+opt.concealcursor = "" -- Don't hide cursor line markup
+opt.synmaxcol = 300 -- Syntax highlighting limit
+opt.ruler = false -- Disable the default ruler
+opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.winminwidth = 5 -- Minimum window width
 
 -- File Handling & Persistence
 opt.backup = false -- Don't keep a backup file after overwriting
 opt.writebackup = false -- Don't write a backup before overwriting
 opt.swapfile = false -- Don't use swapfiles
-
 opt.undofile = true -- Save undo history to an undofile
 opt.undolevels = 10000 -- Maximum number of changes that can be undone
 
@@ -63,48 +66,32 @@ end
 
 opt.undodir = undo_dir -- Directory for undo files
 
-opt.updatetime = 300 -- Interval for CursorHold (affects swap & diagnostics)
-opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Time to wait for a mapped sequence
-opt.ttimeoutlen = 0 -- Time to wait for a key code sequence
-opt.autoread = true -- Automatically read file when changed outside of Vim
-opt.autowrite = true -- Automatically write file when switching buffers
+opt.updatetime = 500
+opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
+opt.ttimeoutlen = 0 -- Key code timeout
+opt.autoread = true -- Auto reload files changed outside vim
+opt.autowrite = true -- Auto save
 
--- Behavior Settings
-opt.errorbells = false -- Disable beep/flash on errors
-opt.backspace = "indent,eol,start" -- Allow backspacing over everything in insert mode
-opt.autochdir = false -- Do not change the working directory automatically
-opt.iskeyword:append("-") -- Treat hyphen-separated words as single words
-opt.path:append("**") -- Allow recursive file searching via :find
-opt.mouse = "a" -- Enable mouse support in all modes
-opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Clipboard sync (local only)
-opt.modifiable = true -- Ensure buffers are modifiable
+-- Behavior settings
+opt.winfixbuf = false -- disable winfixbuf globally
+opt.hidden = true -- Allow hidden buffers
+opt.errorbells = false -- No error bells
+opt.backspace = "indent,eol,start" -- Better backspace behavior
+opt.autochdir = false -- Don't auto change directory
 
--- Folding Settings {{{
-opt.smoothscroll = true -- Smooth scrolling for wrapped lines
-opt.foldmethod = "marker" -- Use {{{ and }}} for folding
-opt.foldlevel = 99 -- Default to all folds open
-opt.foldcolumn = "1" -- Show fold gutter
-opt.foldtext = "" -- Use clean 0.10+ fold styling
+opt.path:append("**") -- include subdirectories in search
+opt.mouse = "a" -- Enable mouse support
+opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+opt.modifiable = true -- Allow buffer modifications
+opt.encoding = "UTF-8" -- Set encoding
 
--- opt.fillchars = {
--- 	foldopen = "",
--- 	foldclose = "",
--- 	foldsep = " ", -- Keep separator empty for a clean "IDE-like" look
--- }
--- }}}
-
--- Text Formatting Options
--- j: Delete comment leader when joining lines
--- c: Auto-wrap comments using textwidth
--- r: Auto-insert comment leader after <Enter>
--- o: Auto-insert comment leader after 'o' or 'O'
--- q: Allow formatting of comments with 'gq'
--- l: Long lines are not broken in insert mode
--- n: Recognize numbered lists
--- t: Auto-wrap text using textwidth
-opt.formatoptions = "jcroqlnt"
-opt.grepformat = "%f:%l:%c:%m" -- Format for grep output (file:line:col:msg)
-opt.grepprg = "rg --vimgrep" -- Use Ripgrep for internal :grep command
+-- Folding settings
+opt.smoothscroll = false
+opt.foldlevel = 99 -- Start with all folds open
+opt.formatoptions = "jcroqlnt" -- tcqj
+opt.nrformats = "unsigned"
+opt.grepformat = "%f:%l:%c:%m"
+opt.grepprg = "rg --vimgrep --no-heading --smart-case"
 
 -- Window Splitting
 opt.splitbelow = true -- Put new horizontal splits below current
@@ -138,6 +125,13 @@ vim.g.markdown_recommended_style = 0 -- Prevent indenting with 4 spaces in Markd
 -- c: Don't give ins-completion-menu messages
 -- C: Don't give messages while scanning for completion
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
+
+-- Messages Display (0.13+)
+-- ui2 config keys msg.msg.timeout / msg.cmd.height were removed;
+-- use the 'messagesopt' option instead.
+-- 2026-09-07: "hit-enter" or "wait:{n}" is required; ui2 uses "timeout:{n}"
+-- for msg-window visibility and "maxheight:{n}" for expanded-cmdline height.
+opt.messagesopt = "wait:4000,history:500,progress:c,timeout:4000,maxheight:50"
 
 -- Custom Filetypes
 vim.filetype.add({

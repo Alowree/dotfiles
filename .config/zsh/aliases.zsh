@@ -199,4 +199,9 @@ mcd() {
     cd "$1" || exit
 }
 
+
+# Generate a perfect 4K plasma/abstract vector wallpaper instantly
+alias gen-plasma="magick -size 3840x2160 plasma:fractal ~/Pictures/Wallpapers/plasma_wall.png && swww img ~/Pictures/Wallpapers/plasma_wall.png"
+alias gen-gradient="magick -size 2560x1600 gradient:#1e1e2e-#89b4fa ~/Pictures/Wallpapers/grad.png && swww img ~/Pictures/Wallpapers/grad.png"
+
 # vim:set expandtab shiftwidth=2 tabstop=2 foldmethod=marker:

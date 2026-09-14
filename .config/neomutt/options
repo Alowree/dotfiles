@@ -118,7 +118,7 @@ unhdr_order *                                    # Clear header order
 hdr_order from: to: cc: date: subject: x-label:  # Set order
 
 # --- Notmuch Integration ---
-set nm_default_url = "notmuch:///Users/alowree/.maildir" # Use your absolute path
+set nm_default_url = "notmuch://$HOME/.maildir" # Portable: expands to /Users/... on macOS, /home/... on Linux
 set virtual_spool_file = yes                             # Allow virtual folders
 
 # Define Virtual Mailboxes (saved searches)

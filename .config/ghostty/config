@@ -4,7 +4,12 @@
 # ghostty +show-config
 #
 # Theme & Appearance
+#
+# The active palette is driven by Quickshell (ThemeState.qml), which writes
+# the current theme colors to this file and reloads Ghostty via SIGUSR2.
+# Keep the light:/dark: fallbacks below in case Quickshell is not running.
 theme = light:3024 Day,dark:Broadcast
+config-file = ?themes/dynamic.conf
 
 background-opacity             = 0.8
 background-blur                = 90
@@ -76,109 +81,95 @@ confirm-close-surface          = false
 # if you have the same set of keybinds defined for AeroSpace or Hyprland
 # they will take precedance at the window manager level
 #
-# These are all default keybinds
-# Pasted here for remembering them
-# --- A: Core keybinds ---
-keybind = super+d=new_split:right
-keybind = super+shift+d=new_split:down
-keybind = super+enter=toggle_fullscreen
-
-keybind = super+n=new_window
-
-# When with `macos-titlebar-style = hidden` set,
-# `super+t` performs the same as `super+n`
-keybind = super+t=new_tab
-
-# When with `macos-titlebar-style = transparent`,
-# `super+t` does open new tabs, but appears to
-# mess with the AeroSpace window manager,
-# and disrupts the correct window layouts
-# when switching between tabs.
-
-keybind = super+q=quit
-
-# --- B: New keybinds to be tested ---
-keybind = super+alt+shift+j=write_screen_file:open
-keybind = super+2=goto_tab:2
-keybind = super+digit_6=goto_tab:6
-keybind = super+k=clear_screen
-keybind = super+page_down=scroll_page_down
-keybind = super+4=goto_tab:4
-keybind = super+shift+z=redo
-keybind = super+shift+v=paste_from_selection
-keybind = super+w=close_surface
-keybind = shift+page_down=adjust_selection:page_down
-keybind = super+7=goto_tab:7
-keybind = shift+arrow_down=adjust_selection:down
-keybind = super+bracket_left=goto_split:previous
-keybind = super+5=goto_tab:5
-keybind = super+3=goto_tab:3
-keybind = super+a=select_all
-keybind = super+arrow_left=text:\\x01
-keybind = shift+page_up=adjust_selection:page_up
-keybind = super+0=reset_font_size
-keybind = super+digit_2=goto_tab:2
-keybind = super+shift+bracket_left=previous_tab
-keybind = super+shift+,=reload_config
-keybind = super+,=open_config
-keybind = super+ctrl+shift+j=write_screen_file:copy
-keybind = paste=paste_from_clipboard
-keybind = super+bracket_right=goto_split:next
-keybind = super+alt+arrow_up=goto_split:up
-keybind = super+ctrl+arrow_right=resize_split:right,10
-keybind = alt+arrow_left=esc:b
-keybind = super+equal=increase_font_size:1
+# The core set below is aligned with Kitty (ctrl+shift namespace).
+# Everything Hyprland's SUPER+letter/SHIFT/CTRL+SHIFT scheme shadows is gone;
+# the remaining super chords below are ones Hyprland does not grab.
+# ===== Aligned core (shared with Kitty, ctrl+shift namespace) =====
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+d=new_split:right
+keybind = ctrl+shift+enter=new_split:down
+keybind = ctrl+shift+w=close_surface
+keybind = ctrl+shift+q=quit
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+keybind = ctrl+shift+a=select_all
+keybind = ctrl+shift+k=clear_screen
+keybind = ctrl+shift+f=toggle_fullscreen
+keybind = ctrl+shift+equal=increase_font_size:1
+keybind = ctrl+shift+minus=decrease_font_size:1
+keybind = ctrl+shift+0=reset_font_size
 keybind = ctrl+tab=next_tab
-keybind = super+digit_4=goto_tab:4
-keybind = super+shift+arrow_up=jump_to_prompt:-1
-keybind = super+alt+arrow_right=goto_split:right
-keybind = super+ctrl+equal=equalize_splits
-keybind = super+digit_7=goto_tab:7
-keybind = super+ctrl+f=toggle_fullscreen
-keybind = super+backspace=text:\\x15
-keybind = super+6=goto_tab:6
-keybind = super+page_up=scroll_page_up
-keybind = super+1=goto_tab:1
-keybind = super+alt+w=close_tab:this
-keybind = super+end=scroll_to_bottom
-keybind = super+-=decrease_font_size:1
-keybind = super+arrow_up=jump_to_prompt:-1
-keybind = super+shift+t=undo
-keybind = super+alt+arrow_left=goto_split:left
-keybind = super+z=undo
-keybind = super+digit_8=goto_tab:8
-keybind = super+9=last_tab
-keybind = shift+arrow_up=adjust_selection:up
-keybind = super+home=scroll_to_top
-keybind = super+digit_1=goto_tab:1
-keybind = super+shift+w=close_window
-keybind = super+alt+shift+w=close_all_windows
-keybind = super+ctrl+arrow_down=resize_split:down,10
-keybind = shift+end=adjust_selection:end
-keybind = super+v=paste_from_clipboard
-keybind = shift+arrow_right=adjust_selection:right
-keybind = super+c=copy_to_clipboard
-keybind = super+ctrl+arrow_left=resize_split:left,10
-keybind = super+shift+enter=toggle_split_zoom
-keybind = super+arrow_right=text:\\x05
-keybind = super++=increase_font_size:1
-keybind = super+shift+p=toggle_command_palette
-keybind = super+8=goto_tab:8
-keybind = shift+arrow_left=adjust_selection:left
-keybind = super+shift+arrow_down=jump_to_prompt:1
-keybind = super+alt+arrow_down=goto_split:down
-keybind = copy=copy_to_clipboard
-keybind = super+shift+j=write_screen_file:paste
-keybind = super+shift+bracket_right=next_tab
-keybind = super+arrow_down=jump_to_prompt:1
 keybind = ctrl+shift+tab=previous_tab
-keybind = alt+arrow_right=esc:f
-keybind = shift+home=adjust_selection:home
-keybind = super+alt+i=inspector:toggle
-keybind = super+digit_5=goto_tab:5
-keybind = super+digit_3=goto_tab:3
-keybind = super+ctrl+arrow_up=resize_split:up,10
+keybind = ctrl+shift+1=goto_tab:1
+keybind = ctrl+shift+2=goto_tab:2
+keybind = ctrl+shift+3=goto_tab:3
+keybind = ctrl+shift+4=goto_tab:4
+keybind = ctrl+shift+5=goto_tab:5
+keybind = ctrl+shift+6=goto_tab:6
+keybind = ctrl+shift+7=goto_tab:7
+keybind = ctrl+shift+8=goto_tab:8
+keybind = ctrl+shift+9=goto_tab:9
+keybind = ctrl+shift+page_up=scroll_page_up
+keybind = ctrl+shift+page_down=scroll_page_down
+keybind = ctrl+shift+home=scroll_to_top
+keybind = ctrl+shift+end=scroll_to_bottom
 
-# There is no default keybind for toggling the quick terminal.
-# To enable, bind the toggle_quick_terminal action to a key.
+# ===== Extras (terminal-specific, on chords Hyprland does not grab) =====
+# mac-parity quit (also available); super+q is not used by Hyprland
+keybind = super+q=quit
+# was super+shift+p, which Hyprland shadows with the active-window screenshot
+keybind = ctrl+shift+p=toggle_command_palette
+# quick terminal requires the `global:` prefix to work outside the window
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
+
+# split / tab navigation
+keybind = super+bracket_left=goto_split:previous
+keybind = super+bracket_right=goto_split:next
+keybind = super+shift+bracket_left=previous_tab
+keybind = super+shift+bracket_right=next_tab
+keybind = super+alt+arrow_left=goto_split:left
+keybind = super+alt+arrow_right=goto_split:right
+keybind = super+alt+arrow_up=goto_split:up
+keybind = super+alt+arrow_down=goto_split:down
+keybind = super+alt+w=close_tab:this
+keybind = super+alt+shift+w=close_all_windows
+keybind = super+shift+enter=toggle_split_zoom
+keybind = super+ctrl+equal=equalize_splits
+
+# split resize (reachable; Hyprland only grabs SUPER+CTRL+SHIFT+hjkl)
+keybind = super+ctrl+arrow_left=resize_split:left,10
+keybind = super+ctrl+arrow_right=resize_split:right,10
+keybind = super+ctrl+arrow_up=resize_split:up,10
+keybind = super+ctrl+arrow_down=resize_split:down,10
+
+# prompt navigation (Ghostty-only, not in Kitty)
+keybind = super+arrow_up=jump_to_prompt:-1
+keybind = super+arrow_down=jump_to_prompt:1
+keybind = super+shift+arrow_up=jump_to_prompt:-1
+keybind = super+shift+arrow_down=jump_to_prompt:1
+
+# config + misc
+keybind = super+,=open_config
+keybind = super+shift+,=reload_config
+keybind = super+alt+i=inspector:toggle
+keybind = super+alt+shift+j=write_screen_file:open
+keybind = super+ctrl+shift+j=write_screen_file:copy
+keybind = super+arrow_left=text:\\x01
+keybind = super+arrow_right=text:\\x05
+keybind = alt+arrow_left=esc:b
+keybind = alt+arrow_right=esc:f
+
+# ===== Selection (shift-only, passed through to the shell) =====
+keybind = shift+page_up=adjust_selection:page_up
+keybind = shift+page_down=adjust_selection:page_down
+keybind = shift+arrow_up=adjust_selection:up
+keybind = shift+arrow_down=adjust_selection:down
+keybind = shift+arrow_left=adjust_selection:left
+keybind = shift+arrow_right=adjust_selection:right
+keybind = shift+home=adjust_selection:home
+keybind = shift+end=adjust_selection:end
+
+# ===== Unmodified (mouse-based) =====
+keybind = copy=copy_to_clipboard
+keybind = paste=paste_from_clipboard

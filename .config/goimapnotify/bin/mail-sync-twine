@@ -134,18 +134,23 @@ sync_mail() {
     
     log "INFO" "Starting mail sync on $(uname -s)"
     
-    # Run mbsync
+    # Run mbsync (capture stdout+stderr into the log so failures are diagnosable)
     if [[ -n "$mbsync_path" ]] && [[ -x "$mbsync_path" ]]; then
         log "INFO" "Running mbsync: $mbsync_path twine"
-        "$mbsync_path" twine
+        "$mbsync_path" twine >> "$LOG_FILE" 2>&1
         local mbsync_exit=$?
-        
+
         if [[ $mbsync_exit -eq 0 ]]; then
             log "INFO" "mbsync completed successfully"
         else
-            log "ERROR" "mbsync failed with exit code: $mbsync_exit"
-            return 1
+            log "WARN" "mbsync exited with code: $mbsync_exit (partial sync; continuing)"
+            # Do NOT return here: other boxes may have synced fine.
+            # Continue with indexing/notification below.
         fi
+
+        # Record last-run time for the NeoMutt status bar widget (~/.config/neomutt/bin/last_sync)
+        mkdir -p "$HOME/.config/neomutt"
+        touch "$HOME/.config/neomutt/.mailsynclastrun"
     else
         log "ERROR" "mbsync not found"
         return 1
@@ -173,6 +178,14 @@ sync_mail() {
 
 # Main execution
 main() {
+    # Prevent concurrent syncs (goimapnotify event + NeoMutt startup trigger)
+    mkdir -p "$HOME/.cache"
+    exec 9>"$HOME/.cache/twine-mail-sync.lock"
+    if ! flock -n 9; then
+        log "INFO" "Another sync is already running; exiting"
+        exit 0
+    fi
+
     # Detect OS
     OS=$(detect_os)
     log "INFO" "Detected OS: $OS"

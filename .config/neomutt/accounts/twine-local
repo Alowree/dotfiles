@@ -28,6 +28,15 @@ set spool_file      = "+INBOX"
 set move            = no
 
 # ------------------------------------------------------------------------------
+# Mail Synchronization (remote -> local via mbsync)
+# ------------------------------------------------------------------------------
+# Fire-and-forget sync each time this account config is loaded
+# (i.e., on every NeoMutt start or account switch). The subshell + '&' return
+# immediately so startup is never blocked; the script itself uses flock to
+# avoid racing with goimapnotify-triggered syncs.
+set my_twine_sync = `( sleep 2; pgrep -x mbsync >/dev/null || /home/alowree/.config/goimapnotify/bin/mail-sync-twine ) >/dev/null 2>&1 &`
+
+# ------------------------------------------------------------------------------
 # Standard Folders
 # ------------------------------------------------------------------------------
 set postponed       = "+Drafts"
@@ -53,6 +62,9 @@ mailboxes -label "📁 2025"    -nonotify "~/.maildir/2025" \
 # ------------------------------------------------------------------------------
 # Macros for Quick Archive Access
 # ------------------------------------------------------------------------------
+# F8: manual on-demand sync
+macro index,pager <F8> "<shell-escape>/home/alowree/.config/goimapnotify/bin/mail-sync-twine<enter>" "Sync twine now"
+
 # Press '25' to go to 2025 archive, '26' for 2026
 bind index,pager 2 noop
 macro index,pager 25 "<change-folder>~/.maildir/2025<enter>" "Go to 2025 archive"

@@ -44,12 +44,12 @@ local map = vim.keymap.set
 -- Symmetric pairs (backtick, quotes) are handled only through the closing
 -- path so they receive smarter guards (word-boundary, in-string checks).
 local pairs_map = {
-  ["("] = ")",    -- parenthesis
-  ["["] = "]",    -- square bracket
-  ["{"] = "}",    -- curly brace
-  ["`"] = "`",    -- backtick          (symmetric)
-  ["'"] = "'",    -- single quote      (symmetric)
-  ['"'] = '"',    -- double quote      (symmetric)
+  ["("] = ")", -- parenthesis
+  ["["] = "]", -- square bracket
+  ["{"] = "}", -- curly brace
+  ["`"] = "`", -- backtick          (symmetric)
+  ["'"] = "'", -- single quote      (symmetric)
+  ['"'] = '"', -- double quote      (symmetric)
 }
 
 -- ── Code filetypes ────────────────────────────────────────────────────────────
@@ -78,6 +78,7 @@ local code_ft = {
   toml = 1,
   yaml = 1,
   json = 1,
+  qml = 1,
 }
 
 -- ── Context detection ─────────────────────────────────────────────────────────
@@ -94,7 +95,7 @@ local function in_code_context()
   -- cursor sits inside a fenced code block (``` or ~~~).
   local ok = pcall(require, "nvim-treesitter.parsers")
   if not ok then
-    return false   -- Treesitter not available → conservative: no pairs
+    return false -- Treesitter not available → conservative: no pairs
   end
 
   -- nvim_win_get_cursor returns 1-indexed (row, col); Treesitter uses 0-indexed.
@@ -104,11 +105,11 @@ local function in_code_context()
   -- Walk up the syntax tree looking for a code fence ancestor.
   while node do
     if node:type() == "code_fence_content" then
-      return true   -- cursor is inside ``` ... ``` → pair away
+      return true -- cursor is inside ``` ... ``` → pair away
     end
     node = node:parent()
   end
-  return false   -- prose section → no pairs
+  return false -- prose section → no pairs
 end
 
 -- ── In-string detection ───────────────────────────────────────────────────────
@@ -135,7 +136,6 @@ end
 -- opening and closing characters.  All callbacks use `{ expr = true }`
 -- so Vim evaluates the returned string as keystrokes.
 for open, close in pairs(pairs_map) do
-
   -- ── Opening key: asymmetric pairs only (e.g. ( → ) ───────────────────────
   -- For pairs where open ≠ close (paren, bracket, brace), typing the
   -- opener inserts both characters and places the cursor between them.
@@ -145,9 +145,9 @@ for open, close in pairs(pairs_map) do
   if open ~= close then
     map("i", open, function()
       if not in_code_context() then
-        return open              -- not in code → plain character
+        return open -- not in code → plain character
       end
-      return open .. close .. "<left>"   -- insert pair, move cursor left
+      return open .. close .. "<left>" -- insert pair, move cursor left
     end, { expr = true })
   end
 
@@ -157,14 +157,14 @@ for open, close in pairs(pairs_map) do
   -- symmetric characters receive additional smart-pairing logic below.
   map("i", close, function()
     if not in_code_context() then
-      return close               -- not in code → plain character
+      return close -- not in code → plain character
     end
 
     -- Grab the character immediately before and after the cursor.
     local col = vim.fn.col(".")
     local line = vim.fn.getline(".")
-    local before = line:sub(col - 1, col - 1)   -- char left of cursor
-    local after = line:sub(col, col)             -- char right of cursor
+    local before = line:sub(col - 1, col - 1) -- char left of cursor
+    local after = line:sub(col, col) -- char right of cursor
 
     -- ── Skip-over ──────────────────────────────────────────────────────────
     -- If the next character is already the closer, just move right
@@ -213,13 +213,13 @@ end
 -- so the user doesn't have to backspace twice.
 map("i", "<BS>", function()
   if not in_code_context() then
-    return "<BS>"                 -- not in code → normal backspace
+    return "<BS>" -- not in code → normal backspace
   end
 
   local col = vim.fn.col(".")
   local line = vim.fn.getline(".")
-  local before = line:sub(col - 1, col - 1)   -- char left of cursor
-  local after = line:sub(col, col)             -- char right of cursor
+  local before = line:sub(col - 1, col - 1) -- char left of cursor
+  local after = line:sub(col, col) -- char right of cursor
 
   -- Check every pair: if cursor sits exactly between open and close,
   -- delete both characters (<BS> removes the opener, <Del> the closer).
@@ -229,5 +229,5 @@ map("i", "<BS>", function()
     end
   end
 
-  return "<BS>"   -- no matched pair found → normal backspace
+  return "<BS>" -- no matched pair found → normal backspace
 end, { expr = true })
