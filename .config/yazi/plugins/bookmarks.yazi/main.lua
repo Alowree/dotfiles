@@ -309,10 +309,13 @@ return {
 				save_last_jump()
 			end
 
+			-- ya.mgr_emit() was deprecated in Yazi v25.5.28 and later removed;
+			-- ya.emit() is its replacement (keep the old one as a fallback).
+			local emit = ya.emit or ya.mgr_emit
 			if bookmarks[selected].is_parent then
-				ya.mgr_emit("cd", { bookmarks[selected].path })
+				emit("cd", { bookmarks[selected].path })
 			else
-				ya.mgr_emit("reveal", { bookmarks[selected].path })
+				emit("reveal", { bookmarks[selected].path })
 			end
 		elseif action == "delete" then
 			delete_bookmark(selected)

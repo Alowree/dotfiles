@@ -23,7 +23,23 @@ else
 	require("recycle-bin"):setup()
 end
 
--- 4. Linemode
+-- 4. bookmarks.yazi — vi-like marks, plus `''` to jump back to the last directory
+-- https://github.com/dedukun/bookmarks
+require("bookmarks"):setup({
+	-- Enables the automatic `'` bookmark used by `''` to jump back
+	last_directory = { enable = true, persist = false, mode = "dir" },
+	persist = "none",
+	-- Bookmark the current directory (not the hovered file), and show
+	-- folder paths in the jump menu — better for navigating deep trees
+	desc_format = "parent",
+	file_pick_mode = "parent",
+	custom_desc_input = false,
+	-- Show the available keys when saving a bookmark (helpful while learning)
+	show_keys = true,
+	notify = { enable = true, timeout = 1 },
+})
+
+-- 5. Linemode
 function Linemode:size_and_mtime()
 	local time = math.floor(self._file.cha.mtime or 0)
 	if time == 0 then
