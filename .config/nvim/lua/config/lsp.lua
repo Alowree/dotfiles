@@ -147,7 +147,7 @@ vim.lsp.enable({
 	"eslint",
 	"lua_ls",
 	"gopls",
-	"rust_analyser",
+	"rust_analyzer",
 	"zls",
 	"cssls",
 	"html",

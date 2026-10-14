@@ -19,6 +19,14 @@ function M.setup()
     ["<<"] = "←",
     ["^^"] = "↑",
     ["VV"] = "↓",
+  }
+
+  -- Keys containing '-', which is not an 'iskeyword' char, make :iabbrev raise
+  -- E474 ("Invalid argument"). Such an error propagates out of ftplugin/mail.lua
+  -- and aborts the FileType autocmd chain, so syntax highlighting never gets
+  -- enabled for the mail buffer. Apply these with buffer-local insert keymaps
+  -- instead of :iabbrev so the abbreviation text is never re-parsed as Ex keys.
+  local addresses = {
     ["youkey-address"] = "深圳市龙岗区园山街道山子下路130号友旗园山仓; 杨小超; 134-2870-6470",
     ["uslax17-address"] = "7820 Victoria Avenue, Highland, CA 92346, USA; JF-J0140 USLAX17 USCA01; 620-940-1100",
     ["usca01-address"] = "7820 Victoria Avenue, Highland, CA 92346, USA; JF-J0140 USLAX17 USCA01; 620-940-1100",
@@ -37,6 +45,11 @@ function M.setup()
   -- Apply Abbreviations
   for key, val in pairs(abbreviations) do
     vim.cmd(string.format("iabbrev <buffer> %s %s", key, val))
+  end
+
+  -- Apply Address Abbreviations (insert keymaps, see note above)
+  for key, val in pairs(addresses) do
+    vim.keymap.set("i", key, val, { buffer = true })
   end
 
   -- Apply Mappings
